@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.vala.valaapp.LoginActivity;
 import com.vala.valaapp.R;
 
 public class WelcomeActivity extends Activity {
@@ -29,7 +28,7 @@ public class WelcomeActivity extends Activity {
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
+                startActivity(new Intent(WelcomeActivity.this, SignupActivity.class));
             }
         });
     }

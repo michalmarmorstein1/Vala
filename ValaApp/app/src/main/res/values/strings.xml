@@ -14,5 +14,22 @@
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">Email is required</string>
+    <string name="error_field_required">This field is required</string>
+
+    <!-- signup screen -->
+    <string name="signup_first_name">First name</string>
+    <string name="signup_last_name">Last name</string>
+    <string name="signup_email">Email</string>
+    <string name="signup_phone">Phone</string>
+    <string name="signup_country">Country of residence</string>
+    <string name="signup_btn">Get started</string>
+    <string-array name="countries_array">
+        <item>India</item>
+        <item>Israel</item>
+        <item>Nepal</item>
+        <item>Philippines</item>
+        <item>UK</item>
+        <item>US</item>
+    </string-array>
+
 </resources>

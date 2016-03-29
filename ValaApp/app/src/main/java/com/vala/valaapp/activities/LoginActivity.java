@@ -1,4 +1,4 @@
-package com.vala.valaapp;
+package com.vala.valaapp.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.AsyncTask;
@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.vala.valaapp.R;
 
 /**
  * A login screen that offers login via email/password.
