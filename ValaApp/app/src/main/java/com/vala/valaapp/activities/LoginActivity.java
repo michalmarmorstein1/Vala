@@ -1,5 +1,6 @@
 package com.vala.valaapp.activities;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -103,7 +104,7 @@ public class LoginActivity extends AppCompatActivity {
 
     //Client password validation
     private boolean isPasswordValid(String password) {
-        return password.length() > 4;
+        return true;
     }
 
     /**
@@ -146,9 +147,11 @@ public class LoginActivity extends AppCompatActivity {
 
             if (success) {
                 finish();
+                Intent i = new Intent(LoginActivity.this, HomeActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
             } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
+                //TODO show server errors
             }
         }
 

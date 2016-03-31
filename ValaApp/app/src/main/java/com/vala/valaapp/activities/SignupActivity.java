@@ -1,5 +1,6 @@
 package com.vala.valaapp.activities;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -81,30 +82,30 @@ public class SignupActivity extends AppCompatActivity {
         View focusView = null;
 
         // Check user input.
-        if (TextUtils.isEmpty(firstName)) {
-            mFirstNameView.setError(getString(R.string.error_field_required));
-            focusView = mFirstNameView;
-            cancel = true;
-        }
-        if (TextUtils.isEmpty(lastName)) {
-            mLastNameView.setError(getString(R.string.error_field_required));
-            focusView = mLastNameView;
-            cancel = true;
-        }
-        if (TextUtils.isEmpty(phone)) {
-            mLastNameView.setError(getString(R.string.error_field_required));
-            focusView = mPhoneView;
-            cancel = true;
-        }
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
-            cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
-            cancel = true;
-        }
+//        if (TextUtils.isEmpty(phone)) {
+//            mPhoneView.setError(getString(R.string.error_field_required));
+//            focusView = mPhoneView;
+//            cancel = true;
+//        }
+//        if (TextUtils.isEmpty(email)) {
+//            mEmailView.setError(getString(R.string.error_field_required));
+//            focusView = mEmailView;
+//            cancel = true;
+//        } else if (!isEmailValid(email)) {
+//            mEmailView.setError(getString(R.string.error_invalid_email));
+//            focusView = mEmailView;
+//            cancel = true;
+//        }
+//        if (TextUtils.isEmpty(lastName)) {
+//            mLastNameView.setError(getString(R.string.error_field_required));
+//            focusView = mLastNameView;
+//            cancel = true;
+//        }
+//        if (TextUtils.isEmpty(firstName)) {
+//            mFirstNameView.setError(getString(R.string.error_field_required));
+//            focusView = mFirstNameView;
+//            cancel = true;
+//        }
 
         if (cancel) {
             // There was an error; don't attempt sign up and focus the first
@@ -168,6 +169,9 @@ public class SignupActivity extends AppCompatActivity {
 
             if (success) {
                 finish();
+                Intent i = new Intent(SignupActivity.this, HomeActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
             } else {
                 //TODO show server errors
             }

@@ -32,4 +32,11 @@
         <item>US</item>
     </string-array>
 
+    <!-- home screen -->
+    <string name="home_name">Hi Angamuthu,</string>
+    <string name="home_collect">You have to collect:</string>
+    <string name="home_amount">250$</string>
+    <string name="home_collect_btn">Collect</string>
+    <string name="home_send_btn">Send</string>
+
 </resources>
