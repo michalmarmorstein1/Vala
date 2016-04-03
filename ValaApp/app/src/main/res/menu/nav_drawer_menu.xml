@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_edit"
+            android:icon="@drawable/ic_menu_share"
+            android:title="@string/navigation_drawer_edit" />
+        <item
+            android:id="@+id/nav_invite"
+            android:icon="@drawable/ic_menu_share"
+            android:title="@string/navigation_drawer_invite" />
+        <item
+            android:id="@+id/nav_how_it_works"
+            android:icon="@drawable/ic_menu_share"
+            android:title="@string/navigation_drawer_how_it_works" />
+        <item
+            android:id="@+id/nav_contact"
+            android:icon="@drawable/ic_menu_share"
+            android:title="@string/navigation_drawer_contact" />
+        <item
+            android:id="@+id/nav_transactions"
+            android:icon="@drawable/ic_menu_share"
+            android:title="@string/navigation_drawer_my_transactions" />
+    </group>
+
+</menu>

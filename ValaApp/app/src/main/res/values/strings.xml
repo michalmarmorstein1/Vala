@@ -13,7 +13,6 @@
     <string name="action_sign_in">Login</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
 
     <!-- signup screen -->
@@ -38,5 +37,15 @@
     <string name="home_amount">250$</string>
     <string name="home_collect_btn">Collect</string>
     <string name="home_send_btn">Send</string>
+
+    <!-- navigation drawer -->
+    <string name="navigation_drawer_edit">Edit account details</string>
+    <string name="navigation_drawer_invite">Invite friends</string>
+    <string name="navigation_drawer_how_it_works">How Vala works</string>
+    <string name="navigation_drawer_contact">Contact support</string>
+    <string name="navigation_drawer_my_transactions">My transactions</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 
 </resources>

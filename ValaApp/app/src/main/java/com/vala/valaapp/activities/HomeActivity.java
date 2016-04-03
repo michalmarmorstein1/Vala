@@ -8,12 +8,11 @@ import android.widget.Toast;
 
 import com.vala.valaapp.R;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends NavigationDrawerActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
 
         Button collectButton = (Button) findViewById(R.id.collect_btn);
         collectButton.setOnClickListener(new View.OnClickListener() {
@@ -30,5 +29,10 @@ public class HomeActivity extends AppCompatActivity {
                 Toast.makeText(HomeActivity.this, "send", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    protected int getContentId() {
+        return R.layout.activity_home;
     }
 }
