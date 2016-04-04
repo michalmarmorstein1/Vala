@@ -38,13 +38,26 @@
     <string name="home_collect_btn">Collect</string>
     <string name="home_send_btn">Send</string>
 
+    <!-- send screen -->
+    <string name="send_name">Hi Angamuthu,</string>
+    <string name="send_send">send:</string>
+    <string name="send_amount">Amount</string>
+    <string name="send_receiver">Select receiver</string>
+    <string name="send_button">Send</string>
+    <string-array name="currency_array">
+        <item>USD</item>
+        <item>INR</item>
+        <item>GBP</item>
+        <item>NIS</item>
+    </string-array>
+
     <!-- navigation drawer -->
     <string name="navigation_drawer_edit">Edit account details</string>
     <string name="navigation_drawer_invite">Invite friends</string>
     <string name="navigation_drawer_how_it_works">How Vala works</string>
     <string name="navigation_drawer_contact">Contact support</string>
     <string name="navigation_drawer_my_transactions">My transactions</string>
-
+    <string name="action_home">Home</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 

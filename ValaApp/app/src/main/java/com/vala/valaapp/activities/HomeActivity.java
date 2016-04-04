@@ -1,5 +1,6 @@
 package com.vala.valaapp.activities;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -26,7 +27,7 @@ public class HomeActivity extends NavigationDrawerActivity {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(HomeActivity.this, "send", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(HomeActivity.this, SendActivity.class));
             }
         });
     }
