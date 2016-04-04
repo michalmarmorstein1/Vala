@@ -63,7 +63,7 @@
                 android:layout_alignParentLeft="true"
                 android:id="@+id/send_to_text" />
 
-            <EditText
+            <Button
                 android:layout_width="292dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/receiver_editText"

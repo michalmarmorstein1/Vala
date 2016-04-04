@@ -50,6 +50,20 @@
         <item>GBP</item>
         <item>NIS</item>
     </string-array>
+    <string name="invite_dialog">Select Receiver</string>
+    <string name="invite_edit_text">Type username or e-mail</string>
+    <string name="invite_dialog_btn">Invite</string>
+    <string name="select_dialog_btn">Select</string>
+    <string name="cancel_dialog_btn">Cancel</string>
+
+    <!-- DELETE THIS - temporary-->
+    <string-array name="receivers_array">
+        <item>Ashish</item>
+        <item>Moshe</item>
+        <item>Haim</item>
+        <item>Kumar</item>
+    </string-array>
+
 
     <!-- navigation drawer -->
     <string name="navigation_drawer_edit">Edit account details</string>
