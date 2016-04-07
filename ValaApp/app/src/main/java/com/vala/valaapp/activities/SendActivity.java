@@ -22,13 +22,10 @@ import android.widget.Toast;
 
 import com.vala.valaapp.R;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 public class SendActivity extends NavigationDrawerActivity {
 
     TextView mSelectReceiver;
+    EditText mAmount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +37,7 @@ public class SendActivity extends NavigationDrawerActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         currencySpinner.setAdapter(adapter);
 
+        mAmount = (EditText) findViewById(R.id.amount_editText);
         mSelectReceiver = (TextView) findViewById(R.id.select_receiver);
         mSelectReceiver.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,6 +45,19 @@ public class SendActivity extends NavigationDrawerActivity {
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 InviteDialogFragment frag = new InviteDialogFragment();
                 frag.show(ft, "invite_fragment_tag");
+            }
+        });
+         Button sendBtn = (Button) findViewById(R.id.send_button);
+        sendBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CharSequence recipient = mSelectReceiver.getText();
+                CharSequence amount = mAmount.getText();
+                //TODO check null? display error
+                if(!recipient.equals("") && !amount.equals("")){
+
+                    PaymentActivity.startPaymentActivity(recipient.toString(), Integer.parseInt(amount.toString()), SendActivity.this);
+                }
             }
         });
     }

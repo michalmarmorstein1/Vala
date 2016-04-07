@@ -64,6 +64,12 @@
         <item>Kumar</item>
     </string-array>
 
+    <!-- payment screen-->
+    <string name="payment_amount">You are sending</string>
+    <string name="payment_fee_1">You will pay</string>
+    <string name="payment_fee_2">$ as fees</string>
+    <string name="payment_total">will get</string>
+    <string name="payment_button">Continue to payment</string>
 
     <!-- navigation drawer -->
     <string name="navigation_drawer_edit">Edit account details</string>
