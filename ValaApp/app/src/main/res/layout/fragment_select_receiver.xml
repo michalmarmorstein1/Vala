@@ -32,13 +32,15 @@
         android:id="@+id/invite_button"
         android:layout_gravity="center_horizontal" />
     <ScrollView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="80dp">
 
         <RadioGroup
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/radio_group"
+            android:background="#ffffff10"
+
             android:layout_gravity="center_horizontal">
 
         </RadioGroup>

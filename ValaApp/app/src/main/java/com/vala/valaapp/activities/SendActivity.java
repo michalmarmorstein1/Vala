@@ -12,10 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.vala.valaapp.R;
 
@@ -24,6 +27,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class SendActivity extends NavigationDrawerActivity {
+
+    TextView mSelectReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +40,8 @@ public class SendActivity extends NavigationDrawerActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         currencySpinner.setAdapter(adapter);
 
-        Button selectReceiver = (Button) findViewById(R.id.receiver_editText);
-        selectReceiver.setOnClickListener(new View.OnClickListener() {
+        mSelectReceiver = (TextView) findViewById(R.id.select_receiver);
+        mSelectReceiver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -96,11 +101,21 @@ public class SendActivity extends NavigationDrawerActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
             final View root = inflater.inflate(R.layout.fragment_select_receiver, container, true);
+
+            Button cancelBtn = (Button) root.findViewById(R.id.btn_cancel);
+            cancelBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getDialog().dismiss();
+                }
+            });
+
+            final RadioGroup radioGroup = (RadioGroup) root.findViewById(R.id.radio_group);
+
             Button inviteBtn = (Button) root.findViewById(R.id.invite_button);
             inviteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    RadioGroup radiogroup = (RadioGroup) root.findViewById(R.id.radio_group);
                     // layout params to use when adding each radio button
                     LinearLayout.LayoutParams layoutParams = new RadioGroup.LayoutParams(
                             RadioGroup.LayoutParams.WRAP_CONTENT,
@@ -112,11 +127,27 @@ public class SendActivity extends NavigationDrawerActivity {
                         String label = receiversArray[i];
                         newRadioButton.setText(label);
                         newRadioButton.setId(i);
-                        radiogroup.addView(newRadioButton, layoutParams);
+                        radioGroup.addView(newRadioButton, layoutParams);
                     }
 
                 }
             });
+
+            Button selectBtn = (Button) root.findViewById(R.id.btn_select);
+            selectBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    int radioButtonID = radioGroup.getCheckedRadioButtonId();
+                    RadioButton radioButton = (RadioButton) radioGroup.findViewById(radioButtonID);
+                    TextView selectReceiver = (TextView) getActivity().findViewById(R.id.select_receiver);
+                    CharSequence receiver = radioButton != null ? radioButton.getText() : "";
+                        selectReceiver.setText(receiver);
+                    getDialog().dismiss();
+                }
+            });
+
+
             return root;
         }
 

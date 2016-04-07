@@ -42,6 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/send_currency_spinner"
+                android:layout_marginBottom="15dp"
                 android:layout_below="@id/text_send"
                 android:layout_alignParentLeft="true" />
 
@@ -51,25 +52,31 @@
                 android:inputType="number"
                 android:ems="10"
                 android:hint="@string/send_amount"
-                android:id="@+id/send_receiver_editText"
+                android:id="@+id/amount_editText"
                 android:layout_below="@id/text_send"
+                android:layout_alignTop="@id/send_currency_spinner"
                 android:layout_alignParentRight="true" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="To:"
+                android:paddingRight="20dp"
+                android:paddingLeft="20dp"
                 android:layout_below="@id/send_currency_spinner"
                 android:layout_alignParentLeft="true"
                 android:id="@+id/send_to_text" />
 
-            <Button
-                android:layout_width="292dp"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/receiver_editText"
+                style="@android:style/Widget.Material.Spinner"
+                android:id="@+id/select_receiver"
+                android:textSize="18sp"
                 android:layout_alignParentRight="true"
                 android:hint="@string/send_receiver"
-                android:layout_below="@id/send_currency_spinner"
+                android:layout_alignTop="@id/send_to_text"
+                android:layout_below="@id/amount_editText"
                 android:layout_toRightOf="@id/send_to_text" />
 
     </RelativeLayout>
