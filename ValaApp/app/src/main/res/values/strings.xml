@@ -42,6 +42,7 @@
     <string name="send_name">Hi Angamuthu,</string>
     <string name="send_send">send:</string>
     <string name="send_amount">Amount</string>
+    <string name="send_to">To:</string>
     <string name="send_receiver">Select receiver</string>
     <string name="send_button">Send</string>
     <string-array name="currency_array">
@@ -70,6 +71,14 @@
     <string name="payment_fee_2">$ as fees</string>
     <string name="payment_total">will get</string>
     <string name="payment_button">Continue to payment</string>
+
+    <!-- payment confirmation dialog-->
+    <string name="payment_confirmation_header">Sent</string>
+    <string name="payment_confirmation_top_1">Your money has been sent,</string>
+    <string name="payment_confirmation_top_2">will be notified</string>
+    <string name="payment_confirmation_mid">Tracking number:</string>
+    <string name="payment_confirmation_bottom">You can review this info from the home screen</string>
+    <string name="payment_confirmation_button">@android:string/ok</string>
 
     <!-- navigation drawer -->
     <string name="navigation_drawer_edit">Edit account details</string>

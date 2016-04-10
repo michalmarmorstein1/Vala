@@ -1,13 +1,16 @@
 package com.vala.valaapp.activities;
 
 import android.app.Activity;
-import android.content.Context;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -55,6 +58,9 @@ public class PaymentActivity extends NavigationDrawerActivity {
             @Override
             public void onClick(View v) {
                 //TODO integrate payment here
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                PaymentConfirmationDialogFragment frag = new PaymentConfirmationDialogFragment();
+                frag.show(ft, "payment_confirmation_fragment_tag");
             }
         });
     }
@@ -85,6 +91,52 @@ public class PaymentActivity extends NavigationDrawerActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    static public class PaymentConfirmationDialogFragment extends DialogFragment {
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setStyle(DialogFragment.STYLE_NORMAL, R.style.FullScreenDialog);
+        }
+
+        @Override
+        public void onStart() {
+            super.onStart();
+            Dialog d = getDialog();
+            if (d != null){
+                int width = ViewGroup.LayoutParams.MATCH_PARENT;
+                int height = ViewGroup.LayoutParams.MATCH_PARENT;
+                d.getWindow().setLayout(width, height);
+            }
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
+            final View root = inflater.inflate(R.layout.fragment_payment_confirmation, container, true);
+
+            Button button = (Button) root.findViewById(R.id.con_button);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getDialog().dismiss();
+                    Intent i = new Intent(getActivity(), HomeActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(i);
+                }
+            });
+
+            String recipient = getActivity().getIntent().getStringExtra(RECIPIENT_KEY);
+            TextView recipientTextView = (TextView) root.findViewById(R.id.textViewName);
+            recipientTextView.setText(recipient + " " + getString(R.string.payment_confirmation_top_2));
+
+            TextView trackingNumberTextView = (TextView) root.findViewById(R.id.textViewTrackingNumber);
+            trackingNumberTextView.setText("WE456TYU7");
+
+            return root;
+        }
+
     }
 
 }
