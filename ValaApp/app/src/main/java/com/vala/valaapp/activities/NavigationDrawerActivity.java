@@ -1,6 +1,7 @@
 package com.vala.valaapp.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
@@ -60,9 +61,10 @@ public abstract class NavigationDrawerActivity extends AppCompatActivity
         // Handle navigation view item clicks.
         int id = item.getItemId();
 
-//        if (id == R.id.nav_edit) {
-
-//        } else if (id == R.id.nav_invite) {
+        if (id == R.id.nav_transactions) {
+            startActivity(new Intent(this, MyTransactionsActivity.class));
+        }
+        //else if (id == R.id.nav_invite) {
 //
 //        } else if (id == R.id.nav_contact) {
 //
