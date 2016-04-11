@@ -89,6 +89,11 @@
     <string name="collect_btn_ok">@android:string/ok</string>
     <string name="collect_btn_cancel">@android:string/cancel</string>
 
+    <!-- pickup confirmation screen-->
+    <string name="pickup_confirmation_header">Show this to affiliate</string>
+    <string name="pickup_confirmation_ok_btn">I got my money</string>
+    <string name="pickup_confirmation_problem_btn">I have a problem</string>
+
     <!-- navigation drawer -->
     <string name="navigation_drawer_edit">Edit account details</string>
     <string name="navigation_drawer_invite">Invite friends</string>

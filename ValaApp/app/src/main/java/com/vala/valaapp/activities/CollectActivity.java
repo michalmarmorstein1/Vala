@@ -40,7 +40,7 @@ public class CollectActivity extends AppCompatActivity {
         okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(CollectActivity.this, PickupConfirmationActivity.class));
             }
         });
 
