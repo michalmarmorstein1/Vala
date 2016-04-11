@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.vala.valaapp.R;
 
@@ -18,7 +17,7 @@ public class HomeActivity extends NavigationDrawerActivity {
         collectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(HomeActivity.this, "collect", Toast.LENGTH_SHORT).show();
+                CollectActivity.startCollectActivity("Abhimanyusuta", "100$", HomeActivity.this);
             }
         });
 

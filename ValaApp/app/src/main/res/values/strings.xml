@@ -55,7 +55,7 @@
     <string name="invite_edit_text">Type username or e-mail</string>
     <string name="invite_dialog_btn">Invite</string>
     <string name="select_dialog_btn">Select</string>
-    <string name="cancel_dialog_btn">Cancel</string>
+    <string name="cancel_dialog_btn">@android:string/cancel</string>
 
     <!-- DELETE THIS - temporary-->
     <string-array name="receivers_array">
@@ -79,6 +79,15 @@
     <string name="payment_confirmation_mid">Tracking number:</string>
     <string name="payment_confirmation_bottom">You can review this info from the home screen</string>
     <string name="payment_confirmation_button">@android:string/ok</string>
+
+    <!-- collect screen-->
+    <string name="collect_header">Collect</string>
+    <string name="collect_1">We are reserving</string>
+    <string name="collect_2">for you at %1$s</string>
+    <string name="collect_3">Please arrive in the next 5 hours\n to get your cash</string>
+    <string name="collect_4">Don\'t forget your ID.</string>
+    <string name="collect_btn_ok">@android:string/ok</string>
+    <string name="collect_btn_cancel">@android:string/cancel</string>
 
     <!-- navigation drawer -->
     <string name="navigation_drawer_edit">Edit account details</string>
