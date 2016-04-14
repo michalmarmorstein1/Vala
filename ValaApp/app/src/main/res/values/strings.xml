@@ -8,14 +8,17 @@
     <string name="welcome_signup_btn">Sign-up</string>
 
     <!-- login screen -->
+    <string name="login_title">Login</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Login</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_field_required">This field is required</string>
+    <string name="login_forgot_password">Forgot your password?</string>
 
     <!-- signup screen -->
+    <string name="signup_title">Sign-up</string>
     <string name="signup_first_name">First name</string>
     <string name="signup_last_name">Last name</string>
     <string name="signup_email">Email</string>

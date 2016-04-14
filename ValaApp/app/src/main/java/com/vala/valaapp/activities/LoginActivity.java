@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.vala.valaapp.R;
 
@@ -43,6 +45,14 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         mProgressView = findViewById(R.id.login_progress);
+        TextView forgotPassword = (TextView) findViewById(R.id.textViewForgotPassword);
+        forgotPassword.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(LoginActivity.this, "email will be sent", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     /**

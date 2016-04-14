@@ -5,10 +5,12 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.vala.valaapp.R;
 
@@ -49,11 +51,35 @@ public class SignupActivity extends AppCompatActivity {
         });
 
         mProgressView = findViewById(R.id.signup_progress);
+
         mCountryView = (Spinner) findViewById(R.id.countries_spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.countries_array, android.R.layout.simple_spinner_item);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item) {
+
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+
+                View v = super.getView(position, convertView, parent);
+                if (position == getCount()) {
+                    ((TextView)v.findViewById(android.R.id.text1)).setText("");
+                    ((TextView)v.findViewById(android.R.id.text1)).setHint(getItem(getCount())); //"Hint to be displayed"
+                }
+                return v;
+            }
+
+            @Override
+            public int getCount() {
+                return super.getCount() - 1; // Don't display last item. It is used as hint.
+            }
+        };
+
+        String [] countries = getResources().getStringArray(R.array.countries_array);
+        for(int i = 0; i < countries.length; i++){
+            adapter.add(countries[i]);
+        }
+        adapter.add(getString(R.string.signup_country)); //Add hint
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mCountryView.setAdapter(adapter);
+        mCountryView.setSelection(adapter.getCount()); //display hint
     }
 
     /**
