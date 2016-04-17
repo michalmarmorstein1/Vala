@@ -11,15 +11,6 @@
     android:background="@android:color/darker_gray"
     tools:context="com.vala.valaapp.activities.SignupActivity">
 
-    <ProgressBar
-        android:id="@+id/signup_progress"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_gravity="center"
-        android:visibility="gone" />
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -34,6 +34,11 @@
         <item>US</item>
     </string-array>
 
+    <!-- add pin code screen -->
+    <string name="pin_header">Secure your account</string>
+    <string name="pin_text">Please type a 4 digits pin code\n to secure your account and\n future transactions</string>
+    <string name="pin_btn">Confirm</string>
+
     <!-- home screen -->
     <string name="home_name">Hi Angamuthu,</string>
     <string name="home_collect">You have to collect:</string>

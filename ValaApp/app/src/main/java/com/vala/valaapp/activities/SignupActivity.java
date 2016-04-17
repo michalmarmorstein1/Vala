@@ -14,23 +14,13 @@ import android.widget.TextView;
 
 import com.vala.valaapp.R;
 
-/**
- * A sign up screen that offers registration.
- */
-
 public class SignupActivity extends AppCompatActivity {
-
-    /**
-     * Keep track of the signup task to ensure we can cancel it if requested.
-     */
-    private UserSignupTask mAuthTask = null;
 
     // UI references.
     private EditText mFirstNameView;
     private EditText mLastNameView;
     private EditText mEmailView;
     private EditText mPhoneView;
-    private View mProgressView;
     private Spinner mCountryView;
 
     @Override
@@ -46,11 +36,9 @@ public class SignupActivity extends AppCompatActivity {
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptSignup();
+                checkFieldsAndProceed();
             }
         });
-
-        mProgressView = findViewById(R.id.signup_progress);
 
         mCountryView = (Spinner) findViewById(R.id.countries_spinner);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item) {
@@ -82,14 +70,7 @@ public class SignupActivity extends AppCompatActivity {
         mCountryView.setSelection(adapter.getCount()); //display hint
     }
 
-    /**
-     * Attempts to register the account specified by the sign up form.
-     * If there are form errors, the errors are presented and no actual sign up attempt is made.
-     */
-    private void attemptSignup() {
-        if (mAuthTask != null) {
-            return;
-        }
+    private void checkFieldsAndProceed() {
 
         // Reset errors.
         mFirstNameView.setError(null);
@@ -97,7 +78,6 @@ public class SignupActivity extends AppCompatActivity {
         mEmailView.setError(null);
         mPhoneView.setError(null);
 
-        // Store values at the time of the login attempt.
         String firstName = mFirstNameView.getText().toString();
         String lastName = mLastNameView.getText().toString();
         String email = mEmailView.getText().toString();
@@ -133,15 +113,9 @@ public class SignupActivity extends AppCompatActivity {
 //        }
 
         if (cancel) {
-            // There was an error; don't attempt sign up and focus the first
-            // form field with an error.
             focusView.requestFocus();
         } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user sign up attempt.
-            showProgress(true);
-            mAuthTask = new UserSignupTask(firstName, lastName, email, phone);
-            mAuthTask.execute((Void) null);
+            AddPinCodeActivity.startActivity(this, firstName, lastName, email, phone);
         }
     }
 
@@ -150,62 +124,4 @@ public class SignupActivity extends AppCompatActivity {
         return email.contains("@");
     }
 
-    /**
-     * Shows the progress UI and hides the login form.
-     */
-    private void showProgress(final boolean show) {
-        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-    }
-
-    /**
-     * Represents an asynchronous registration task used to authenticate
-     * the user.
-     */
-    public class UserSignupTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mFirstName;
-        private final String mLastName;
-        private final String mEmail;
-        private final String mPhone;
-
-        UserSignupTask(String firstName, String lastName, String email, String phone) {
-            mFirstName = firstName;
-            mLastName = lastName;
-            mEmail = email;
-            mPhone = phone;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            // TODO: register the new account.
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if (success) {
-                finish();
-                Intent i = new Intent(SignupActivity.this, HomeActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(i);
-            } else {
-                //TODO show server errors
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
-    }
 }
