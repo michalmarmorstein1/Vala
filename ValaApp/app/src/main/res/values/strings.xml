@@ -41,7 +41,7 @@
 
     <!-- home screen -->
     <string name="home_name">Hi Angamuthu,</string>
-    <string name="home_collect">You have to collect:</string>
+    <string name="home_collect">Your balance is:</string>
     <string name="home_amount">250$</string>
     <string name="home_collect_btn">Collect</string>
     <string name="home_send_btn">Send</string>
@@ -55,8 +55,6 @@
     <string name="send_button">Send</string>
     <string-array name="currency_array">
         <item>USD</item>
-        <item>INR</item>
-        <item>GBP</item>
         <item>NIS</item>
     </string-array>
     <string name="invite_dialog">Select Receiver</string>
