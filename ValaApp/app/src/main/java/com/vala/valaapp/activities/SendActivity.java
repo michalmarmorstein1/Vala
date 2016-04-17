@@ -1,10 +1,13 @@
 package com.vala.valaapp.activities;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,10 +24,15 @@ import android.widget.TextView;
 
 import com.vala.valaapp.R;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class SendActivity extends NavigationDrawerActivity {
 
     TextView mSelectReceiver;
     EditText mAmount;
+
+    public static ArrayList<String> receiversList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +50,12 @@ public class SendActivity extends NavigationDrawerActivity {
             @Override
             public void onClick(View v) {
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
-                InviteDialogFragment frag = new InviteDialogFragment();
-                frag.show(ft, "invite_fragment_tag");
+                ReceiversDialogFragment frag = new ReceiversDialogFragment();
+                frag.show(ft, "receivers_fragment_tag");
             }
         });
-         Button sendBtn = (Button) findViewById(R.id.send_button);
+
+        Button sendBtn = (Button) findViewById(R.id.send_button);
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,7 +94,9 @@ public class SendActivity extends NavigationDrawerActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    static public class InviteDialogFragment extends DialogFragment {
+    static public class ReceiversDialogFragment extends DialogFragment {
+
+        RadioGroup mRadioGroup;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -107,8 +118,27 @@ public class SendActivity extends NavigationDrawerActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
             final View root = inflater.inflate(R.layout.fragment_select_receiver, container, true);
+            final Button selectBtn = (Button) root.findViewById(R.id.btnSelect);
+            final Button cancelBtn = (Button) root.findViewById(R.id.btnCancel);
+            final Button searchBtn = (Button) root.findViewById(R.id.btnSearch);
+            final Button addReceiverBtn = (Button) root.findViewById(R.id.btnAddReceiver);
+            final EditText userNameET = (EditText) root.findViewById(R.id.editTextUsername);
+            mRadioGroup = (RadioGroup) root.findViewById(R.id.radio_group);
 
-            Button cancelBtn = (Button) root.findViewById(R.id.btn_cancel);
+            receiversList = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.receivers_array)));
+            refreshReceiversList(receiversList);
+
+//            userNameET.setOnKeyListener(new View.OnKeyListener() {
+//
+//                @Override
+//                public boolean onKey(View v, int keyCode, KeyEvent event) {
+//                    if(((EditText)v).getText().toString().length() > 0){
+//                        searchBtn.setEnabled(true);
+//                    }
+//                    return false;
+//                }
+//            });
+
             cancelBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -116,47 +146,64 @@ public class SendActivity extends NavigationDrawerActivity {
                 }
             });
 
-            final RadioGroup radioGroup = (RadioGroup) root.findViewById(R.id.radio_group);
-
-            Button inviteBtn = (Button) root.findViewById(R.id.invite_button);
-            inviteBtn.setOnClickListener(new View.OnClickListener() {
+            searchBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // layout params to use when adding each radio button
-                    LinearLayout.LayoutParams layoutParams = new RadioGroup.LayoutParams(
-                            RadioGroup.LayoutParams.WRAP_CONTENT,
-                            RadioGroup.LayoutParams.WRAP_CONTENT);
-
-                    String[] receiversArray = getResources().getStringArray(R.array.receivers_array);
-                    for (int i = 0; i < receiversArray.length; i++){
-                        RadioButton newRadioButton = new RadioButton(getActivity());
-                        String label = receiversArray[i];
-                        newRadioButton.setText(label);
-                        newRadioButton.setId(i);
-                        radioGroup.addView(newRadioButton, layoutParams);
-                    }
-
+                    //TODO search on server and change select button
+                    mRadioGroup.clearCheck();
+                    addReceiverBtn.setVisibility(View.VISIBLE);
+                    selectBtn.setVisibility(View.GONE);
                 }
             });
 
-            Button selectBtn = (Button) root.findViewById(R.id.btn_select);
+            addReceiverBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    addReceiverBtn.setVisibility(View.GONE);
+                    selectBtn.setVisibility(View.VISIBLE);
+                    int radioButtonID = mRadioGroup.getCheckedRadioButtonId();
+                    RadioButton radioButton = (RadioButton) mRadioGroup.findViewById(radioButtonID);
+                    if(radioButton != null){
+                        String receiver = radioButton.getText().toString();
+                        receiversList.add(receiver);
+                        refreshReceiversList(receiversList);
+                    }
+                }
+            });
+
             selectBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    int radioButtonID = radioGroup.getCheckedRadioButtonId();
-                    RadioButton radioButton = (RadioButton) radioGroup.findViewById(radioButtonID);
+                    int radioButtonID = mRadioGroup.getCheckedRadioButtonId();
+                    RadioButton radioButton = (RadioButton) mRadioGroup.findViewById(radioButtonID);
                     TextView selectReceiver = (TextView) getActivity().findViewById(R.id.select_receiver);
                     CharSequence receiver = radioButton != null ? radioButton.getText() : "";
-                        selectReceiver.setText(receiver);
+                    selectReceiver.setText(receiver);
                     getDialog().dismiss();
                 }
             });
 
-
             return root;
         }
 
-    }
+        public void refreshReceiversList(ArrayList<String> list){
 
+            mRadioGroup.removeAllViews();
+            String[] receiversArray = new String[list.size()];
+            receiversArray = list.toArray(receiversArray);
+            // layout params to use when adding each radio button
+            LinearLayout.LayoutParams layoutParams = new RadioGroup.LayoutParams(
+                    RadioGroup.LayoutParams.WRAP_CONTENT,
+                    RadioGroup.LayoutParams.WRAP_CONTENT);
+            for (int i = 0; i < receiversArray.length; i++){
+                RadioButton newRadioButton = new RadioButton(getActivity());
+                String label = receiversArray[i];
+                newRadioButton.setText(label);
+                newRadioButton.setId(i);
+                mRadioGroup.addView(newRadioButton, layoutParams);
+            }
+        }
+    }
 }

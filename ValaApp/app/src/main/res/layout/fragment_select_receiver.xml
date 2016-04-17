@@ -7,44 +7,52 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/img_invite"
+        android:id="@+id/imgHeader"
         android:layout_gravity="center_horizontal" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/invite_dialog"
-        android:id="@+id/textView_invite"
+        android:id="@+id/textViewSelectReceiver"
         android:layout_gravity="center_horizontal" />
 
-    <EditText
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/editText_username"
-        android:hint="@string/invite_edit_text"
-        android:layout_gravity="center_horizontal" />
+        android:orientation="horizontal">
 
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/invite_dialog_btn"
-        android:id="@+id/invite_button"
-        android:layout_gravity="center_horizontal" />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/editTextUsername"
+            android:layout_weight="4"
+            android:hint="@string/invite_edit_text" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/search_dialog_btn"
+            android:id="@+id/btnSearch"/>
+    </LinearLayout>
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="80dp">
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:fillViewport="false">
 
         <RadioGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/radio_group"
             android:background="#ffffff10"
-
             android:layout_gravity="center_horizontal">
 
         </RadioGroup>
     </ScrollView>
+
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -56,13 +64,19 @@
             android:layout_height="wrap_content"
             android:text="@string/cancel_dialog_btn"
             android:layout_weight="1"
-            android:id="@+id/btn_cancel" />
-
+            android:id="@+id/btnCancel" />
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/select_dialog_btn"
             android:layout_weight="1"
-            android:id="@+id/btn_select" />
+            android:id="@+id/btnSelect" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_receiver_dialog_btn"
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:id="@+id/btnAddReceiver" />
     </LinearLayout>
 </LinearLayout>
