@@ -1,4 +1,4 @@
-package com.vala.valaapp;
+package com.valapay.vala;
 
 import org.junit.Test;
 

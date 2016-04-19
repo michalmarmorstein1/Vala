@@ -9,7 +9,7 @@
     android:paddingTop="?attr/actionBarSize"
     android:orientation="vertical"
     android:background="@android:color/darker_gray"
-    tools:context="com.vala.valaapp.activities.SendActivity">
+    tools:context="com.valapay.vala.activities.SendActivity">
 
     <ImageView
         android:layout_width="wrap_content"

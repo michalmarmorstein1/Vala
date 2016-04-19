@@ -8,7 +8,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="?attr/actionBarSize"
     android:orientation="vertical"
-    tools:context="com.vala.valaapp.activities.MyTransactionsActivity">
+    tools:context="com.valapay.vala.activities.MyTransactionsActivity">
 
     <ImageView
         android:layout_width="wrap_content"

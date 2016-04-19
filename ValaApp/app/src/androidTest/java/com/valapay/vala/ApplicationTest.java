@@ -1,4 +1,4 @@
-package com.vala.valaapp;
+package com.valapay.vala;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

@@ -1,4 +1,4 @@
-package com.vala.valaapp.activities;
+package com.valapay.vala.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.vala.valaapp.R;
+import com.valapay.vala.R;
 
 public class PickupConfirmationActivity extends AppCompatActivity {
 

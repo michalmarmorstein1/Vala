@@ -4,10 +4,10 @@
 
     To get one, follow this link, follow the directions and press "Create" at the end:
 
-    https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=E5:68:22:5E:4D:69:A3:0E:8A:77:B1:37:36:08:FE:18:46:1F:5E:C8%3Bcom.vala.valaapp.activities
+    https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=E5:68:22:5E:4D:69:A3:0E:8A:77:B1:37:36:08:FE:18:46:1F:5E:C8%3Bcom.valapay.vala.activities
 
     You can also add your credentials to an existing key, using this line:
-    E5:68:22:5E:4D:69:A3:0E:8A:77:B1:37:36:08:FE:18:46:1F:5E:C8;com.vala.valaapp.activities
+    E5:68:22:5E:4D:69:A3:0E:8A:77:B1:37:36:08:FE:18:46:1F:5E:C8;com.valapay.vala.activities
 
     Alternatively, follow the directions here:
     https://developers.google.com/maps/documentation/android/start#get-key

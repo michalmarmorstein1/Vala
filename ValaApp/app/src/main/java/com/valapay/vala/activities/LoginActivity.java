@@ -1,4 +1,4 @@
-package com.vala.valaapp.activities;
+package com.valapay.vala.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.vala.valaapp.R;
+import com.valapay.vala.R;
 
 /**
  * A login screen that offers login via email/password.

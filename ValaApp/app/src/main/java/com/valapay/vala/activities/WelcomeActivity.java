@@ -1,4 +1,4 @@
-package com.vala.valaapp.activities;
+package com.valapay.vala.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.vala.valaapp.R;
+import com.valapay.vala.R;
 
 public class WelcomeActivity extends Activity {
 

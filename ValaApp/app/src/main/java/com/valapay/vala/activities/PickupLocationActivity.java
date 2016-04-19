@@ -1,4 +1,4 @@
-package com.vala.valaapp.activities;
+package com.valapay.vala.activities;
 
 import android.Manifest;
 import android.content.Intent;
@@ -18,7 +18,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.vala.valaapp.R;
+import com.valapay.vala.R;
 
 public class PickupLocationActivity extends NavigationDrawerActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {

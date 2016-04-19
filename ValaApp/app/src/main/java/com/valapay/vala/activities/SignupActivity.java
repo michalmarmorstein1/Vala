@@ -1,4 +1,4 @@
-package com.vala.valaapp.activities;
+package com.valapay.vala.activities;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.vala.valaapp.R;
+import com.valapay.vala.R;
 
 public class SignupActivity extends AppCompatActivity {
 

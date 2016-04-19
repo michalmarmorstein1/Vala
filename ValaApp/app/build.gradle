@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.3"
 
     defaultConfig {
-        applicationId "com.vala.valaapp"
+        applicationId "com.valapay.vala"
         minSdkVersion 21
         targetSdkVersion 23
         versionCode 1

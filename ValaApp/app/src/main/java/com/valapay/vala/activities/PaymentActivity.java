@@ -1,4 +1,4 @@
-package com.vala.valaapp.activities;
+package com.valapay.vala.activities;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.vala.valaapp.R;
+import com.valapay.vala.R;
 
 public class PaymentActivity extends NavigationDrawerActivity {
 
