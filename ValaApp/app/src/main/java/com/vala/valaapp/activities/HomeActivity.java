@@ -17,7 +17,7 @@ public class HomeActivity extends NavigationDrawerActivity {
         collectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CollectActivity.startCollectActivity("Abhimanyusuta", "100$", HomeActivity.this);
+                startActivity(new Intent(HomeActivity.this, PickupLocationActivity.class));
             }
         });
 

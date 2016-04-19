@@ -12,6 +12,8 @@ import com.vala.valaapp.R;
 
 public class CollectActivity extends AppCompatActivity {
 
+    public static final int REQUEST_CODE = 0;
+
     private static final String NAME_KEY = "NAME_KEY";
     private static final String AMOUNT_KEY = "AMOUNT_KEY";
 
@@ -20,7 +22,7 @@ public class CollectActivity extends AppCompatActivity {
         Intent intent = new Intent(context, CollectActivity.class);
         intent.putExtra(NAME_KEY, name);
         intent.putExtra(AMOUNT_KEY, amount);
-        context.startActivity(intent);
+        context.startActivityForResult(intent, REQUEST_CODE);
     }
 
     @Override
@@ -40,7 +42,8 @@ public class CollectActivity extends AppCompatActivity {
         okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(CollectActivity.this, PickupConfirmationActivity.class));
+                setResult(RESULT_OK);
+                finish();
             }
         });
 
@@ -48,6 +51,7 @@ public class CollectActivity extends AppCompatActivity {
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setResult(RESULT_CANCELED);
                 finish();
             }
         });

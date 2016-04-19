@@ -87,6 +87,10 @@
     <string name="payment_confirmation_bottom">You can review this info from the home screen</string>
     <string name="payment_confirmation_button">@android:string/ok</string>
 
+    <!-- pickup confirmation screen-->
+    <string name="pickup_collect">Collect</string>
+    <string name="pickup_reserve">I\'m here</string>
+
     <!-- collect screen-->
     <string name="collect_header">Collect</string>
     <string name="collect_1">We are reserving</string>
