@@ -49,9 +49,17 @@
             android:id="@+id/radio_group"
             android:background="#ffffff10"
             android:layout_gravity="center_horizontal">
-
         </RadioGroup>
+
     </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/search_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
 
     <LinearLayout
         android:orientation="horizontal"

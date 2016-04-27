@@ -6,6 +6,7 @@ import android.app.DialogFragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -17,10 +18,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.valapay.vala.R;
 
@@ -29,8 +32,9 @@ import java.util.Arrays;
 
 public class SendActivity extends NavigationDrawerActivity {
 
-    TextView mSelectReceiver;
-    EditText mAmount;
+    private TextView mSelectReceiver;
+    private EditText mAmount;
+    private SendMoneyTask mSendMoneyTask = null;
 
     public static ArrayList<String> receiversList;
 
@@ -64,7 +68,11 @@ public class SendActivity extends NavigationDrawerActivity {
                 //TODO check null? display error
                 if(!recipient.equals("") && !amount.equals("")){
 
-                    PaymentActivity.startPaymentActivity(recipient.toString(), Integer.parseInt(amount.toString()), SendActivity.this);
+                    if(mSendMoneyTask == null){
+                        //TODO show progress
+                        mSendMoneyTask = new SendMoneyTask(recipient.toString(), Integer.parseInt(amount.toString()));
+                        mSendMoneyTask.execute((Void) null);
+                    }
                 }
             }
         });
@@ -97,6 +105,13 @@ public class SendActivity extends NavigationDrawerActivity {
     static public class ReceiversDialogFragment extends DialogFragment {
 
         RadioGroup mRadioGroup;
+        Button mSelectBtn;
+        Button mCancelBtn;
+        Button mSearchBtn;
+        Button mAddReceiverBtn;
+        EditText mUserNameET;
+        ProgressBar mProgressBar;
+        SearchReceiverTask mSearchReceiverTask = null;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -118,12 +133,13 @@ public class SendActivity extends NavigationDrawerActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
             final View root = inflater.inflate(R.layout.fragment_select_receiver, container, true);
-            final Button selectBtn = (Button) root.findViewById(R.id.btnSelect);
-            final Button cancelBtn = (Button) root.findViewById(R.id.btnCancel);
-            final Button searchBtn = (Button) root.findViewById(R.id.btnSearch);
-            final Button addReceiverBtn = (Button) root.findViewById(R.id.btnAddReceiver);
-            final EditText userNameET = (EditText) root.findViewById(R.id.editTextUsername);
+            mSelectBtn = (Button) root.findViewById(R.id.btnSelect);
+            mCancelBtn = (Button) root.findViewById(R.id.btnCancel);
+            mSearchBtn = (Button) root.findViewById(R.id.btnSearch);
+            mAddReceiverBtn = (Button) root.findViewById(R.id.btnAddReceiver);
             mRadioGroup = (RadioGroup) root.findViewById(R.id.radio_group);
+            mUserNameET = (EditText) root.findViewById(R.id.editTextUsername);
+            mProgressBar = (ProgressBar) root.findViewById(R.id.search_progress);
 
             receiversList = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.receivers_array)));
             refreshReceiversList(receiversList);
@@ -139,29 +155,32 @@ public class SendActivity extends NavigationDrawerActivity {
 //                }
 //            });
 
-            cancelBtn.setOnClickListener(new View.OnClickListener() {
+            mCancelBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     getDialog().dismiss();
                 }
             });
 
-            searchBtn.setOnClickListener(new View.OnClickListener() {
+            mSearchBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //TODO search on server and change select button
-                    mRadioGroup.clearCheck();
-                    addReceiverBtn.setVisibility(View.VISIBLE);
-                    selectBtn.setVisibility(View.GONE);
+
+                    if(mSearchReceiverTask == null){
+                        mRadioGroup.setVisibility(View.GONE);
+                        mProgressBar.setVisibility(View.VISIBLE);
+                        mSearchReceiverTask = new SearchReceiverTask(mUserNameET.getText().toString());
+                        mSearchReceiverTask.execute();
+                    }
                 }
             });
 
-            addReceiverBtn.setOnClickListener(new View.OnClickListener() {
+            mAddReceiverBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    addReceiverBtn.setVisibility(View.GONE);
-                    selectBtn.setVisibility(View.VISIBLE);
+                    mAddReceiverBtn.setVisibility(View.GONE);
+                    mSelectBtn.setVisibility(View.VISIBLE);
                     int radioButtonID = mRadioGroup.getCheckedRadioButtonId();
                     RadioButton radioButton = (RadioButton) mRadioGroup.findViewById(radioButtonID);
                     if(radioButton != null){
@@ -172,7 +191,7 @@ public class SendActivity extends NavigationDrawerActivity {
                 }
             });
 
-            selectBtn.setOnClickListener(new View.OnClickListener() {
+            mSelectBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
@@ -204,6 +223,88 @@ public class SendActivity extends NavigationDrawerActivity {
                 newRadioButton.setId(i);
                 mRadioGroup.addView(newRadioButton, layoutParams);
             }
+        }
+
+        public class SearchReceiverTask extends AsyncTask<Void, Void, Boolean> {
+
+            private final String mUserName;
+
+            SearchReceiverTask(String userName) {
+                mUserName = userName;
+            }
+
+            @Override
+            protected Boolean doInBackground(Void... params) {
+                // TODO: search user name
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                return true;
+            }
+
+            @Override
+            protected void onPostExecute(final Boolean success) {
+                mSearchReceiverTask = null;
+                mRadioGroup.setVisibility(View.VISIBLE);
+                mProgressBar.setVisibility(View.GONE);
+                if (success) {
+
+                    refreshReceiversList(receiversList);
+                    mRadioGroup.clearCheck();
+                    mAddReceiverBtn.setVisibility(View.VISIBLE);
+                    mSelectBtn.setVisibility(View.GONE);
+                } else {
+                    //TODO show server errors
+                }
+            }
+
+            @Override
+            protected void onCancelled() {
+                mSearchReceiverTask = null;
+                mRadioGroup.setVisibility(View.VISIBLE);
+                mProgressBar.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    public class SendMoneyTask extends AsyncTask<Void, Void, Boolean> {
+
+        private String mReceiver;
+        private int mAmount;
+
+        SendMoneyTask(String receiver, int amount) {
+            mReceiver = receiver;
+            mAmount = amount;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            // TODO: search user name
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            mSendMoneyTask = null;
+            //TODO hide progress
+            if (success) {
+                PaymentActivity.startPaymentActivity(mReceiver, mAmount, SendActivity.this);
+            } else {
+                //TODO show server errors
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            mSendMoneyTask = null;
+            //TODO hide progress
         }
     }
 }
