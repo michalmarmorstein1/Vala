@@ -18,17 +18,20 @@ public class AddPinCodeActivity extends AppCompatActivity {
     private static final String LAST_NAME_KEY = "LAST_NAME_KEY";
     private static final String EMAIL_KEY = "EMAIL_KEY";
     private static final String PHONE_KEY = "PHONE_KEY";
+    private static final String PHOTO_KEY = "PHOTO_KEY";
 
     private UserSignupTask mAuthTask = null;
     private View mProgressView;
 
-    public static void startActivity(Context context, String firstName, String lastName, String email, String phone){
+    public static void startActivity(Context context, String firstName, String lastName,
+                                     String email, String phone, String photo){
 
         Intent intent = new Intent(context, AddPinCodeActivity.class);
         intent.putExtra(FIRST_NAME_KEY, firstName);
         intent.putExtra(LAST_NAME_KEY, lastName);
         intent.putExtra(EMAIL_KEY, email);
         intent.putExtra(PHONE_KEY, phone);
+        intent.putExtra(PHOTO_KEY, photo);
         context.startActivity(intent);
     }
 
@@ -83,7 +86,8 @@ public class AddPinCodeActivity extends AppCompatActivity {
         // perform the user sign up attempt.
         showProgress(true);
         mAuthTask = new UserSignupTask(bundle.getString(FIRST_NAME_KEY),
-                bundle.getString(LAST_NAME_KEY), bundle.getString(EMAIL_KEY), bundle.getString(PHONE_KEY));
+                bundle.getString(LAST_NAME_KEY), bundle.getString(EMAIL_KEY),
+                bundle.getString(PHONE_KEY), bundle.getString(PHOTO_KEY));
         mAuthTask.execute((Void) null);
     }
 
@@ -104,19 +108,27 @@ public class AddPinCodeActivity extends AppCompatActivity {
         private final String mLastName;
         private final String mEmail;
         private final String mPhone;
+        private final String mPhoto;
 
-        UserSignupTask(String firstName, String lastName, String email, String phone) {
+        UserSignupTask(String firstName, String lastName, String email, String phone, String photo) {
             mFirstName = firstName;
             mLastName = lastName;
             mEmail = email;
             mPhone = phone;
+            mPhoto = photo;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
+            // TODO: signup
             try {
-                Thread.sleep(2000);
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            // TODO: upload photo
+            try {
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

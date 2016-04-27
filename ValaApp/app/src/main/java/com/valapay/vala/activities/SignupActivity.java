@@ -115,7 +115,7 @@ public class SignupActivity extends AppCompatActivity {
         if (cancel) {
             focusView.requestFocus();
         } else {
-            AddPinCodeActivity.startActivity(this, firstName, lastName, email, phone);
+            AddPinCodeActivity.startActivity(this, firstName, lastName, email, phone, "photo file location");
         }
     }
 
