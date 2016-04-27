@@ -14,15 +14,10 @@ import android.widget.Toast;
 
 import com.valapay.vala.R;
 
-/**
- * A login screen that offers login via email/password.
- */
 public class LoginActivity extends AppCompatActivity {
 
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
     private UserLoginTask mAuthTask = null;
+    private ForgorPasswordTask mPassowrdTask = null;
 
     // UI references.
     private EditText mEmailView;
@@ -49,7 +44,11 @@ public class LoginActivity extends AppCompatActivity {
         forgotPassword.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(LoginActivity.this, "email will be sent", Toast.LENGTH_SHORT).show();
+                if(mPassowrdTask == null){
+                    mPassowrdTask = new ForgorPasswordTask(mEmailView.getText().toString());
+                    mPassowrdTask.execute();
+                }
+
             }
         });
 
@@ -76,7 +75,6 @@ public class LoginActivity extends AppCompatActivity {
         boolean cancel = false;
         View focusView = null;
 
-        // Check for a valid password, if the user entered one.
         if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
@@ -142,7 +140,7 @@ public class LoginActivity extends AppCompatActivity {
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
             try {
-                Thread.sleep(2000);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -168,6 +166,46 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected void onCancelled() {
             mAuthTask = null;
+            showProgress(false);
+        }
+    }
+
+    public class ForgorPasswordTask extends AsyncTask<Void, Void, Boolean> {
+
+        private final String mEmail;
+
+        ForgorPasswordTask(String email) {
+            mEmail = email;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            // TODO: attempt to reset password using a network service.
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            // TODO: register the new account.
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            mPassowrdTask = null;
+            showProgress(false);
+
+            if (success) {
+                Toast.makeText(LoginActivity.this, String.format("email will be sent to %1$s", mEmail), Toast.LENGTH_SHORT).show();
+
+            } else {
+                //TODO show server errors
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            mPassowrdTask = null;
             showProgress(false);
         }
     }
