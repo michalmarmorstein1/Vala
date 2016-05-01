@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
@@ -28,6 +29,7 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
     private Location mLastLocation;
     private Button mButton;
     private boolean mHideMarkers;
+    private ConfirmCollectionTask confirmCollectionTask = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,10 +138,45 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
                 mButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startActivity(new Intent(PickupLocationActivity.this, PickupConfirmationActivity.class));
+                        if(confirmCollectionTask == null){
+                            //TODO show progress
+                            confirmCollectionTask = new ConfirmCollectionTask();
+                            confirmCollectionTask.execute((Void) null);
+                        }
                     }
                 });
             }
+        }
+    }
+
+    private class ConfirmCollectionTask extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            // TODO: get QR code
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            confirmCollectionTask = null;
+            //TODO hide progress
+            if (success) {
+                startActivity(new Intent(PickupLocationActivity.this, PickupConfirmationActivity.class));
+            } else {
+                //TODO show server errors
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            confirmCollectionTask = null;
+            //TODO hide progress
         }
     }
 }
