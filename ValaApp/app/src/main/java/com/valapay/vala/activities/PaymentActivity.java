@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,6 +26,7 @@ public class PaymentActivity extends NavigationDrawerActivity {
 
     private String recipient;
     private int amount;
+    private ConfirmPaymentTask confirmPaymentTask = null;
 
     public static void startPaymentActivity(String recipient, int amount, Activity context){
 
@@ -58,9 +60,11 @@ public class PaymentActivity extends NavigationDrawerActivity {
         okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                PaymentConfirmationDialogFragment frag = new PaymentConfirmationDialogFragment();
-                frag.show(ft, "payment_confirmation_fragment_tag");
+                if(confirmPaymentTask == null){
+                    //TODO show progress
+                    confirmPaymentTask = new ConfirmPaymentTask();
+                    confirmPaymentTask.execute((Void) null);
+                }
             }
         });
 
@@ -154,4 +158,37 @@ public class PaymentActivity extends NavigationDrawerActivity {
 
     }
 
+    public class ConfirmPaymentTask extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            // TODO: get tracking number
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            confirmPaymentTask = null;
+            //TODO hide progress
+            if (success) {
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                PaymentConfirmationDialogFragment frag = new PaymentConfirmationDialogFragment();
+                frag.show(ft, "payment_confirmation_fragment_tag");
+
+            } else {
+                //TODO show server errors
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            confirmPaymentTask = null;
+            //TODO hide progress
+        }
+    }
 }
