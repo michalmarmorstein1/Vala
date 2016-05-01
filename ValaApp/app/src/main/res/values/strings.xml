@@ -5,7 +5,7 @@
     <!-- welcome screen -->
     <string name="welcome_text">The best way to send money\nto people you love</string>
     <string name="welcome_login_btn">Login</string>
-    <string name="welcome_signup_btn">Sign-up</string>
+    <string name="welcome_signup_btn">Sign up</string>
 
     <!-- login screen -->
     <string name="login_title">Login</string>
