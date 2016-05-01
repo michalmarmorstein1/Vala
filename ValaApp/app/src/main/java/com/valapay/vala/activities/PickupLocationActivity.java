@@ -51,7 +51,7 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CollectActivity.startCollectActivity("Abhimanyusuta", "100$", PickupLocationActivity.this);
+                ReservationActivity.startCollectActivity("Abhimanyusuta", "100$", PickupLocationActivity.this);
             }
         });
     }
@@ -126,7 +126,7 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if(requestCode == CollectActivity.REQUEST_CODE){
+        if(requestCode == ReservationActivity.REQUEST_CODE){
             if(resultCode == RESULT_OK){
                 //TODO add marker, add textView
                 mMap.clear();
