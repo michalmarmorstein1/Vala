@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.valapay.vala.R;
@@ -53,14 +54,32 @@ public class PaymentActivity extends NavigationDrawerActivity {
         String totalText = recipient + " " + getString(R.string.payment_total) + " " + total + "$";
         totalView.setText(totalText);
 
-        Button continueBtn = (Button) findViewById(R.id.payment_button);
+        Button okBtn = (Button) findViewById(R.id.buttonPaymentOk);
+        okBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                PaymentConfirmationDialogFragment frag = new PaymentConfirmationDialogFragment();
+                frag.show(ft, "payment_confirmation_fragment_tag");
+            }
+        });
+
+        Button cancelBtn = (Button) findViewById(R.id.buttonPaymentCancel);
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        final Button continueBtn = (Button) findViewById(R.id.buttonPayment);
         continueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //TODO integrate payment here
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                PaymentConfirmationDialogFragment frag = new PaymentConfirmationDialogFragment();
-                frag.show(ft, "payment_confirmation_fragment_tag");
+                LinearLayout layout = (LinearLayout) findViewById(R.id.LayoutConfirmPayment);
+                layout.setVisibility(View.VISIBLE);
+                continueBtn.setVisibility(View.GONE);
             }
         });
     }

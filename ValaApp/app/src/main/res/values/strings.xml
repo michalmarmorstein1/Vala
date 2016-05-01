@@ -78,6 +78,7 @@
     <string name="payment_fee_2">$ as fees</string>
     <string name="payment_total">will get</string>
     <string name="payment_button">Continue to payment</string>
+    <string name="payment_ok_button">Confirm</string>
 
     <!-- payment confirmation dialog-->
     <string name="payment_confirmation_header">Sent</string>
