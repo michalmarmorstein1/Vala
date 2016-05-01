@@ -29,7 +29,7 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
     private Location mLastLocation;
     private Button mButton;
     private boolean mHideMarkers;
-    private ConfirmCollectionTask confirmCollectionTask = null;
+    private ConfirmAffiliateTask confirmAffiliateTask = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,10 +138,10 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
                 mButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(confirmCollectionTask == null){
+                        if(confirmAffiliateTask == null){
                             //TODO show progress
-                            confirmCollectionTask = new ConfirmCollectionTask();
-                            confirmCollectionTask.execute((Void) null);
+                            confirmAffiliateTask = new ConfirmAffiliateTask();
+                            confirmAffiliateTask.execute((Void) null);
                         }
                     }
                 });
@@ -149,7 +149,7 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
         }
     }
 
-    private class ConfirmCollectionTask extends AsyncTask<Void, Void, Boolean> {
+    private class ConfirmAffiliateTask extends AsyncTask<Void, Void, Boolean> {
 
         @Override
         protected Boolean doInBackground(Void... params) {
@@ -164,7 +164,7 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
 
         @Override
         protected void onPostExecute(final Boolean success) {
-            confirmCollectionTask = null;
+            confirmAffiliateTask = null;
             //TODO hide progress
             if (success) {
                 startActivity(new Intent(PickupLocationActivity.this, PickupConfirmationActivity.class));
@@ -175,7 +175,7 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
 
         @Override
         protected void onCancelled() {
-            confirmCollectionTask = null;
+            confirmAffiliateTask = null;
             //TODO hide progress
         }
     }
