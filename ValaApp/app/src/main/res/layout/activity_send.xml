@@ -90,6 +90,8 @@
                     android:layout_marginLeft="20dp"
                     android:id="@+id/select_receiver"
                     android:textSize="18sp"
+                    android:drawableLeft="@drawable/userico"
+                    android:drawablePadding="10dp"
                     android:textColorHint="@color/darkGray"
                     android:hint="@string/send_receiver" />
 
