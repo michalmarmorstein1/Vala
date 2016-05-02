@@ -2,13 +2,21 @@ package com.valapay.vala.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.valapay.vala.R;
 
@@ -41,6 +49,11 @@ public class AddPinCodeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_pin_code);
 
         mProgressView = findViewById(R.id.signup_progress);
+        TextView tv = (TextView) findViewById(R.id.textView5);
+        Spannable wordToSpan = new SpannableString(tv.getText().toString());
+        wordToSpan.setSpan(new StyleSpan(Typeface.BOLD), 13, 22, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        wordToSpan.setSpan(new ForegroundColorSpan(Color.rgb(0, 172, 163)), 13, 22, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tv.setText(wordToSpan);
 
         final EditText e1 = (EditText) findViewById(R.id.editText1);
         final EditText e2 = (EditText) findViewById(R.id.editText2);

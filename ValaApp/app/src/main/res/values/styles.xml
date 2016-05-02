@@ -21,7 +21,7 @@
     <style name="GreenButton" parent="@style/Widget.AppCompat.Button">
         <item name="android:width">260dp</item>
         <item name="android:height">51dp</item>
-        <item name="android:background">#00ACA3</item>
+        <item name="android:background">@color/green</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textAlignment">center</item>
     </style>
@@ -29,7 +29,7 @@
     <style name="BlueButton" parent="@style/Widget.AppCompat.Button">
         <item name="android:width">260dp</item>
         <item name="android:height">51dp</item>
-        <item name="android:background">#0099DB</item>
+        <item name="android:background">@color/blue</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textAlignment">center</item>
     </style>
@@ -37,6 +37,10 @@
     <style name="ValaEditText" parent="@style/Widget.AppCompat.EditText">
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textColorHint">@android:color/white</item>
+    </style>
+
+    <style name="BlackEditText" parent="@style/Widget.AppCompat.EditText">
+        <item name="android:textColor">@color/colorPrimary</item>
     </style>
 
 
