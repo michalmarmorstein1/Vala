@@ -1,6 +1,8 @@
 package com.valapay.vala.activities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -12,9 +14,11 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.valapay.vala.R;
+import com.valapay.vala.components.RoundImage;
 
 public class HomeActivity extends NavigationDrawerActivity {
 
@@ -38,7 +42,7 @@ public class HomeActivity extends NavigationDrawerActivity {
         collectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(getAffiliatesTask == null){
+                if (getAffiliatesTask == null) {
                     //TODO show progress
                     getAffiliatesTask = new GetAffiliatesTask();
                     getAffiliatesTask.execute((Void) null);
@@ -53,6 +57,11 @@ public class HomeActivity extends NavigationDrawerActivity {
                 startActivity(new Intent(HomeActivity.this, SendActivity.class));
             }
         });
+
+        ImageView userImage = (ImageView) findViewById(R.id.userImage);
+        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.babu);
+        RoundImage roundedImage = new RoundImage(bm);
+        userImage.setImageDrawable(roundedImage);
     }
 
     @Override
