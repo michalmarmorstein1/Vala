@@ -38,6 +38,7 @@
     <string name="pin_header">Secure your account</string>
     <string name="pin_btn">Get started</string>
     <string name="pin_text">Please type a 4 digits pin code\n to secure your account and\n future transactions</string>
+    <string name="pin_error">Please type a 4 digits pin code</string>
 
     <!-- home screen -->
     <string name="home_name">Hi Angamuthu,</string>
@@ -63,6 +64,9 @@
     <string name="select_dialog_btn">Select</string>
     <string name="add_receiver_dialog_btn">Add to receivers list</string>
     <string name="cancel_dialog_btn">@android:string/cancel</string>
+    <string name="send_receiver_error">Please select a receiver</string>
+    <string name="send_amount_error">Please select amount to send</string>
+    <string name="send_amount_receiver_error">Please select amount to send and a receiver</string>
 
     <!-- DELETE THIS - temporary-->
     <string-array name="receivers_array">

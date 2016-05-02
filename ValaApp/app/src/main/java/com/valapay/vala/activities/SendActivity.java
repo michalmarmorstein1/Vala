@@ -77,16 +77,24 @@ public class SendActivity extends NavigationDrawerActivity {
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CharSequence recipient = mSelectReceiver.getText();
-                CharSequence amount = mAmount.getText();
-                //TODO check null? display error
-                if(!recipient.equals("") && !amount.equals("")){
-
-                    if(mSendMoneyTask == null){
-                        showProgress(true);
-                        mSendMoneyTask = new SendMoneyTask(recipient.toString(), Integer.parseInt(amount.toString()));
-                        mSendMoneyTask.execute((Void) null);
-                    }
+                String recipient = mSelectReceiver.getText().toString();
+                String amount = mAmount.getText().toString();
+                if(recipient.equals("") && amount.equals("")){
+                    Toast.makeText(SendActivity.this, getString(R.string.send_amount_receiver_error), Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if(recipient.equals("")){
+                    Toast.makeText(SendActivity.this, getString(R.string.send_receiver_error), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(amount.equals("")){
+                    Toast.makeText(SendActivity.this, getString(R.string.send_amount_error), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(mSendMoneyTask == null){
+                    showProgress(true);
+                    mSendMoneyTask = new SendMoneyTask(recipient.toString(), Integer.parseInt(amount.toString()));
+                    mSendMoneyTask.execute((Void) null);
                 }
             }
         });

@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.valapay.vala.R;
 
@@ -67,6 +68,12 @@ public class AddPinCodeActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(android.view.View v) {
+
+                if (e1.getText().toString().equals("") || e2.getText().toString().equals("") ||
+                        e3.getText().toString().equals("") || e4.getText().toString().equals("")) {
+                    Toast.makeText(AddPinCodeActivity.this, getString(R.string.pin_error), Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 attemptSignUp();
             }
         });
@@ -75,9 +82,12 @@ public class AddPinCodeActivity extends AppCompatActivity {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
 
-                if(!e1.getText().toString().equals("") && !e2.getText().toString().equals("") &&
-                        !e3.getText().toString().equals("") && !e4.getText().toString().equals("")) {
-                    button.setEnabled(true);
+                if(v == e1 && !e1.getText().toString().equals("")) {
+                    e2.requestFocus();
+                } else if (v == e2 && !e2.getText().toString().equals("")) {
+                    e3.requestFocus();
+                } else if(v == e3 && !e3.getText().toString().equals("")) {
+                    e4.requestFocus();
                 }
                 return false;
             }
@@ -87,7 +97,6 @@ public class AddPinCodeActivity extends AppCompatActivity {
         e1.setOnKeyListener(listener);
         e2.setOnKeyListener(listener);
         e3.setOnKeyListener(listener);
-        e4.setOnKeyListener(listener);
     }
 
     private void attemptSignUp(){
@@ -111,7 +120,7 @@ public class AddPinCodeActivity extends AppCompatActivity {
      */
     private void showProgress(final boolean show) {
         mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-        mImage.setVisibility(show ? View.GONE: View.VISIBLE);
+        mImage.setVisibility(show ? View.GONE : View.VISIBLE);
     }
 
     /**
