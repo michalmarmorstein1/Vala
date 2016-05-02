@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
-import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.view.View;
 import android.widget.Button;
@@ -23,10 +22,15 @@ import com.valapay.vala.components.RoundImage;
 public class HomeActivity extends NavigationDrawerActivity {
 
     private GetAffiliatesTask getAffiliatesTask = null;
+    private View mProgressView;
+    private View mImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mProgressView = findViewById(R.id.home_progress);
+        mImage = findViewById(R.id.userImage);
 
         TextView tv = (TextView) findViewById(R.id.name_text);
         Spannable wordToSpan = new SpannableString(tv.getText().toString());
@@ -43,7 +47,7 @@ public class HomeActivity extends NavigationDrawerActivity {
             @Override
             public void onClick(View v) {
                 if (getAffiliatesTask == null) {
-                    //TODO show progress
+                    showProgress(true);
                     getAffiliatesTask = new GetAffiliatesTask();
                     getAffiliatesTask.execute((Void) null);
                 }
@@ -62,6 +66,11 @@ public class HomeActivity extends NavigationDrawerActivity {
         Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.babu);
         RoundImage roundedImage = new RoundImage(bm);
         userImage.setImageDrawable(roundedImage);
+    }
+
+    private void showProgress(final boolean show) {
+        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+        mImage.setVisibility(show ? View.GONE: View.VISIBLE);
     }
 
     @Override
@@ -85,7 +94,7 @@ public class HomeActivity extends NavigationDrawerActivity {
         @Override
         protected void onPostExecute(final Boolean success) {
             getAffiliatesTask = null;
-            //TODO hide progress
+            showProgress(false);
             if (success) {
                 startActivity(new Intent(HomeActivity.this, PickupLocationActivity.class));
             } else {
@@ -96,7 +105,8 @@ public class HomeActivity extends NavigationDrawerActivity {
         @Override
         protected void onCancelled() {
             getAffiliatesTask = null;
-            //TODO hide progress
+            showProgress(false);
+
         }
     }
 }

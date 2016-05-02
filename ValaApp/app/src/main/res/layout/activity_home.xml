@@ -8,6 +8,16 @@
     android:paddingTop="?attr/actionBarSize"
     tools:context="com.valapay.vala.activities.HomeActivity">
 
+    <ProgressBar
+        android:id="@+id/home_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="112dp"
+        android:layout_height="112dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
     <ImageView
         android:layout_width="112dp"
         android:layout_height="112dp"
