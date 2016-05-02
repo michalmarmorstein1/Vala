@@ -4,11 +4,7 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@android:color/darker_gray"
+    android:background="@drawable/background_image_02"
     tools:context=".activities.LoginActivity">
 
     <!-- Login progress -->
@@ -20,11 +16,24 @@
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/valalogo_02"
+        android:layout_marginBottom="40dp"
+        android:layout_marginTop="40dp" />
+
     <LinearLayout
         android:id="@+id/email_login_form"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:paddingTop="40dp"
+        android:background="@color/transparentGray">
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
@@ -36,6 +45,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/prompt_email"
                 android:inputType="textEmailAddress"
+                android:textColorHint="@android:color/white"
                 android:maxLines="1"
                 android:singleLine="true" />
 
@@ -52,26 +62,28 @@
                 android:hint="@string/prompt_password"
                 android:inputType="textPassword"
                 android:maxLines="1"
+                android:layout_marginTop="30dp"
                 android:singleLine="true" />
 
         </android.support.design.widget.TextInputLayout>
 
         <Button
             android:id="@+id/email_sign_in_button"
-            style="?android:textAppearanceSmall"
-            android:layout_width="match_parent"
+            style="@style/GreenButton"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="30dp"
             android:text="@string/action_sign_in"
             android:textStyle="bold" />
 
-    </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:text="@string/login_forgot_password"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:id="@+id/textViewForgotPassword"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
-        android:text="@string/login_forgot_password"
-        android:gravity="center_horizontal"
-        android:id="@+id/textViewForgotPassword"/>
+    </LinearLayout>
 </LinearLayout>

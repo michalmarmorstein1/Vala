@@ -5,8 +5,40 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@android:color/white</item>
+        <item name="actionBarStyle">@style/ValaActionBar</item>
+        <item name="colorControlNormal">#c5c5c5</item>
+        <item name="colorControlActivated">@android:color/white</item>
+        <item name="colorControlHighlight">@android:color/white</item>
+        <item name="editTextStyle">@style/ValaEditText</item>
     </style>
+
+    <style name="ValaActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="background">@drawable/action_bar_gradient</item>
+        <item name="color">@android:color/white</item>
+    </style>
+
+    <style name="GreenButton" parent="@style/Widget.AppCompat.Button">
+        <item name="android:width">260dp</item>
+        <item name="android:height">51dp</item>
+        <item name="android:background">#00ACA3</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
+    <style name="BlueButton" parent="@style/Widget.AppCompat.Button">
+        <item name="android:width">260dp</item>
+        <item name="android:height">51dp</item>
+        <item name="android:background">#0099DB</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
+    <style name="ValaEditText" parent="@style/Widget.AppCompat.EditText">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColorHint">@android:color/white</item>
+    </style>
+
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
@@ -22,6 +54,5 @@
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowIsFloating">false</item>
     </style>
-
 
 </resources>

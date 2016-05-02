@@ -8,8 +8,8 @@
     tools:context="com.valapay.vala.activities.WelcomeActivity">
 
     <ImageView
-        android:layout_width="120dp"
-        android:layout_height="174dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:src="@drawable/logo_vala"
         android:layout_marginTop="40dp" />
@@ -30,27 +30,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="#80242424">
+        android:background="@color/transparentGray">
 
         <Button
-            android:layout_width="260dp"
-            android:layout_height="51dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/GreenButton"
             android:text="@string/welcome_login_btn"
             android:id="@+id/login_button"
             android:layout_gravity="center"
-            android:background="#00ACA3"
-            android:textColor="#FFFFFF"
-            android:textAlignment="center"
             android:layout_marginTop="70dp" />
 
         <Button
-            android:layout_width="260dp"
-            android:layout_height="51dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/BlueButton"
             android:text="@string/welcome_signup_btn"
             android:id="@+id/signup_button"
             android:layout_gravity="center"
-            android:background="#0099DB"
-            android:textColor="#FFFFFF"
             android:layout_marginTop="14dp" />
     </LinearLayout>
 </LinearLayout>
