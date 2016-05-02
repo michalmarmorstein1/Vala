@@ -43,6 +43,8 @@ public class SendActivity extends NavigationDrawerActivity {
 
     private TextView mSelectReceiver;
     private EditText mAmount;
+    private View mProgressView;
+    private View mImage;
     private SendMoneyTask mSendMoneyTask = null;
 
     public static ArrayList<String> receiversList;
@@ -50,6 +52,9 @@ public class SendActivity extends NavigationDrawerActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mProgressView = findViewById(R.id.send_progress);
+        mImage = findViewById(R.id.userImage);
 
         Spinner currencySpinner = (Spinner) findViewById(R.id.send_currency_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -78,7 +83,7 @@ public class SendActivity extends NavigationDrawerActivity {
                 if(!recipient.equals("") && !amount.equals("")){
 
                     if(mSendMoneyTask == null){
-                        //TODO show progress
+                        showProgress(true);
                         mSendMoneyTask = new SendMoneyTask(recipient.toString(), Integer.parseInt(amount.toString()));
                         mSendMoneyTask.execute((Void) null);
                     }
@@ -95,6 +100,11 @@ public class SendActivity extends NavigationDrawerActivity {
         Spannable wordToSpan = new SpannableString(tv.getText().toString());
         wordToSpan.setSpan(new StyleSpan(Typeface.BOLD), 3, wordToSpan.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         tv.setText(wordToSpan);
+    }
+
+    private void showProgress(final boolean show) {
+        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+        mImage.setVisibility(show ? View.GONE: View.VISIBLE);
     }
 
     @Override
@@ -312,7 +322,7 @@ public class SendActivity extends NavigationDrawerActivity {
         @Override
         protected void onPostExecute(final Boolean success) {
             mSendMoneyTask = null;
-            //TODO hide progress
+            showProgress(false);
             if (success) {
                 PaymentActivity.startPaymentActivity(mReceiver, mAmount, SendActivity.this);
             } else {
@@ -323,7 +333,7 @@ public class SendActivity extends NavigationDrawerActivity {
         @Override
         protected void onCancelled() {
             mSendMoneyTask = null;
-            //TODO hide progress
+            showProgress(false);
         }
     }
 }
