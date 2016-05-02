@@ -8,15 +8,16 @@
 
     <ProgressBar
         android:id="@+id/signup_progress"
-        style="?android:attr/progressBarStyleLarge"
+        style="?android:attr/progressBarStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="50dp"
         android:layout_gravity="center"
         android:visibility="gone" />
 
     <ImageView
-        android:layout_width="match_parent"
+        android:id="@+id/imageLock"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="50dp"
@@ -53,7 +54,7 @@
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/BlackEditText"
+            style="@style/GreenEditText"
             android:inputType="number"
             android:gravity="center"
             android:ems="10"
@@ -64,7 +65,7 @@
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/BlackEditText"
+            style="@style/GreenEditText"
             android:inputType="number"
             android:layout_weight="1"
             android:ems="10"
@@ -75,7 +76,7 @@
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/BlackEditText"
+            style="@style/GreenEditText"
             android:layout_weight="1"
             android:inputType="number"
             android:ems="10"
@@ -87,7 +88,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="number"
-            style="@style/BlackEditText"
+            style="@style/GreenEditText"
             android:layout_weight="1"
             android:ems="10"
             android:maxLength="1"

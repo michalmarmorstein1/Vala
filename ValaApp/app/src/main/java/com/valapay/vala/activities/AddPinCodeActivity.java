@@ -30,6 +30,7 @@ public class AddPinCodeActivity extends AppCompatActivity {
 
     private UserSignupTask mAuthTask = null;
     private View mProgressView;
+    private View mImage;
 
     public static void startActivity(Context context, String firstName, String lastName,
                                      String email, String phone, String photo){
@@ -49,6 +50,7 @@ public class AddPinCodeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_pin_code);
 
         mProgressView = findViewById(R.id.signup_progress);
+        mImage = findViewById(R.id.imageLock);
         TextView tv = (TextView) findViewById(R.id.textView5);
         Spannable wordToSpan = new SpannableString(tv.getText().toString());
         wordToSpan.setSpan(new StyleSpan(Typeface.BOLD), 13, 22, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -109,6 +111,7 @@ public class AddPinCodeActivity extends AppCompatActivity {
      */
     private void showProgress(final boolean show) {
         mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+        mImage.setVisibility(show ? View.GONE: View.VISIBLE);
     }
 
     /**

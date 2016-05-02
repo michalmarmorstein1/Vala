@@ -6,8 +6,15 @@ import android.app.DialogFragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.StyleSpan;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
@@ -26,6 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.valapay.vala.R;
+import com.valapay.vala.components.RoundImage;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -76,6 +85,16 @@ public class SendActivity extends NavigationDrawerActivity {
                 }
             }
         });
+
+        ImageView userImage = (ImageView) findViewById(R.id.userImage);
+        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.babu);
+        RoundImage roundedImage = new RoundImage(bm);
+        userImage.setImageDrawable(roundedImage);
+
+        TextView tv = (TextView) findViewById(R.id.textName);
+        Spannable wordToSpan = new SpannableString(tv.getText().toString());
+        wordToSpan.setSpan(new StyleSpan(Typeface.BOLD), 3, wordToSpan.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tv.setText(wordToSpan);
     }
 
     @Override

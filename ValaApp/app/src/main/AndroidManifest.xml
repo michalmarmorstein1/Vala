@@ -36,7 +36,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.SendActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/GreenTheme" />
         <activity
             android:name=".activities.PaymentActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -54,7 +54,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity android:name=".activities.AddPinCodeActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/GreenTheme" />
 
 
         <!--
