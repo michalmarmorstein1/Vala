@@ -1,58 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:orientation="vertical"
+    android:background="@drawable/background_image06"
     android:paddingTop="?attr/actionBarSize"
     tools:context="com.valapay.vala.activities.HomeActivity">
 
-    <TextView
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/home_name"
-        android:id="@+id/name_text"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="54dp" />
+        android:layout_gravity="center"
+        android:src="@drawable/valalogo_02"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/home_collect"
-        android:id="@+id/collect_text"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/name_text" />
+        android:background="@android:color/white">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="@string/home_name"
+            android:id="@+id/name_text"
+            android:textColor="@color/blue"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/home_amount"
-        android:id="@+id/amount_text"
-        android:layout_below="@+id/collect_text"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="52dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/home_balance"
+            android:textSize="20sp"
+            android:id="@+id/collect_text"
+            android:textColor="@color/darkGray"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/name_text" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/home_amount"
+            android:textSize="37.5sp"
+            android:fontFamily="sans-serif-thin"
+            android:id="@+id/amount_text"
+            android:textColor="@color/blue"
+            android:layout_below="@+id/collect_text"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="50dp"
+            android:layout_marginTop="20dp" />
+    </RelativeLayout>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/BlueButton"
         android:text="@string/home_collect_btn"
         android:id="@+id/collect_btn"
-        android:layout_below="@+id/amount_text"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="89dp" />
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/GreenButton"
         android:text="@string/home_send_btn"
         android:id="@+id/send_btn"
-        android:layout_below="@+id/collect_btn"
-        android:layout_centerHorizontal="true" />
+        android:layout_marginTop="15dp"
+        android:layout_gravity="center" />
 
-</RelativeLayout>
+</LinearLayout>

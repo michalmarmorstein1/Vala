@@ -25,6 +25,7 @@ public abstract class NavigationDrawerActivity extends AppCompatActivity
 
         //Add toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("");
         setSupportActionBar(toolbar);
 
         //Toggle drawer

@@ -1,10 +1,18 @@
 package com.valapay.vala.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.valapay.vala.R;
 
@@ -15,6 +23,16 @@ public class HomeActivity extends NavigationDrawerActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        TextView tv = (TextView) findViewById(R.id.name_text);
+        Spannable wordToSpan = new SpannableString(tv.getText().toString());
+        wordToSpan.setSpan(new StyleSpan(Typeface.BOLD), 3, wordToSpan.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tv.setText(wordToSpan);
+
+        tv = (TextView) findViewById(R.id.amount_text);
+        wordToSpan = new SpannableString(tv.getText().toString());
+        wordToSpan.setSpan(new StyleSpan(Typeface.BOLD), 1, wordToSpan.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tv.setText(wordToSpan);
 
         Button collectButton = (Button) findViewById(R.id.collect_btn);
         collectButton.setOnClickListener(new View.OnClickListener() {

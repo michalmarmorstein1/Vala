@@ -22,6 +22,8 @@
         <item name="android:width">260dp</item>
         <item name="android:height">51dp</item>
         <item name="android:background">@color/green</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textAlignment">center</item>
     </style>
@@ -31,6 +33,8 @@
         <item name="android:height">51dp</item>
         <item name="android:background">@color/blue</item>
         <item name="android:textColor">@android:color/white</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:textAlignment">center</item>
     </style>
 

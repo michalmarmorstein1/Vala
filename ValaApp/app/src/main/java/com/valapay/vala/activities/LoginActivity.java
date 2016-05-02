@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,13 +24,17 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mEmailView;
     private EditText mPasswordView;
     private View mProgressView;
+    private View mLogo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         mEmailView = (EditText) findViewById(R.id.email);
         mPasswordView = (EditText) findViewById(R.id.password);
+        mProgressView = findViewById(R.id.login_progress);
+        mLogo = findViewById(R.id.login_logo);
 
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
@@ -39,7 +44,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        mProgressView = findViewById(R.id.login_progress);
         TextView forgotPassword = (TextView) findViewById(R.id.textViewForgotPassword);
         forgotPassword.setOnClickListener(new OnClickListener() {
             @Override
@@ -120,6 +124,7 @@ public class LoginActivity extends AppCompatActivity {
      */
     private void showProgress(final boolean show) {
         mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+        mLogo.setVisibility(show ? View.GONE: View.VISIBLE);
     }
 
     /**
