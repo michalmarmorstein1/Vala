@@ -68,7 +68,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/BlueButton"
+        style="@style/BigBlueButton"
         android:text="@string/home_collect_btn"
         android:id="@+id/collect_btn"
         android:layout_gravity="center"
@@ -77,7 +77,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/GreenButton"
+        style="@style/BigGreenButton"
         android:text="@string/home_send_btn"
         android:id="@+id/send_btn"
         android:layout_marginTop="15dp"

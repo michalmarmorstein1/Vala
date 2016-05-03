@@ -117,7 +117,7 @@
         android:text="@string/send_button"
         android:id="@+id/send_button"
         android:layout_marginTop="30dp"
-        style="@style/GreenButton"
+        style="@style/BigGreenButton"
         android:layout_gravity="center_horizontal" />
 
 </LinearLayout>

@@ -35,7 +35,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/GreenButton"
+            style="@style/BigGreenButton"
             android:text="@string/welcome_login_btn"
             android:id="@+id/login_button"
             android:layout_gravity="center"
@@ -44,7 +44,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/BlueButton"
+            style="@style/BigBlueButton"
             android:text="@string/welcome_signup_btn"
             android:id="@+id/signup_button"
             android:layout_gravity="center"

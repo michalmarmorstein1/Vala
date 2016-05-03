@@ -2,29 +2,99 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     android:orientation="vertical">
 
-    <ImageView
+    <ProgressBar
+        android:id="@+id/search_progress"
+        style="?android:attr/progressBarStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imgHeader"
-        android:layout_gravity="center_horizontal" />
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/imageSelectReceiver"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:src="@drawable/lockico"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/invite_dialog"
         android:id="@+id/textViewSelectReceiver"
-        android:layout_gravity="center_horizontal" />
+        android:layout_marginTop="10dp"
+        android:textSize="20sp"
+        android:textColor="@color/green"
+        android:layout_gravity="center" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center_horizontal">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/SilverButton"
+            android:text="@string/cancel_dialog_btn"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:id="@+id/btnCancel" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/GreenButton"
+            android:text="@string/select_dialog_btn"
+            android:layout_weight="1"
+            android:layout_margin="10dp"
+            android:id="@+id/btnSelect" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/BlueButton"
+            android:text="@string/add_receiver_dialog_btn"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:id="@+id/btnAddReceiver" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        android:fillViewport="false">
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/radio_group"
+            android:paddingLeft="30dp"
+            android:layout_gravity="center">
+        </RadioGroup>
+    </ScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
         android:orientation="horizontal">
 
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
             android:id="@+id/editTextUsername"
             android:layout_weight="4"
             android:hint="@string/invite_edit_text" />
@@ -32,59 +102,12 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            style="@style/GreenButton"
             android:layout_weight="1"
+            android:padding="8dp"
             android:text="@string/search_dialog_btn"
             android:id="@+id/btnSearch"/>
     </LinearLayout>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:fillViewport="false">
-
-        <RadioGroup
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/radio_group"
-            android:background="#ffffff10"
-            android:layout_gravity="center_horizontal">
-        </RadioGroup>
-
-    </ScrollView>
-
-    <ProgressBar
-        android:id="@+id/search_progress"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:visibility="gone" />
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/cancel_dialog_btn"
-            android:layout_weight="1"
-            android:id="@+id/btnCancel" />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/select_dialog_btn"
-            android:layout_weight="1"
-            android:id="@+id/btnSelect" />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/add_receiver_dialog_btn"
-            android:layout_weight="1"
-            android:visibility="gone"
-            android:id="@+id/btnAddReceiver" />
-    </LinearLayout>
 </LinearLayout>

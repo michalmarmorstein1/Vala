@@ -60,13 +60,13 @@
     </string-array>
     <string name="invite_dialog">Select Receiver</string>
     <string name="invite_edit_text">Type username or e-mail</string>
-    <string name="search_dialog_btn">Search on server</string>
+    <string name="search_dialog_btn">Search user</string>
     <string name="select_dialog_btn">Select</string>
-    <string name="add_receiver_dialog_btn">Add to receivers list</string>
+    <string name="add_receiver_dialog_btn">Add to list</string>
     <string name="cancel_dialog_btn">@android:string/cancel</string>
     <string name="send_receiver_error">Please select a receiver</string>
     <string name="send_amount_error">Please select amount to send</string>
-    <string name="send_amount_receiver_error">Please select amount to send and a receiver</string>
+    <string name="select_receiver_error">Please select a receiver</string>
 
     <!-- DELETE THIS - temporary-->
     <string-array name="receivers_array">

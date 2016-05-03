@@ -15,6 +15,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.StyleSpan;
+import android.view.ContextThemeWrapper;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -79,16 +80,12 @@ public class SendActivity extends NavigationDrawerActivity {
             public void onClick(View v) {
                 String recipient = mSelectReceiver.getText().toString();
                 String amount = mAmount.getText().toString();
-                if(recipient.equals("") && amount.equals("")){
-                    Toast.makeText(SendActivity.this, getString(R.string.send_amount_receiver_error), Toast.LENGTH_LONG).show();
+                if(amount.equals("")){
+                    Toast.makeText(SendActivity.this, getString(R.string.send_amount_error), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if(recipient.equals("")){
                     Toast.makeText(SendActivity.this, getString(R.string.send_receiver_error), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if(amount.equals("")){
-                    Toast.makeText(SendActivity.this, getString(R.string.send_amount_error), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if(mSendMoneyTask == null){
@@ -147,7 +144,8 @@ public class SendActivity extends NavigationDrawerActivity {
         Button mSearchBtn;
         Button mAddReceiverBtn;
         EditText mUserNameET;
-        ProgressBar mProgressBar;
+        View mFragmentProgressBar;
+        View mFragmentImage;
         SearchReceiverTask mSearchReceiverTask = null;
 
         @Override
@@ -169,43 +167,33 @@ public class SendActivity extends NavigationDrawerActivity {
 
         @Override
         public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
-            final View root = inflater.inflate(R.layout.fragment_select_receiver, container, true);
+
+            // create ContextThemeWrapper from the original Activity Context with the custom theme
+            final Context contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.GreenTheme);
+            // clone the inflater using the ContextThemeWrapper
+            LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapper);
+            // inflate the layout using the cloned inflater, not default inflater
+            final View root = localInflater.inflate(R.layout.fragment_select_receiver, container, true);
             mSelectBtn = (Button) root.findViewById(R.id.btnSelect);
             mCancelBtn = (Button) root.findViewById(R.id.btnCancel);
             mSearchBtn = (Button) root.findViewById(R.id.btnSearch);
             mAddReceiverBtn = (Button) root.findViewById(R.id.btnAddReceiver);
             mRadioGroup = (RadioGroup) root.findViewById(R.id.radio_group);
             mUserNameET = (EditText) root.findViewById(R.id.editTextUsername);
-            mProgressBar = (ProgressBar) root.findViewById(R.id.search_progress);
+            mFragmentProgressBar = root.findViewById(R.id.search_progress);
+            mFragmentImage = root.findViewById(R.id.imageSelectReceiver);
 
             receiversList = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.receivers_array)));
             refreshReceiversList(receiversList);
 
-//            userNameET.setOnKeyListener(new View.OnKeyListener() {
-//
-//                @Override
-//                public boolean onKey(View v, int keyCode, KeyEvent event) {
-//                    if(((EditText)v).getText().toString().length() > 0){
-//                        searchBtn.setEnabled(true);
-//                    }
-//                    return false;
-//                }
-//            });
-
-            mCancelBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    getDialog().dismiss();
-                }
-            });
+            mCancelBtn.setOnClickListener(new MainCancelListener());
 
             mSearchBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
                     if(mSearchReceiverTask == null){
-                        mRadioGroup.setVisibility(View.GONE);
-                        mProgressBar.setVisibility(View.VISIBLE);
+                        showProgress(true);
                         mSearchReceiverTask = new SearchReceiverTask(mUserNameET.getText().toString());
                         mSearchReceiverTask.execute();
                     }
@@ -216,15 +204,16 @@ public class SendActivity extends NavigationDrawerActivity {
                 @Override
                 public void onClick(View v) {
 
-                    mAddReceiverBtn.setVisibility(View.GONE);
-                    mSelectBtn.setVisibility(View.VISIBLE);
                     int radioButtonID = mRadioGroup.getCheckedRadioButtonId();
                     RadioButton radioButton = (RadioButton) mRadioGroup.findViewById(radioButtonID);
-                    if(radioButton != null){
-                        String receiver = radioButton.getText().toString();
-                        receiversList.add(receiver);
-                        refreshReceiversList(receiversList);
+                    if(radioButton == null){
+                        Toast.makeText(getActivity(), getString(R.string.select_receiver_error), Toast.LENGTH_SHORT).show();
+                        return;
                     }
+                    setSearchMode(false);
+                    String receiver = radioButton.getText().toString();
+                    receiversList.add(receiver);
+                    refreshReceiversList(receiversList);
                 }
             });
 
@@ -234,14 +223,46 @@ public class SendActivity extends NavigationDrawerActivity {
 
                     int radioButtonID = mRadioGroup.getCheckedRadioButtonId();
                     RadioButton radioButton = (RadioButton) mRadioGroup.findViewById(radioButtonID);
+                    if(radioButton == null){
+                        Toast.makeText(getActivity(), getString(R.string.select_receiver_error), Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     TextView selectReceiver = (TextView) getActivity().findViewById(R.id.select_receiver);
-                    CharSequence receiver = radioButton != null ? radioButton.getText() : "";
+                    CharSequence receiver = radioButton.getText();
                     selectReceiver.setText(receiver);
                     getDialog().dismiss();
                 }
             });
 
             return root;
+        }
+
+        private void setSearchMode(boolean isSearchMode){
+
+            mAddReceiverBtn.setVisibility(isSearchMode ? View.VISIBLE : View.GONE);
+            mSelectBtn.setVisibility(isSearchMode ? View.GONE : View.VISIBLE);
+            mCancelBtn.setOnClickListener(isSearchMode ? new SearchCancelListener() : new MainCancelListener());
+        }
+
+        private class MainCancelListener implements View.OnClickListener {
+
+            @Override
+            public void onClick(View v) {
+                getDialog().dismiss();
+            }
+        }
+
+        private class SearchCancelListener implements View.OnClickListener {
+
+            @Override
+            public void onClick(View v) {
+                setSearchMode(false);
+            }
+        }
+
+        private void showProgress(final boolean show) {
+            mFragmentProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            mFragmentImage.setVisibility(show ? View.GONE: View.VISIBLE);
         }
 
         public void refreshReceiversList(ArrayList<String> list){
@@ -258,6 +279,7 @@ public class SendActivity extends NavigationDrawerActivity {
                 String label = receiversArray[i];
                 newRadioButton.setText(label);
                 newRadioButton.setId(i);
+                newRadioButton.setLayoutParams(new LinearLayout.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT, RadioGroup.LayoutParams.WRAP_CONTENT, 1f));
                 mRadioGroup.addView(newRadioButton, layoutParams);
             }
         }
@@ -284,14 +306,11 @@ public class SendActivity extends NavigationDrawerActivity {
             @Override
             protected void onPostExecute(final Boolean success) {
                 mSearchReceiverTask = null;
-                mRadioGroup.setVisibility(View.VISIBLE);
-                mProgressBar.setVisibility(View.GONE);
+                showProgress(false);
                 if (success) {
-
                     refreshReceiversList(receiversList);
                     mRadioGroup.clearCheck();
-                    mAddReceiverBtn.setVisibility(View.VISIBLE);
-                    mSelectBtn.setVisibility(View.GONE);
+                    setSearchMode(true);
                 } else {
                     //TODO show server errors
                 }
@@ -300,8 +319,7 @@ public class SendActivity extends NavigationDrawerActivity {
             @Override
             protected void onCancelled() {
                 mSearchReceiverTask = null;
-                mRadioGroup.setVisibility(View.VISIBLE);
-                mProgressBar.setVisibility(View.GONE);
+                showProgress(false);
             }
         }
     }
