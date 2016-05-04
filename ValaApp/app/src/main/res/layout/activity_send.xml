@@ -9,6 +9,13 @@
     android:background="@drawable/background_image06"
     tools:context="com.valapay.vala.activities.SendActivity">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:id="@+id/stepsImage"
+        android:src="@drawable/stepstabs_send" />
+
     <ProgressBar
         android:id="@+id/send_progress"
         style="?android:attr/progressBarStyleLarge"
@@ -18,13 +25,6 @@
         android:layout_marginBottom="20dp"
         android:layout_gravity="center"
         android:visibility="gone" />
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:id="@+id/stepsImage"
-        android:src="@drawable/stepstabs_send" />
 
     <ImageView
         android:layout_width="112dp"
