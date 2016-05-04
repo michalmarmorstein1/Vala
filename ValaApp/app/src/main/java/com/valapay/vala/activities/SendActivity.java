@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Spannable;
@@ -16,6 +17,7 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.StyleSpan;
 import android.view.ContextThemeWrapper;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -146,6 +148,7 @@ public class SendActivity extends NavigationDrawerActivity {
         EditText mUserNameET;
         View mFragmentProgressBar;
         View mFragmentImage;
+        TextView mListHeader;
         SearchReceiverTask mSearchReceiverTask = null;
 
         @Override
@@ -182,7 +185,7 @@ public class SendActivity extends NavigationDrawerActivity {
             mUserNameET = (EditText) root.findViewById(R.id.editTextUsername);
             mFragmentProgressBar = root.findViewById(R.id.search_progress);
             mFragmentImage = root.findViewById(R.id.imageSelectReceiver);
-
+            mListHeader = (TextView) root.findViewById(R.id.textListHeader);
             receiversList = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.receivers_array)));
             refreshReceiversList(receiversList);
 
@@ -241,7 +244,10 @@ public class SendActivity extends NavigationDrawerActivity {
 
             mAddReceiverBtn.setVisibility(isSearchMode ? View.VISIBLE : View.GONE);
             mSelectBtn.setVisibility(isSearchMode ? View.GONE : View.VISIBLE);
-            mCancelBtn.setOnClickListener(isSearchMode ? new SearchCancelListener() : new MainCancelListener());
+            mCancelBtn.setOnClickListener(isSearchMode ? new SearchCancelListener()
+                    : new MainCancelListener());
+            mListHeader.setText(isSearchMode ? getString(R.string.invite_search_results)
+                    : getString(R.string.invite_my_receivers));
         }
 
         private class MainCancelListener implements View.OnClickListener {
@@ -279,7 +285,16 @@ public class SendActivity extends NavigationDrawerActivity {
                 String label = receiversArray[i];
                 newRadioButton.setText(label);
                 newRadioButton.setId(i);
-                newRadioButton.setLayoutParams(new LinearLayout.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT, RadioGroup.LayoutParams.WRAP_CONTENT, 1f));
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(RadioGroup.LayoutParams.MATCH_PARENT, RadioGroup.LayoutParams.WRAP_CONTENT, 1f);
+                params.gravity = Gravity.LEFT;
+                newRadioButton.setLayoutParams(params);
+                Drawable avatarImg = getActivity().getDrawable(R.drawable.babu);
+                avatarImg.setBounds(0, 0, 100, 100);
+                Drawable radioImg = getActivity().getDrawable(R.drawable.radio_btn);
+                newRadioButton.setCompoundDrawables(avatarImg, null, null, null);
+                newRadioButton.setCompoundDrawablePadding(40);
+                newRadioButton.setButtonDrawable(radioImg);
+                newRadioButton.setPadding(30,30,0,30);
                 mRadioGroup.addView(newRadioButton, layoutParams);
             }
         }

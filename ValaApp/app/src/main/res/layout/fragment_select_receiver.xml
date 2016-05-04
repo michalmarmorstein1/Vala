@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="50dp"
-        android:src="@drawable/lockico"/>
+        android:src="@drawable/receiverlargeico"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -66,6 +66,18 @@
             android:id="@+id/btnAddReceiver" />
     </LinearLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/invite_my_receivers"
+        android:layout_marginTop="10dp"
+        android:id="@+id/textListHeader"
+        android:textSize="16sp"
+        android:paddingLeft="30dp"
+        android:textStyle="bold"
+        android:textColor="@color/green"
+        android:layout_gravity="left" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -78,8 +90,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/radio_group"
-            android:paddingLeft="30dp"
-            android:layout_gravity="center">
+            android:gravity="left"
+            android:paddingLeft="40dp">
         </RadioGroup>
     </ScrollView>
 

@@ -59,6 +59,8 @@
         <item>NIS</item>
     </string-array>
     <string name="invite_dialog">Select Receiver</string>
+    <string name="invite_my_receivers">My Receivers</string>
+    <string name="invite_search_results">Search Results</string>
     <string name="invite_edit_text">Type username or e-mail</string>
     <string name="search_dialog_btn">Search user</string>
     <string name="select_dialog_btn">Select</string>
