@@ -5,14 +5,22 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -26,6 +34,7 @@ public class PaymentActivity extends NavigationDrawerActivity {
 
     private String recipient;
     private int amount;
+    private String currency = "$";
     private ConfirmPaymentTask confirmPaymentTask = null;
 
     public static void startPaymentActivity(String recipient, int amount, Activity context){
@@ -48,13 +57,26 @@ public class PaymentActivity extends NavigationDrawerActivity {
         TextView totalView = (TextView) findViewById(R.id.total_text);
 
         //TODO handle currency
-        String amountText = getString(R.string.payment_amount) + " " + amount + "$";
-        amountView.setText(amountText);
-        String feeText = getString(R.string.payment_fee_1) + " " + FEE + getString(R.string.payment_fee_2);
-        feeView.setText(feeText);
+        String amountStr = currency + amount;
+        Spannable wordToSpan = new SpannableString(amountStr);
+        wordToSpan.setSpan(new StyleSpan(Typeface.BOLD), currency.length(), wordToSpan.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        amountView.setText(wordToSpan);
+
+        String feeStr = getString(R.string.payment_fee, FEE);
+        wordToSpan = new SpannableString(feeStr);
+        int startIndex = feeStr.indexOf("pay") + 4;
+        wordToSpan.setSpan(new ForegroundColorSpan(Color.rgb(242, 160, 104)), startIndex, startIndex + currency.length() + String.valueOf(FEE).length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        wordToSpan.setSpan(new StyleSpan(Typeface.BOLD), startIndex + currency.length(), startIndex + currency.length() + String.valueOf(FEE).length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        feeView.setText(wordToSpan);
+
         int total = amount - FEE;
-        String totalText = recipient + " " + getString(R.string.payment_total) + " " + total + "$";
-        totalView.setText(totalText);
+        String totalText = recipient + " " + getString(R.string.payment_total) + " $" + total;
+        wordToSpan = new SpannableString(totalText);
+        startIndex = totalText.indexOf(currency);
+        wordToSpan.setSpan(new ForegroundColorSpan(Color.rgb(0, 153, 219)), startIndex, startIndex + currency.length() + String.valueOf(total).length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        wordToSpan.setSpan(new StyleSpan(Typeface.BOLD), startIndex + currency.length(), startIndex + currency.length() + String.valueOf(total).length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        wordToSpan.setSpan(new StyleSpan(Typeface.BOLD), 0, recipient.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        totalView.setText(wordToSpan);
 
         Button okBtn = (Button) findViewById(R.id.buttonPaymentOk);
         okBtn.setOnClickListener(new View.OnClickListener() {
@@ -84,6 +106,9 @@ public class PaymentActivity extends NavigationDrawerActivity {
                 LinearLayout layout = (LinearLayout) findViewById(R.id.LayoutConfirmPayment);
                 layout.setVisibility(View.VISIBLE);
                 continueBtn.setVisibility(View.GONE);
+                ImageView steps = (ImageView) findViewById(R.id.stepsImage);
+                steps.setImageDrawable(getDrawable(R.drawable.stepstabs_confirm));
+                findViewById(R.id.card_text).setVisibility(View.VISIBLE);
             }
         });
     }

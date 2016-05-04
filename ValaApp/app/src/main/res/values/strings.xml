@@ -80,9 +80,9 @@
 
     <!-- payment screen-->
     <string name="payment_amount">You are sending</string>
-    <string name="payment_fee_1">You will pay</string>
-    <string name="payment_fee_2">$ as fees</string>
+    <string name="payment_fee">You will pay $%1$s as fees</string>
     <string name="payment_total">will get</string>
+    <string name="payment_card">Your card number is\n XXXX XXXX XXXX 1234\n Expiration date is 06/19</string>
     <string name="payment_button">Continue to payment</string>
     <string name="payment_ok_button">Confirm</string>
 
@@ -100,8 +100,8 @@
 
     <!-- collect screen-->
     <string name="collect_header">Collect</string>
-    <string name="collect_1">We are reserving</string>
-    <string name="collect_2">for you at %1$s</string>
+    <string name="collect_1">We are reserv%1$sing</string>
+    <string name="collect_2">for you at </string>
     <string name="collect_3">Please arrive in the next 5 hours\n to get your cash</string>
     <string name="collect_4">Don\'t forget your ID.</string>
     <string name="collect_btn_ok">@android:string/ok</string>
