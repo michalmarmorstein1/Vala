@@ -20,20 +20,27 @@
         android:visibility="gone" />
 
     <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:id="@+id/stepsImage"
+        android:src="@drawable/stepstabs_send" />
+
+    <ImageView
         android:layout_width="112dp"
         android:layout_height="112dp"
         android:layout_gravity="center"
         android:id="@+id/userImage"
         android:src="@drawable/babu"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="20dp" />
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="15dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingTop="20dp"
-        android:paddingBottom="20dp"
+        android:paddingBottom="40dp"
         android:background="@android:color/white">
 
         <TextView
