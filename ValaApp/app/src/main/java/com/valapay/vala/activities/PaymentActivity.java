@@ -5,6 +5,8 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -14,6 +16,7 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
+import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,6 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.valapay.vala.R;
+import com.valapay.vala.components.RoundImage;
 
 public class PaymentActivity extends NavigationDrawerActivity {
 
@@ -171,12 +175,22 @@ public class PaymentActivity extends NavigationDrawerActivity {
                 }
             });
 
+            ImageView userImage = (ImageView) root.findViewById(R.id.imageViewUser);
+            Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.babu);
+            RoundImage roundedImage = new RoundImage(bm);
+            userImage.setImageDrawable(roundedImage);
+
             String recipient = getActivity().getIntent().getStringExtra(RECIPIENT_KEY);
             TextView recipientTextView = (TextView) root.findViewById(R.id.textViewName);
-            recipientTextView.setText(recipient + " " + getString(R.string.payment_confirmation_top_2));
+            recipientTextView.setText(getString(R.string.payment_confirmation_top_2, recipient));
+            Spannable wordToSpan = new SpannableString(recipientTextView.getText().toString());
+            wordToSpan.setSpan(new StyleSpan(Typeface.BOLD), 0, recipient.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            recipientTextView.setText(wordToSpan);
 
             TextView trackingNumberTextView = (TextView) root.findViewById(R.id.textViewTrackingNumber);
-            trackingNumberTextView.setText("WE456TYU7");
+            SpannableString content = new SpannableString("WE456TYU7");
+            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+            trackingNumberTextView.setText(content);
 
             return root;
         }

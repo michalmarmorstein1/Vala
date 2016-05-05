@@ -14,24 +14,29 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:src="@drawable/ic_menu_share"
-        android:id="@+id/headerImage"/>
+        android:layout_marginTop="40dp"
+        android:id="@+id/headerImage"
+        android:src="@drawable/sendicolarge"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textColor="@android:color/darker_gray"
-        android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/payment_confirmation_header"
-        android:id="@+id/textViewHeader" />
+        android:id="@+id/textViewHeader"
+        android:layout_marginTop="10dp"
+        android:textSize="20sp"
+        android:layout_weight="1"
+        android:fontFamily="sans-serif-light"
+        android:textColor="@color/green"
+        android:layout_gravity="center" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textColor="@android:color/darker_gray"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="17.5sp"
+        android:fontFamily="sans-serif-light"
+        android:textColor="@android:color/black"
         android:text="@string/payment_confirmation_top_1"
         android:id="@+id/textViewTop" />
 
@@ -39,24 +44,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textColor="@android:color/darker_gray"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_weight="1"
+        android:fontFamily="sans-serif-light"
+        android:textColor="@android:color/black"
+        android:textSize="17.5sp"
         android:text="@string/payment_confirmation_top_2"
         android:id="@+id/textViewName" />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="112dp"
+        android:layout_height="112dp"
         android:layout_gravity="center"
-        android:src="@drawable/ic_menu_share"
-        android:id="@+id/imageView2" />
+        android:layout_weight="1"
+        android:id="@+id/imageViewUser"
+        android:src="@drawable/babu" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textColor="@android:color/darker_gray"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:fontFamily="sans-serif-light"
+        android:textColor="@android:color/black"
+        android:textSize="17.5sp"
         android:text="@string/payment_confirmation_mid"
         android:id="@+id/textViewMid" />
 
@@ -64,16 +73,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textColor="@android:color/darker_gray"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:fontFamily="sans-serif-light"
+        android:layout_weight="1"
+        android:textColor="@color/green"
+        android:textStyle="bold"
+        android:textSize="30sp"
         android:id="@+id/textViewTrackingNumber" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textColor="@android:color/darker_gray"
-        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:fontFamily="sans-serif-light"
+        android:textColor="@android:color/black"
+        android:textSize="17.5sp"
         android:text="@string/payment_confirmation_bottom"
         android:id="@+id/textViewBottom" />
 
@@ -81,6 +96,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        style="@style/BigGreenButton"
         android:text="@string/payment_confirmation_button"
         android:id="@+id/con_button" />
 </LinearLayout>

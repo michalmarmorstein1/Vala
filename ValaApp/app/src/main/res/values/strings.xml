@@ -89,10 +89,10 @@
     <!-- payment confirmation dialog-->
     <string name="payment_confirmation_header">Sent</string>
     <string name="payment_confirmation_top_1">Your money has been sent,</string>
-    <string name="payment_confirmation_top_2">will be notified</string>
+    <string name="payment_confirmation_top_2">%1$s will be notified</string>
     <string name="payment_confirmation_mid">Tracking number:</string>
-    <string name="payment_confirmation_bottom">You can review this info from the home screen</string>
-    <string name="payment_confirmation_button">@android:string/ok</string>
+    <string name="payment_confirmation_bottom">You can review this info\n from the home screen</string>
+    <string name="payment_confirmation_button">Back to home</string>
 
     <!-- pickup confirmation screen-->
     <string name="pickup_collect">Collect</string>
