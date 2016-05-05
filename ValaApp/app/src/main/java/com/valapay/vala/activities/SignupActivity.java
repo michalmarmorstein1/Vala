@@ -21,6 +21,7 @@ public class SignupActivity extends AppCompatActivity {
     private EditText mLastNameView;
     private EditText mEmailView;
     private EditText mPhoneView;
+    private EditText mPasswordView;
     private Spinner mCountryView;
 
     @Override
@@ -31,6 +32,7 @@ public class SignupActivity extends AppCompatActivity {
         mLastNameView = (EditText) findViewById(R.id.last_name);
         mEmailView = (EditText) findViewById(R.id.email);
         mPhoneView = (EditText) findViewById(R.id.phone);
+        mPasswordView = (EditText) findViewById(R.id.password);
 
         Button signupButton = (Button) findViewById(R.id.signup_button);
         signupButton.setOnClickListener(new View.OnClickListener() {
@@ -77,11 +79,13 @@ public class SignupActivity extends AppCompatActivity {
         mLastNameView.setError(null);
         mEmailView.setError(null);
         mPhoneView.setError(null);
+        mPasswordView.setError(null);
 
         String firstName = mFirstNameView.getText().toString();
         String lastName = mLastNameView.getText().toString();
         String email = mEmailView.getText().toString();
         String phone = mPhoneView.getText().toString();
+        String password= mPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;

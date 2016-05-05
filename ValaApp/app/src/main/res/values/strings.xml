@@ -22,6 +22,7 @@
     <string name="signup_first_name">First name</string>
     <string name="signup_last_name">Last name</string>
     <string name="signup_email">Email</string>
+    <string name="signup_password">Password</string>
     <string name="signup_phone">Phone</string>
     <string name="signup_country">Country of residence</string>
     <string name="signup_btn">Continue</string>
