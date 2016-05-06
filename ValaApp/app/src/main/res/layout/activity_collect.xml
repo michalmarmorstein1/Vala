@@ -3,74 +3,81 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
     tools:context=".activities.ReservationActivity">
 
+    <ProgressBar
+        android:id="@+id/collect_progress"
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center"
+        android:visibility="gone" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_menu_share"
+        android:layout_marginTop="50dp"
+        android:src="@drawable/collecticolarge"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="1"
         android:id="@+id/imageView" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="1"
         android:text="@string/collect_header"
-        android:id="@+id/textViewHeader" />
+        android:id="@+id/textViewHeader"
+        android:layout_marginTop="10dp"
+        android:textSize="20sp"
+        android:layout_weight="1"
+        android:fontFamily="sans-serif-light"
+        android:textColor="@color/green"
+        android:layout_gravity="center" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:textSize="17.5sp"
+        android:fontFamily="sans-serif-light"
+        android:textColor="@android:color/black"
         android:text="@string/collect_1"
-        android:id="@+id/textView1"
-        android:layout_gravity="center_horizontal" />
+        android:id="@+id/textView1" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_gravity="center_horizontal"
-        android:id="@+id/textViewAmount" />
+        android:textSize="37.5sp"
+        android:fontFamily="sans-serif-thin"
+        android:id="@+id/textViewAmount"
+        android:textColor="@color/blue"
+        android:layout_gravity="center"
+        android:layout_marginBottom="50dp"
+        android:layout_marginTop="20dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_weight="1"
-        android:layout_gravity="center_horizontal"
+        android:textSize="17.5sp"
+        android:text="@string/collect_2"
+        android:fontFamily="sans-serif-light"
+        android:textColor="@android:color/black"
+        android:layout_gravity="center"
+        android:layout_marginBottom="60dp"
         android:id="@+id/textViewName" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="17.5sp"
+        android:fontFamily="sans-serif-light"
+        android:textColor="@color/blue"
         android:text="@string/collect_3"
         android:layout_weight="1"
         android:gravity="center"
         android:layout_gravity="center_horizontal"
         android:id="@+id/textView3" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/collect_4"
-        android:layout_weight="1"
-        android:layout_gravity="center_horizontal"
-        android:id="@+id/textView4" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -81,15 +88,19 @@
 
         <Button
             android:layout_width="wrap_content"
+            style="@style/SilverButton"
             android:layout_height="wrap_content"
             android:text="@string/collect_btn_cancel"
+            android:layout_marginRight="5dp"
             android:layout_weight="1"
             android:id="@+id/buttonCancel" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            style="@style/GreenButton"
             android:text="@string/collect_btn_ok"
+            android:layout_marginLeft="5dp"
             android:layout_weight="1"
             android:id="@+id/buttonOk" />
     </LinearLayout>

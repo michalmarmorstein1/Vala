@@ -42,7 +42,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.ReservationActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/GreenTheme" />
         <activity android:name=".activities.PickupConfirmationActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

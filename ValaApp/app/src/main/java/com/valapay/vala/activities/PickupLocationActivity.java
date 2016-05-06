@@ -53,7 +53,7 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ReservationActivity.startCollectActivity("Abhimanyusuta", "100$", PickupLocationActivity.this);
+                ReservationActivity.startCollectActivity("Abhimanyusuta", "$100", PickupLocationActivity.this);
             }
         });
     }

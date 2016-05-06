@@ -101,10 +101,9 @@
 
     <!-- collect screen-->
     <string name="collect_header">Collect</string>
-    <string name="collect_1">We are reserv%1$sing</string>
-    <string name="collect_2">for you at </string>
-    <string name="collect_3">Please arrive in the next 5 hours\n to get your cash</string>
-    <string name="collect_4">Don\'t forget your ID.</string>
+    <string name="collect_1">We are reserving</string>
+    <string name="collect_2">for you at %1$s</string>
+    <string name="collect_3">Please arrive in the next 5 hours \n to get your cash</string>
     <string name="collect_btn_ok">@android:string/ok</string>
     <string name="collect_btn_cancel">@android:string/cancel</string>
 

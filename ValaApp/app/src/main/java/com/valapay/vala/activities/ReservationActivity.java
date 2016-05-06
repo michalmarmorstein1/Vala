@@ -2,9 +2,14 @@ package com.valapay.vala.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.StyleSpan;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -19,6 +24,8 @@ public class ReservationActivity extends AppCompatActivity {
     private static final String AMOUNT_KEY = "AMOUNT_KEY";
 
     private ConfirmReservationTask confirmReservationTask = null;
+    View mProgressView;
+    View mImage;
 
     public static void startCollectActivity(String name, String amount, Activity context){
 
@@ -36,17 +43,32 @@ public class ReservationActivity extends AppCompatActivity {
         String name = getIntent().getStringExtra(NAME_KEY);
         String amount = getIntent().getStringExtra(AMOUNT_KEY);
 
+        mProgressView = findViewById(R.id.collect_progress);
+        mImage = findViewById(R.id.imageView);
         TextView amountView = (TextView) findViewById(R.id.textViewAmount);
-        amountView.setText(amount);
+        Spannable wordToSpan = new SpannableString(amount);
+        wordToSpan.setSpan(new StyleSpan(Typeface.BOLD), 1, wordToSpan.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        amountView.setText(wordToSpan);
+
         TextView nameView = (TextView) findViewById(R.id.textViewName);
-        nameView.setText(getString(R.string.collect_2, name));
+        String txt = getString(R.string.collect_2, name);
+        wordToSpan = new SpannableString(txt);
+        wordToSpan.setSpan(new StyleSpan(Typeface.BOLD), txt.indexOf(name), txt.indexOf(name) + name.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        nameView.setText(wordToSpan);
+
+        TextView textView3 = (TextView) findViewById(R.id.textView3);
+        String boldText = "next 5 hours";
+        String txt3 = getString(R.string.collect_3);
+        wordToSpan = new SpannableString(txt3);
+        wordToSpan.setSpan(new StyleSpan(Typeface.BOLD), txt3.indexOf(boldText), txt3.indexOf(boldText) + boldText.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        textView3.setText(wordToSpan);
 
         Button okBtn = (Button) findViewById(R.id.buttonOk);
         okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(confirmReservationTask == null){
-                    //TODO show progress
+                    showProgress(true);
                     confirmReservationTask = new ConfirmReservationTask();
                     confirmReservationTask.execute((Void) null);
                 }
@@ -61,6 +83,11 @@ public class ReservationActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void showProgress(final boolean show) {
+        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+        mImage.setVisibility(show ? View.GONE: View.VISIBLE);
     }
 
     private class ConfirmReservationTask extends AsyncTask<Void, Void, Boolean> {
@@ -79,7 +106,7 @@ public class ReservationActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(final Boolean success) {
             confirmReservationTask = null;
-            //TODO hide progress
+            showProgress(false);
             if (success) {
                 setResult(RESULT_OK);
                 finish();
@@ -91,7 +118,7 @@ public class ReservationActivity extends AppCompatActivity {
         @Override
         protected void onCancelled() {
             confirmReservationTask = null;
-            //TODO hide progress
+            showProgress(false);
         }
     }
 }
