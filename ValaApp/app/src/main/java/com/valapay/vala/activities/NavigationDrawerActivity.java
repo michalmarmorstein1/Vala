@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.valapay.vala.R;
 
@@ -27,6 +28,11 @@ public abstract class NavigationDrawerActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
+
+        if(shouldDisplayLogo()){
+            View logo = findViewById(R.id.toolbarLogo);
+            logo.setVisibility(View.VISIBLE);
+        }
 
         //Toggle drawer
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -46,6 +52,9 @@ public abstract class NavigationDrawerActivity extends AppCompatActivity
     }
 
     protected abstract int getContentId();
+    protected boolean shouldDisplayLogo(){
+        return true;
+    }
 
     @Override
     public void onBackPressed() {

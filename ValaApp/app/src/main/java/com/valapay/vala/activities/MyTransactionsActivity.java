@@ -2,7 +2,17 @@ package com.valapay.vala.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +24,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.valapay.vala.R;
+import com.valapay.vala.components.RoundImage;
 
 public class MyTransactionsActivity extends NavigationDrawerActivity {
 
@@ -24,6 +35,9 @@ public class MyTransactionsActivity extends NavigationDrawerActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(getString(R.string.my_transactions_title));
+        setSupportActionBar(toolbar);
         populateLists();
 
         ListView receivedList = (ListView) findViewById(R.id.listViewReceived);
@@ -53,6 +67,11 @@ public class MyTransactionsActivity extends NavigationDrawerActivity {
     @Override
     protected int getContentId() {
         return R.layout.activity_my_transactions;
+    }
+
+    @Override
+    protected boolean shouldDisplayLogo() {
+        return false;
     }
 
     public class TransactionAdapter extends BaseAdapter {
@@ -94,10 +113,17 @@ public class MyTransactionsActivity extends NavigationDrawerActivity {
             String descText = transactions[position].isSent ?
                     getString(R.string.my_transactions_sent, t.getAmount(), t.getName()) :
                     getString(R.string.my_transactions_received, t.getAmount(), t.getName());
-            desc.setText(descText);
+            Spannable wordToSpan = new SpannableString(descText);
+            wordToSpan.setSpan(new StyleSpan(Typeface.BOLD), 1, t.getAmount().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            wordToSpan.setSpan(new ForegroundColorSpan(Color.rgb(0, 172, 163)), 0, t.getAmount().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            desc.setText(wordToSpan);
             status.setText(t.getStatus());
             date.setText(t.getDate());
-            image.setImageResource(t.getImage());
+            ImageView userImage = (ImageView) findViewById(R.id.userImage);
+            Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.babu);
+            RoundImage roundedImage = new RoundImage(bm);
+            image.setImageDrawable(roundedImage);
+//            image.setImageResource(t.getImage());
             return rowView;
         }
     }
@@ -150,13 +176,13 @@ public class MyTransactionsActivity extends NavigationDrawerActivity {
 
         sentTransactions = new Transaction[3];
         receivedTransactions = new Transaction[1];
-        Transaction t1 = new Transaction("Kumar", R.drawable.ic_menu_share, "100$", "19/03/2016", true, "Kumar is notified");
-        Transaction t2 = new Transaction("Moshe", R.drawable.ic_menu_share, "50$", "21/03/2016", true, "Moshe is on his way to pick up the cash");
-        Transaction t3 = new Transaction("Ashish", R.drawable.ic_menu_share, "200$", "21/03/2016", true, "Ashish has got the cash");
+        Transaction t1 = new Transaction("Kumar", R.drawable.babu, "$ 100", "19/03/2016", true, "Kumar is notified");
+        Transaction t2 = new Transaction("Moshe", R.drawable.babu, "$ 50", "21/03/2016", true, "Moshe is on his way to pick up the cash");
+        Transaction t3 = new Transaction("Ashish", R.drawable.babu, "$ 200", "21/03/2016", true, "Ashish has got the cash");
         sentTransactions[0] = t1;
         sentTransactions[1] = t2;
         sentTransactions[2] = t3;
-        Transaction t4 = new Transaction("Haim", R.drawable.ic_menu_share, "200$", "21/03/2016", false, "You got the cash");
+        Transaction t4 = new Transaction("Haim", R.drawable.ic_menu_share, "$ 200", "21/03/2016", false, "You got the cash");
         receivedTransactions[0] = t4;
     }
 }

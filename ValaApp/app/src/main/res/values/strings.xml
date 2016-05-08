@@ -125,5 +125,6 @@
     <!-- my transactions -->
     <string name="my_transactions_sent">%1$s sent to %2$s</string>
     <string name="my_transactions_received">%1$s received from %2$s</string>
+    <string name="my_transactions_title">My transactions</string>
 
 </resources>

@@ -4,9 +4,8 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_menu_share"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_margin="10dp"
         android:layout_gravity="center_vertical"
         android:id="@+id/image" />
@@ -16,25 +15,46 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:layout_gravity="right"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:id="@+id/textViewDate" />
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:src="@drawable/rating_small_4"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="20dp"
+                android:textColor="@color/darkGray"
+                android:layout_alignParentRight="true"
+                android:textSize="10dp"
+                android:fontFamily="sans-serif-medium"
+                android:id="@+id/textViewDate" />
+
+        </RelativeLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:paddingLeft="10dp"
+            android:textSize="15sp"
+            android:textColor="@color/darkGray"
+            android:fontFamily="sans-serif-light"
             android:id="@+id/textViewDesc" />
 
         <TextView
             android:layout_width="wrap_content"
+            android:paddingLeft="10dp"
+            android:textSize="10sp"
+            android:textColor="@color/darkGray"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textStyle="bold"
+            android:fontFamily="sans-serif-medium"
+            android:layout_marginTop="3dp"
             android:layout_marginBottom="10dp"
             android:id="@+id/textViewStatus" />
     </LinearLayout>
