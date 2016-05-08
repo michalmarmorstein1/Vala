@@ -119,11 +119,9 @@ public class MyTransactionsActivity extends NavigationDrawerActivity {
             desc.setText(wordToSpan);
             status.setText(t.getStatus());
             date.setText(t.getDate());
-            ImageView userImage = (ImageView) findViewById(R.id.userImage);
-            Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.babu);
+            Bitmap bm = BitmapFactory.decodeResource(getResources(), t.getImage());
             RoundImage roundedImage = new RoundImage(bm);
             image.setImageDrawable(roundedImage);
-//            image.setImageResource(t.getImage());
             return rowView;
         }
     }
@@ -182,7 +180,7 @@ public class MyTransactionsActivity extends NavigationDrawerActivity {
         sentTransactions[0] = t1;
         sentTransactions[1] = t2;
         sentTransactions[2] = t3;
-        Transaction t4 = new Transaction("Haim", R.drawable.ic_menu_share, "$ 200", "21/03/2016", false, "You got the cash");
+        Transaction t4 = new Transaction("Haim", R.drawable.babu, "$ 200", "21/03/2016", false, "You got the cash");
         receivedTransactions[0] = t4;
     }
 }
