@@ -65,11 +65,6 @@ public abstract class NavigationDrawerActivity extends AppCompatActivity
         if (id == R.id.nav_transactions) {
             startActivity(new Intent(this, MyTransactionsActivity.class));
         }
-        //else if (id == R.id.nav_invite) {
-//
-//        } else if (id == R.id.nav_contact) {
-//
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
