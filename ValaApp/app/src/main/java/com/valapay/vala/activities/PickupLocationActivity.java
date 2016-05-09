@@ -3,12 +3,23 @@ package com.valapay.vala.activities;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.StyleSpan;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -17,9 +28,11 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.valapay.vala.R;
+import com.valapay.vala.components.RoundImage;
 
 public class PickupLocationActivity extends NavigationDrawerActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -29,6 +42,7 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
     private Location mLastLocation;
     private Button mButton;
     private boolean mHideMarkers;
+    private TextView mAmountTextView;
     private ConfirmAffiliateTask confirmAffiliateTask = null;
 
     @Override
@@ -49,6 +63,16 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
                     .build();
         }
 
+        ImageView userImage = (ImageView) findViewById(R.id.imageViewAffiliate);
+        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.babu);
+        RoundImage roundedImage = new RoundImage(bm);
+        userImage.setImageDrawable(roundedImage);
+
+        mAmountTextView = (TextView) findViewById(R.id.textViewAmount);
+        Spannable wordToSpan = new SpannableString(mAmountTextView.getText().toString());
+        wordToSpan.setSpan(new StyleSpan(Typeface.BOLD), 1, wordToSpan.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        mAmountTextView.setText(wordToSpan);
+
         mButton = (Button) findViewById(R.id.button);
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,6 +80,24 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
                 ReservationActivity.startCollectActivity("Abhimanyusuta", "$100", PickupLocationActivity.this);
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Add items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_home) {
+            startActivity(new Intent(this, HomeActivity.class));
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -71,6 +113,7 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
         mMap.addMarker(new MarkerOptions()
                 .title("You are here")
                 .snippet("why?")
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.affiliate_off))
                 .position(loc));
 
     }
@@ -133,7 +176,7 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
                 //TODO add marker, add textView
                 mMap.clear();
                 mHideMarkers = true;
-
+                mAmountTextView.setVisibility(View.VISIBLE);
                 mButton.setText(getText(R.string.pickup_reserve));
                 mButton.setOnClickListener(new View.OnClickListener() {
                     @Override

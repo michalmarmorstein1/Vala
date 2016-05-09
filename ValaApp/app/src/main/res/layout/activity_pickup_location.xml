@@ -11,25 +11,127 @@
     <fragment
         xmlns:map="http://schemas.android.com/apk/res-auto"
         android:id="@+id/map"
+        android:layout_weight="1"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="300dp"/>
+        android:layout_height="wrap_content"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="250dp"
         android:background="@android:color/white"
-        android:layout_weight="1">
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:paddingBottom="35dp"
+        android:paddingTop="20dp">
 
-        <RatingBar
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/babu"
+            android:id="@+id/imageViewAffiliate"/>
+
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/ratingBar" />
+            android:layout_alignTop="@+id/imageViewAffiliate"
+            android:id="@+id/imageViewRating"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="8dp"
+            android:layout_toRightOf="@+id/imageViewAffiliate"
+            android:src="@drawable/rating_small_4"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="8dp"
+            android:layout_toRightOf="@+id/imageViewAffiliate"
+            android:layout_below="@+id/imageViewRating"
+            android:textSize="17.5sp"
+            android:fontFamily="sans-serif-light"
+            android:textColor="@color/darkGray"
+            android:text="Abhimanyusuta"
+            android:layout_alignBottom="@+id/imageViewAffiliate"
+            android:id="@+id/textViewAffiliateName"/>
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@android:color/transparent"
+            android:layout_alignParentTop="true"
+            android:id="@+id/imageButtonCall"
+            android:src="@drawable/callbtn"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:id="@+id/divider"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp"
+            android:background="@color/blue"
+            android:layout_below="@+id/imageViewAffiliate"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/divider"
+            android:textSize="15sp"
+            android:fontFamily="sans-serif-light"
+            android:textColor="@color/darkGray"
+            android:text="Rafi Marg 2, New Delhi"
+            android:id="@+id/textViewAddress"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/divider"
+            android:textSize="12.5sp"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="@color/darkGray"
+            android:text="354m"
+            android:layout_alignTop="@+id/textViewAddress"
+            android:drawableLeft="@drawable/locico"
+            android:drawablePadding="3dp"
+            android:id="@+id/textViewdistance"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_below="@+id/textViewAddress"
+            android:textSize="12.5sp"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="@color/darkGray"
+            android:text="9:00-19:00"
+            android:id="@+id/textViewHours"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:layout_below="@+id/textViewHours"
+            android:textSize="12.5sp"
+            android:fontFamily="sans-serif-light"
+            android:textColor="@color/blue"
+            android:text="$100 is waiting for you"
+            android:visibility="invisible"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/textViewAmount"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/pickup_collect"
+            style="@style/BigBlueButton"
             android:id="@+id/button"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true" />
