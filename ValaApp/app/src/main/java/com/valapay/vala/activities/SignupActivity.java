@@ -1,7 +1,10 @@
 package com.valapay.vala.activities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,12 +12,17 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.valapay.vala.R;
+import com.valapay.vala.components.RoundImage;
 
 public class SignupActivity extends AppCompatActivity {
+
+    static final int REQUEST_IMAGE_CAPTURE = 1;
 
     // UI references.
     private EditText mFirstNameView;
@@ -23,6 +31,7 @@ public class SignupActivity extends AppCompatActivity {
     private EditText mPhoneView;
     private EditText mPasswordView;
     private Spinner mCountryView;
+    private ImageView mUserImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +48,14 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 checkFieldsAndProceed();
+            }
+        });
+
+        mUserImage = (ImageView) findViewById(R.id.imageButtonCamera);
+        mUserImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dispatchTakePictureIntent();
             }
         });
 
@@ -70,6 +87,22 @@ public class SignupActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mCountryView.setAdapter(adapter);
         mCountryView.setSelection(adapter.getCount()); //display hint
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap userBitmap = (Bitmap) extras.get("data");
+            mUserImage.setImageDrawable(new RoundImage(userBitmap));
+        }
     }
 
     private void checkFieldsAndProceed() {
