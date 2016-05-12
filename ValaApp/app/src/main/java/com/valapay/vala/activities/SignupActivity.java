@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -13,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.valapay.vala.R;
 import com.valapay.vala.utils.RoundImage;
@@ -129,10 +131,10 @@ public class SignupActivity extends AppCompatActivity {
 //            focusView = mPhoneView;
 //            cancel = true;
 //        }
-//        if (TextUtils.isEmpty(email)) {
-//            mEmailView.setError(getString(R.string.error_field_required));
-//            focusView = mEmailView;
-//            cancel = true;
+        if (TextUtils.isEmpty(email)) {
+            mEmailView.setError(getString(R.string.error_field_required));
+            focusView = mEmailView;
+            cancel = true;
 //        } else if (!isEmailValid(email)) {
 //            mEmailView.setError(getString(R.string.error_invalid_email));
 //            focusView = mEmailView;
@@ -142,12 +144,18 @@ public class SignupActivity extends AppCompatActivity {
 //            mLastNameView.setError(getString(R.string.error_field_required));
 //            focusView = mLastNameView;
 //            cancel = true;
-//        }
-//        if (TextUtils.isEmpty(firstName)) {
-//            mFirstNameView.setError(getString(R.string.error_field_required));
-//            focusView = mFirstNameView;
-//            cancel = true;
-//        }
+        }
+        if (TextUtils.isEmpty(firstName)) {
+            mFirstNameView.setError(getString(R.string.error_field_required));
+            focusView = mFirstNameView;
+            cancel = true;
+        }
+
+        if(mUserBitmap == null){
+            cancel = true;
+            focusView = mUserImage;
+            Toast.makeText(SignupActivity.this, "Please take a photo", Toast.LENGTH_SHORT).show();
+        }
 
         if (cancel) {
             focusView.requestFocus();
