@@ -117,6 +117,7 @@
     <string name="navigation_drawer_how_it_works">How Vala works</string>
     <string name="navigation_drawer_contact">Contact support</string>
     <string name="navigation_drawer_my_transactions">My transactions</string>
+    <string name="navigation_drawer_logout">Logout</string>
     <string name="action_home">Home</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

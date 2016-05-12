@@ -22,6 +22,10 @@
             android:id="@+id/nav_transactions"
             android:icon="@drawable/transico"
             android:title="@string/navigation_drawer_my_transactions" />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/inviteico"
+            android:title="@string/navigation_drawer_logout" />
     </group>
 
 </menu>

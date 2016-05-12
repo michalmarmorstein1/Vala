@@ -90,7 +90,7 @@ public abstract class NavigationDrawerActivity extends AppCompatActivity
 
         if (id == R.id.nav_transactions) {
             startActivity(new Intent(this, MyTransactionsActivity.class));
-        } else if (id == R.id.nav_contact){
+        } else if (id == R.id.nav_logout){
             Vala.getUser().logout();
             Toast.makeText(getApplicationContext(), "successfully logged out", Toast.LENGTH_SHORT).show();
             finish();
