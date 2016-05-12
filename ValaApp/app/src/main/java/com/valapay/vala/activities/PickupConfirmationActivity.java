@@ -1,6 +1,7 @@
 package com.valapay.vala.activities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,15 +9,26 @@ import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
 import com.valapay.vala.R;
 
 public class PickupConfirmationActivity extends AppCompatActivity {
 
+    public final static int WHITE = 0xFFFFFFFF;
+    public final static int BLACK = 0xFF000000;
+    public final static int WIDTH = 1000;
+    public final static int HEIGHT = 1000;
+
     private ConfirmCollectionTask confirmCollectionTask = null;
     private ReportIssueTask reportIssueTask = null;
+    private static String code = "SKT8N7";
     View mProgressView;
     View mImage;
 
@@ -29,7 +41,7 @@ public class PickupConfirmationActivity extends AppCompatActivity {
         mImage = findViewById(R.id.imageViewHeader);
 
         TextView codeView = (TextView) findViewById(R.id.textViewCode);
-        SpannableString content = new SpannableString("SKT8N7");
+        SpannableString content = new SpannableString(code);
         content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
         codeView.setText(content);
 
@@ -56,6 +68,38 @@ public class PickupConfirmationActivity extends AppCompatActivity {
                 }
             }
         });
+
+        ImageView imageView = (ImageView) findViewById(R.id.qrCode);
+        try {
+            Bitmap bitmap = encodeAsBitmap(code);
+            imageView.setImageBitmap(bitmap);
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    Bitmap encodeAsBitmap(String str) throws WriterException {
+        BitMatrix result;
+        try {
+            result = new MultiFormatWriter().encode(str, BarcodeFormat.QR_CODE, WIDTH, HEIGHT, null);
+        } catch (IllegalArgumentException iae) {
+            // Unsupported format
+            return null;
+        }
+
+        int width = result.getWidth();
+        int height = result.getHeight();
+        int[] pixels = new int[width * height];
+        for (int y = 0; y < height; y++) {
+            int offset = y * width;
+            for (int x = 0; x < width; x++) {
+                pixels[offset + x] = result.get(x, y) ? BLACK : WHITE;
+            }
+        }
+
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
+        return bitmap;
     }
 
     private void showProgress(final boolean show) {
