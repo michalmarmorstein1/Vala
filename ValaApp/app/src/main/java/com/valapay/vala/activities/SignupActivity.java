@@ -2,8 +2,6 @@ package com.valapay.vala.activities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,17 +10,18 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.valapay.vala.R;
-import com.valapay.vala.components.RoundImage;
+import com.valapay.vala.utils.RoundImage;
 
 public class SignupActivity extends AppCompatActivity {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
+
+    private Bitmap mUserBitmap;
 
     // UI references.
     private EditText mFirstNameView;
@@ -100,8 +99,8 @@ public class SignupActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
-            Bitmap userBitmap = (Bitmap) extras.get("data");
-            mUserImage.setImageDrawable(new RoundImage(userBitmap));
+            mUserBitmap = (Bitmap) extras.get("data");
+            mUserImage.setImageDrawable(new RoundImage(mUserBitmap));
         }
     }
 
@@ -119,6 +118,7 @@ public class SignupActivity extends AppCompatActivity {
         String email = mEmailView.getText().toString();
         String phone = mPhoneView.getText().toString();
         String password= mPasswordView.getText().toString();
+        String country = "US"; //TODO handle this
 
         boolean cancel = false;
         View focusView = null;
@@ -152,7 +152,7 @@ public class SignupActivity extends AppCompatActivity {
         if (cancel) {
             focusView.requestFocus();
         } else {
-            AddPinCodeActivity.startActivity(this, firstName, lastName, email, phone, "photo file location");
+            AddPinCodeActivity.startActivity(this, firstName, lastName, email, phone, mUserBitmap, country, password);
         }
     }
 

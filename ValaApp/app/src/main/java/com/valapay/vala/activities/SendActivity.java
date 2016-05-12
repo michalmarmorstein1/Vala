@@ -1,6 +1,5 @@
 package com.valapay.vala.activities;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.FragmentTransaction;
@@ -18,7 +17,6 @@ import android.text.Spanned;
 import android.text.style.StyleSpan;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,7 +27,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -37,7 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.valapay.vala.R;
-import com.valapay.vala.components.RoundImage;
+import com.valapay.vala.utils.RoundImage;
 
 import java.util.ArrayList;
 import java.util.Arrays;

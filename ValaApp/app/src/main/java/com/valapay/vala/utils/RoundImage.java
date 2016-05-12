@@ -1,4 +1,4 @@
-package com.valapay.vala.components;
+package com.valapay.vala.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;

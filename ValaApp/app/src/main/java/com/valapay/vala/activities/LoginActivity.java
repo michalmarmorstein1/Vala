@@ -1,6 +1,7 @@
 package com.valapay.vala.activities;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.valapay.vala.R;
+import com.valapay.vala.Vala;
+import com.valapay.vala.model.User;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -150,6 +153,9 @@ public class LoginActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             // TODO: register the new account.
+            User user = Vala.getUser();
+            user.login(BitmapFactory.decodeResource(getResources(), R.drawable.babu),
+                                        "Babu", "bla", "babu@valapay.com", "123456", "Pakistan");
             return true;
         }
 

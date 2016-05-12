@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.valapay.vala.R;
+import com.valapay.vala.Vala;
 
 public class WelcomeActivity extends Activity {
 
@@ -15,6 +16,12 @@ public class WelcomeActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
+        if(Vala.getUser().isRegistered()){
+            finish();
+            Intent i = new Intent(WelcomeActivity.this, HomeActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
+        }
         Button loginButton = (Button)findViewById(R.id.login_button);
         Button signupButton = (Button)findViewById(R.id.signup_button);
 

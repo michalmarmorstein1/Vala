@@ -13,8 +13,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.valapay.vala.R;
+import com.valapay.vala.Vala;
 
 public abstract class NavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -73,6 +75,14 @@ public abstract class NavigationDrawerActivity extends AppCompatActivity
 
         if (id == R.id.nav_transactions) {
             startActivity(new Intent(this, MyTransactionsActivity.class));
+        } else if (id == R.id.nav_contact){
+            Vala.getUser().logout();
+            Toast.makeText(getApplicationContext(), "successfully logged out", Toast.LENGTH_SHORT).show();
+            finish();
+            Intent i = new Intent(getApplicationContext(), WelcomeActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
+
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

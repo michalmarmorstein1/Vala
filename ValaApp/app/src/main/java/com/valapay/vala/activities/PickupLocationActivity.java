@@ -32,7 +32,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.valapay.vala.R;
-import com.valapay.vala.components.RoundImage;
+import com.valapay.vala.utils.RoundImage;
 
 public class PickupLocationActivity extends NavigationDrawerActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {

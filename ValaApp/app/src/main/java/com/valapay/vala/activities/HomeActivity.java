@@ -16,7 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.valapay.vala.R;
-import com.valapay.vala.components.RoundImage;
+import com.valapay.vala.utils.RoundImage;
 
 public class HomeActivity extends NavigationDrawerActivity {
 
