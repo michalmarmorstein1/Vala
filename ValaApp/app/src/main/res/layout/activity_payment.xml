@@ -68,8 +68,7 @@
         android:layout_below="@id/total_text"
         android:fontFamily="sans-serif"
         android:layout_marginTop="50dp"
-        android:text="@string/payment_card"
-        android:gravity="center"
+        android:gravity="left"
         android:layout_centerHorizontal="true"
         android:visibility="gone"
         android:id="@+id/card_text" />

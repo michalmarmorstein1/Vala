@@ -30,8 +30,11 @@ import android.widget.TextView;
 import com.valapay.vala.R;
 import com.valapay.vala.utils.RoundImage;
 
+import io.card.payment.*;
+
 public class PaymentActivity extends NavigationDrawerActivity {
 
+    private int CARD_IO_REQUEST_CODE = 1;
     private static final String RECIPIENT_KEY = "RECIPIENT_KEY";
     private static final String AMOUNT_KEY = "AMOUNT_KEY";
     private static final int FEE = 3;
@@ -40,6 +43,7 @@ public class PaymentActivity extends NavigationDrawerActivity {
     private int amount;
     private String currency = "$";
     private ConfirmPaymentTask confirmPaymentTask = null;
+    private Button mContinueButton;
 
     public static void startPaymentActivity(String recipient, int amount, Activity context){
 
@@ -102,19 +106,56 @@ public class PaymentActivity extends NavigationDrawerActivity {
             }
         });
 
-        final Button continueBtn = (Button) findViewById(R.id.buttonPayment);
-        continueBtn.setOnClickListener(new View.OnClickListener() {
+        mContinueButton = (Button) findViewById(R.id.buttonPayment);
+        mContinueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO integrate payment here
-                LinearLayout layout = (LinearLayout) findViewById(R.id.LayoutConfirmPayment);
-                layout.setVisibility(View.VISIBLE);
-                continueBtn.setVisibility(View.GONE);
-                ImageView steps = (ImageView) findViewById(R.id.stepsImage);
-                steps.setImageDrawable(getDrawable(R.drawable.stepstabs_confirm));
-                findViewById(R.id.card_text).setVisibility(View.VISIBLE);
+                openScanCreditCard();
             }
         });
+    }
+
+    private void showCreditCardDetails(Intent data){
+
+        LinearLayout layout = (LinearLayout) findViewById(R.id.LayoutConfirmPayment);
+        layout.setVisibility(View.VISIBLE);
+        mContinueButton.setVisibility(View.GONE);
+        ImageView steps = (ImageView) findViewById(R.id.stepsImage);
+        steps.setImageDrawable(getDrawable(R.drawable.stepstabs_confirm));
+        TextView cardTextView = (TextView) findViewById(R.id.card_text);
+        cardTextView.setVisibility(View.VISIBLE);
+
+        String resultStr = "Scan was canceled.";
+        if (data != null && data.hasExtra(io.card.payment.CardIOActivity.EXTRA_SCAN_RESULT)) {
+            CreditCard scanResult = data.getParcelableExtra(io.card.payment.CardIOActivity.EXTRA_SCAN_RESULT);
+            resultStr = "Card Number: " + scanResult.getRedactedCardNumber() + "\n";
+            if (scanResult.isExpiryValid()) {
+                resultStr += "Expiration Date: " + scanResult.expiryMonth + "/" + scanResult.expiryYear + "\n";
+            }
+            if (scanResult.cvv != null) {
+                resultStr += "CVV has " + scanResult.cvv.length() + " digits.\n";
+            }
+            if (scanResult.cardholderName != null) {
+                resultStr += "Cardholder Name : " + scanResult.cardholderName + "\n";
+            }
+        }
+        cardTextView.setText(resultStr);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        showCreditCardDetails(data);
+    }
+
+    private void openScanCreditCard(){
+
+        Intent scanIntent = new Intent(this, io.card.payment.CardIOActivity.class);
+        scanIntent.putExtra(io.card.payment.CardIOActivity.EXTRA_REQUIRE_EXPIRY, true);
+        scanIntent.putExtra(io.card.payment.CardIOActivity.EXTRA_REQUIRE_CVV, true);
+        scanIntent.putExtra(io.card.payment.CardIOActivity.EXTRA_REQUIRE_CARDHOLDER_NAME, true);
+
+        startActivityForResult(scanIntent, CARD_IO_REQUEST_CODE);
     }
 
     @Override
