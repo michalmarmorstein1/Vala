@@ -3,6 +3,7 @@ package com.valapay.vala.model;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import com.valapay.vala.utils.CameraUtils;
 
@@ -20,6 +21,7 @@ public class User {
     private final static String COUNTRY_KEY = "COUNTRY_KEY";
     private final static String IS_REGISTERED_KEY = "IS_REGISTERED_KEY";
     private final static String RECEIPIENTS_KEY = "RECEIPIENTS_KEY";
+    private final static String BALANCE_KEY = "BALANCE_KEY";
 
     private String imagePath;
     private String firstName;
@@ -27,6 +29,7 @@ public class User {
     private String email;
     private String phone;
     private String country;
+    private int balance;
     private ArrayList<Receipient> receipients;
     private boolean isRegistered;
 
@@ -41,7 +44,8 @@ public class User {
         }
     }
 
-    public void login(Bitmap userBitmap, String firstName, String lastName, String email, String phone, String country) {
+    public void login(Bitmap userBitmap, String firstName, String lastName, String email,
+                      String phone, String country, int balance) {
         this.firstName = firstName;
         preferences.edit().putString(FIRST_NAME_KEY, firstName);
         this.lastName = lastName;
@@ -55,6 +59,8 @@ public class User {
         this.isRegistered = true;
         preferences.edit().putBoolean(IS_REGISTERED_KEY, true);
         receipients = new ArrayList<>(); //TODO handle preferences?
+        this.balance = balance;
+        preferences.edit().putFloat(BALANCE_KEY, balance);
 
         File imageFile = CameraUtils.createImageFile();
         this.imagePath = imageFile.getAbsolutePath();
@@ -63,7 +69,7 @@ public class User {
 
     public void logout() {
         preferences.edit().clear().commit();
-        getImage().delete();
+        getImageFile().delete();
         this.imagePath = null;
         this.firstName = null;
         this.lastName = null;
@@ -72,13 +78,18 @@ public class User {
         this.country = null;
         this.receipients = null;
         this.isRegistered = false;
+        this.balance = 0;
     }
 
     public boolean isRegistered(){
         return  isRegistered;
     }
 
-    public File getImage() {
+    public Bitmap getImageBitmap() {
+        return BitmapFactory.decodeFile(imagePath);
+    }
+
+    public File getImageFile() {
         return new File(imagePath);
     }
 
@@ -116,6 +127,14 @@ public class User {
         //TODO handle preferences
     }
 
+    public int getBalance() {
+        return balance;
+    }
+
+    public String getBalanceString() {
+        return "$" + balance;
+    }
+
     private void restoreFromPreferences(){
         imagePath = preferences.getString(IMAGE_KEY, null);
         firstName = preferences.getString(FIRST_NAME_KEY, null);
@@ -124,5 +143,6 @@ public class User {
         phone = preferences.getString(PHONE_KEY, null);
         country = preferences.getString(COUNTRY_KEY, null);
         //TODO handle this: receipients = ;
+        balance = preferences.getInt(BALANCE_KEY, 0);
     }
 }

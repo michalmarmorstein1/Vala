@@ -13,10 +13,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.valapay.vala.R;
 import com.valapay.vala.Vala;
+import com.valapay.vala.model.User;
+import com.valapay.vala.utils.RoundImage;
 
 public abstract class NavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -26,6 +30,7 @@ public abstract class NavigationDrawerActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_drawer);
 
+        User user = Vala.getUser();
         //Add toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("");
@@ -51,6 +56,16 @@ public abstract class NavigationDrawerActivity extends AppCompatActivity
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         CoordinatorLayout container = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
         layoutInflater.inflate(getContentId(), container, true);
+
+        //Set header
+        View headerView = navigationView.inflateHeaderView(R.layout.nav_drawer_header);
+        TextView name = (TextView) headerView.findViewById(R.id.textViewName);
+        name.setText(user.getFirstName());
+        TextView email = (TextView) headerView.findViewById(R.id.textViewEmail);
+        email.setText(user.getEmail());
+        ImageView userImage = (ImageView) headerView.findViewById(R.id.imageViewUser);
+        RoundImage roundedImage = new RoundImage(user.getImageBitmap());
+        userImage.setImageDrawable(roundedImage);
     }
 
     protected abstract int getContentId();

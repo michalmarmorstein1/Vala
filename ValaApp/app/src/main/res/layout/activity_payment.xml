@@ -29,7 +29,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/home_amount"
         android:textSize="37.5sp"
         android:fontFamily="sans-serif-thin"
         android:id="@+id/amount_text"

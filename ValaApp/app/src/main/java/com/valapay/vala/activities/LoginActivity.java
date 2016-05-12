@@ -155,7 +155,7 @@ public class LoginActivity extends AppCompatActivity {
             // TODO: register the new account.
             User user = Vala.getUser();
             user.login(BitmapFactory.decodeResource(getResources(), R.drawable.babu),
-                                        "Babu", "bla", "babu@valapay.com", "123456", "Pakistan");
+                                        "Babu", "bla", "babu@valapay.com", "123456", "Pakistan", 250);
             return true;
         }
 

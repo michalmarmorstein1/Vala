@@ -42,14 +42,13 @@
     <string name="pin_error">Please type a 4 digits pin code</string>
 
     <!-- home screen -->
-    <string name="home_name">Hi Angamuthu,</string>
+    <string name="home_name">Hi %1$s,</string>
     <string name="home_balance">Your balance is:</string>
-    <string name="home_amount">$250</string>
     <string name="home_collect_btn">Collect</string>
     <string name="home_send_btn">Send</string>
 
     <!-- send screen -->
-    <string name="send_name">Hi Angamuthu,</string>
+    <string name="send_name">Hi %1$s,</string>
     <string name="send_send">send:</string>
     <string name="send_amount">Amount</string>
     <string name="send_to">To:</string>

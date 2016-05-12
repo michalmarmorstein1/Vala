@@ -35,8 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:text="@string/home_name"
-            android:id="@+id/name_text"
+            android:id="@+id/textViewName"
             android:textColor="@color/blue"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
@@ -50,15 +49,14 @@
             android:id="@+id/collect_text"
             android:textColor="@color/darkGray"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/name_text" />
+            android:layout_below="@+id/textViewName" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/home_amount"
             android:textSize="37.5sp"
             android:fontFamily="sans-serif-thin"
-            android:id="@+id/amount_text"
+            android:id="@+id/textViewAmount"
             android:textColor="@color/blue"
             android:layout_below="@+id/collect_text"
             android:layout_centerHorizontal="true"
