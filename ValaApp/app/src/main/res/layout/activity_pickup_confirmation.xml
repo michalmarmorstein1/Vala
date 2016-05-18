@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@android:color/white"
     tools:context="com.valapay.vala.activities.PickupConfirmationActivity">
 
     <ProgressBar
@@ -37,9 +38,9 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/QRCode"
-        android:src="@drawable/logo_vala"
+        android:id="@+id/qrCode"
         android:layout_weight="1"
+        android:padding="0dp"
         android:layout_gravity="center_horizontal" />
 
     <TextView
@@ -58,7 +59,7 @@
         style="@style/BigBlueButton"
         android:text="@string/pickup_confirmation_ok_btn"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="20dp"
         android:id="@+id/buttonOk" />
 
     <Button
@@ -66,7 +67,7 @@
         android:layout_height="wrap_content"
         style="@style/BigGreenButton"
         android:text="@string/pickup_confirmation_problem_btn"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="30dp"
         android:layout_gravity="center_horizontal"
         android:id="@+id/buttonProblem" />
 </LinearLayout>
