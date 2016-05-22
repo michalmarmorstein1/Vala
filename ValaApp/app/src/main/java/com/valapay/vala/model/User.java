@@ -20,8 +20,9 @@ public class User {
     private final static String PHONE_KEY = "PHONE_KEY";
     private final static String COUNTRY_KEY = "COUNTRY_KEY";
     private final static String IS_REGISTERED_KEY = "IS_REGISTERED_KEY";
-    private final static String RECEIPIENTS_KEY = "RECEIPIENTS_KEY";
+    private final static String RECIPIENTS_KEY = "RECIPIENTS_KEY";
     private final static String BALANCE_KEY = "BALANCE_KEY";
+    private final static String CURRENCY_KEY = "CURRENCY_KEY";
 
     private String imagePath;
     private String firstName;
@@ -30,8 +31,9 @@ public class User {
     private String phone;
     private String country;
     private int balance;
-    private ArrayList<Receipient> receipients;
+    private ArrayList<Recipient> recipients;
     private boolean isRegistered;
+    private String currency;
 
     private SharedPreferences preferences;
 
@@ -45,7 +47,7 @@ public class User {
     }
 
     public void login(Bitmap userBitmap, String firstName, String lastName, String email,
-                      String phone, String country, int balance) {
+                      String phone, String country, int balance, String currency) {
         this.firstName = firstName;
         preferences.edit().putString(FIRST_NAME_KEY, firstName);
         this.lastName = lastName;
@@ -58,9 +60,11 @@ public class User {
         preferences.edit().putString(COUNTRY_KEY, country);
         this.isRegistered = true;
         preferences.edit().putBoolean(IS_REGISTERED_KEY, true);
-        receipients = new ArrayList<>(); //TODO handle preferences?
+        recipients = new ArrayList<>(); //TODO handle preferences?
         this.balance = balance;
         preferences.edit().putFloat(BALANCE_KEY, balance);
+        this.currency = currency;
+        preferences.edit().putString(CURRENCY_KEY, currency);
 
         File imageFile = CameraUtils.createImageFile();
         this.imagePath = imageFile.getAbsolutePath();
@@ -76,9 +80,10 @@ public class User {
         this.email = null;
         this.phone = null;
         this.country = null;
-        this.receipients = null;
+        this.recipients = null;
         this.isRegistered = false;
         this.balance = 0;
+        this.currency = null;
     }
 
     public boolean isRegistered(){
@@ -113,18 +118,22 @@ public class User {
         return country;
     }
 
-    public ArrayList<Receipient> getReceipients() {
-        return receipients;
+    public ArrayList<Recipient> getRecipients() {
+        return recipients;
     }
 
-    public void addReceipient(Receipient receipient) {
-        this.receipients.add(receipient);
+    public void addRecipient(Recipient recipient) {
+        this.recipients.add(recipient);
         //TODO handle preferences
     }
 
-    public void setReceipients(ArrayList<Receipient> receipients) {
-        this.receipients = receipients;
+    public void setRecipients(ArrayList<Recipient> recipients) {
+        this.recipients = recipients;
         //TODO handle preferences
+    }
+
+    public String getCurrency() {
+        return currency;
     }
 
     public int getBalance() {
@@ -132,7 +141,7 @@ public class User {
     }
 
     public String getBalanceString() {
-        return "$" + balance;
+        return currency + balance;
     }
 
     private void restoreFromPreferences(){
@@ -142,7 +151,8 @@ public class User {
         email = preferences.getString(EMAIL_KEY, null);
         phone = preferences.getString(PHONE_KEY, null);
         country = preferences.getString(COUNTRY_KEY, null);
-        //TODO handle this: receipients = ;
+        //TODO handle this: recipients = ;
         balance = preferences.getInt(BALANCE_KEY, 0);
+        currency = preferences.getString(CURRENCY_KEY, null);
     }
 }

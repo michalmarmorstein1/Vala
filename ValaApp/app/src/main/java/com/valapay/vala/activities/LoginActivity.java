@@ -10,13 +10,18 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.valapay.vala.R;
 import com.valapay.vala.Vala;
+import com.valapay.vala.common.UserLoginMessage;
 import com.valapay.vala.model.User;
+import com.valapay.vala.network.NetworkUtils;
+
+import java.io.IOException;
+
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -127,7 +132,7 @@ public class LoginActivity extends AppCompatActivity {
      */
     private void showProgress(final boolean show) {
         mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-        mLogo.setVisibility(show ? View.GONE: View.VISIBLE);
+        mLogo.setVisibility(show ? View.GONE : View.VISIBLE);
     }
 
     /**
@@ -146,17 +151,25 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
+            UserLoginMessage userLoginMessage = new UserLoginMessage();
+            userLoginMessage.setEmail(mEmail);
+            userLoginMessage.setPassword(mPassword);
+            Response<UserLoginMessage> loginResponse = null;
             try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
+                loginResponse = NetworkUtils.getTestService().login(userLoginMessage).execute();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
-            // TODO: register the new account.
-            User user = Vala.getUser();
-            user.login(BitmapFactory.decodeResource(getResources(), R.drawable.babu),
-                                        "Babu", "bla", "babu@valapay.com", "123456", "Pakistan", 250);
-            return true;
+            if(loginResponse.isSuccessful()){
+                UserLoginMessage data = loginResponse.body();
+                User user = Vala.getUser();
+                user.login(BitmapFactory.decodeResource(getResources(), R.drawable.babu),
+                        "Babu", "bla", data.getEmail(), "123456", "Pakistan", 250, "\u20AA");
+                //TODO set recipients
+                return true;
+            }else{
+                return false;
+            }
         }
 
         @Override
@@ -171,6 +184,7 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(i);
             } else {
                 //TODO show server errors
+                Toast.makeText(LoginActivity.this, "An error as occurred", Toast.LENGTH_SHORT).show();
             }
         }
 

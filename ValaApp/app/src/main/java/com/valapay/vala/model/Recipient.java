@@ -2,13 +2,13 @@ package com.valapay.vala.model;
 
 import android.graphics.Bitmap;
 
-public class Receipient {
+public class Recipient {
 
     private Bitmap image;
     private String name;
     private String id;
 
-    public Receipient(Bitmap image, String name, String id) {
+    public Recipient(Bitmap image, String name, String id) {
         this.image = image;
         this.name = name;
         this.id = id;
