@@ -11,7 +11,6 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -24,7 +23,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -42,11 +40,8 @@ import com.valapay.vala.model.Affiliate;
 import com.valapay.vala.utils.LocationUtils;
 import com.valapay.vala.utils.RoundImage;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 public class PickupLocationActivity extends NavigationDrawerActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -111,7 +106,7 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ReservationActivity.startCollectActivity("Abhimanyusuta", "$100", PickupLocationActivity.this);
+                ReservationActivity.startCollectActivity(mAffiliates.get(selectedMarker.getPosition()).getName(), "$100", PickupLocationActivity.this);
             }
         });
 
