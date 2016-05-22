@@ -134,10 +134,10 @@ public class PaymentActivity extends NavigationDrawerActivity {
                 resultStr += "Expiration Date: " + scanResult.expiryMonth + "/" + scanResult.expiryYear + "\n";
             }
             if (scanResult.cvv != null) {
-                resultStr += "CVV has " + scanResult.cvv.length() + " digits.\n";
+                resultStr += "CVV:" + scanResult.cvv + "\n";
             }
             if (scanResult.cardholderName != null) {
-                resultStr += "Cardholder Name : " + scanResult.cardholderName + "\n";
+                resultStr += "Cardholder Name: " + scanResult.cardholderName + "\n";
             }
         }
         mCardTextView.setText(resultStr);
