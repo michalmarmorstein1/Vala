@@ -44,6 +44,7 @@ public class PaymentActivity extends NavigationDrawerActivity {
     private String currency = "$";
     private ConfirmPaymentTask confirmPaymentTask = null;
     private Button mContinueButton;
+    private TextView mCardTextView;
 
     public static void startPaymentActivity(String recipient, int amount, Activity context){
 
@@ -63,6 +64,7 @@ public class PaymentActivity extends NavigationDrawerActivity {
         TextView amountView = (TextView) findViewById(R.id.amount_text);
         TextView feeView = (TextView) findViewById(R.id.fee_text);
         TextView totalView = (TextView) findViewById(R.id.total_text);
+        mCardTextView = (TextView) findViewById(R.id.card_text);
 
         //TODO handle currency
         String amountStr = currency + amount;
@@ -122,10 +124,9 @@ public class PaymentActivity extends NavigationDrawerActivity {
         mContinueButton.setVisibility(View.GONE);
         ImageView steps = (ImageView) findViewById(R.id.stepsImage);
         steps.setImageDrawable(getDrawable(R.drawable.stepstabs_confirm));
-        TextView cardTextView = (TextView) findViewById(R.id.card_text);
-        cardTextView.setVisibility(View.VISIBLE);
+        mCardTextView.setVisibility(View.VISIBLE);
 
-        String resultStr = "Scan was canceled.";
+        String resultStr = "Failed to scan credit card";
         if (data != null && data.hasExtra(io.card.payment.CardIOActivity.EXTRA_SCAN_RESULT)) {
             CreditCard scanResult = data.getParcelableExtra(io.card.payment.CardIOActivity.EXTRA_SCAN_RESULT);
             resultStr = "Card Number: " + scanResult.getRedactedCardNumber() + "\n";
@@ -139,13 +140,18 @@ public class PaymentActivity extends NavigationDrawerActivity {
                 resultStr += "Cardholder Name : " + scanResult.cardholderName + "\n";
             }
         }
-        cardTextView.setText(resultStr);
+        mCardTextView.setText(resultStr);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        showCreditCardDetails(data);
+        if(resultCode != RESULT_OK){
+            mCardTextView.setVisibility(View.VISIBLE);
+            mCardTextView.setText("Scan was canceled.");
+        }else{
+            showCreditCardDetails(data);
+        }
     }
 
     private void openScanCreditCard(){
