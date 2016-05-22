@@ -134,7 +134,7 @@ public class PaymentActivity extends NavigationDrawerActivity {
                 resultStr += "Expiration Date: " + scanResult.expiryMonth + "/" + scanResult.expiryYear + "\n";
             }
             if (scanResult.cvv != null) {
-                resultStr += "CVV:" + scanResult.cvv + "\n";
+                resultStr += "CVV: " + scanResult.cvv + "\n";
             }
             if (scanResult.cardholderName != null) {
                 resultStr += "Cardholder Name: " + scanResult.cardholderName + "\n";
