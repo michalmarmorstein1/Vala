@@ -146,7 +146,7 @@ public class PaymentActivity extends NavigationDrawerActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode != RESULT_OK){
+        if(resultCode == RESULT_CANCELED){
             mCardTextView.setVisibility(View.VISIBLE);
             mCardTextView.setText("Scan was canceled.");
         }else{
