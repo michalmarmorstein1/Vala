@@ -189,17 +189,17 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
 
             @Override
             public boolean onMarkerClick(Marker marker) {
+                Affiliate selected = mAffiliates.get(marker.getPosition());
                 if (marker.equals(selectedMarker)) {
                     return false;
-                } else {
+                } else if(selected != null){ //Affiliate marker
                     if (selectedMarker != null) {
                         selectedMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.affiliate_off));
                     }
                     selectedMarker = marker;
                     selectedMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.affiliate_on));
+                    updateUIWithAffiliateDetails(selected);
                 }
-                Affiliate selected = mAffiliates.get(marker.getPosition());
-                updateUIWithAffiliateDetails(selected);
                 return false;
             }
         });
