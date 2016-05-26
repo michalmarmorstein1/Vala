@@ -119,12 +119,6 @@ public class PaymentActivity extends NavigationDrawerActivity {
 
     private void showCreditCardDetails(Intent data){
 
-        LinearLayout layout = (LinearLayout) findViewById(R.id.LayoutConfirmPayment);
-        layout.setVisibility(View.VISIBLE);
-        mContinueButton.setVisibility(View.GONE);
-        ImageView steps = (ImageView) findViewById(R.id.stepsImage);
-        steps.setImageDrawable(getDrawable(R.drawable.stepstabs_confirm));
-        mCardTextView.setVisibility(View.VISIBLE);
 
         String resultStr = "Failed to scan credit card";
         if (data != null && data.hasExtra(io.card.payment.CardIOActivity.EXTRA_SCAN_RESULT)) {
@@ -139,6 +133,12 @@ public class PaymentActivity extends NavigationDrawerActivity {
             if (scanResult.cardholderName != null) {
                 resultStr += "Cardholder Name: " + scanResult.cardholderName + "\n";
             }
+            // Update UI after successful scan
+            LinearLayout layout = (LinearLayout) findViewById(R.id.LayoutConfirmPayment);
+            layout.setVisibility(View.VISIBLE);
+            mContinueButton.setVisibility(View.GONE);
+            ImageView steps = (ImageView) findViewById(R.id.stepsImage);
+            steps.setImageDrawable(getDrawable(R.drawable.stepstabs_confirm));
         }
         mCardTextView.setText(resultStr);
     }
@@ -146,8 +146,8 @@ public class PaymentActivity extends NavigationDrawerActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        mCardTextView.setVisibility(View.VISIBLE);
         if(resultCode == RESULT_CANCELED){
-            mCardTextView.setVisibility(View.VISIBLE);
             mCardTextView.setText("Scan was canceled.");
         }else{
             showCreditCardDetails(data);
