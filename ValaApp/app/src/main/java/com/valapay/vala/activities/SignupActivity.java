@@ -52,7 +52,7 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
 
-        mUserImage = (ImageView) findViewById(R.id.imageButtonCamera);
+        mUserImage = (ImageView) findViewById(R.id.imageViewCamera);
         mUserImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
