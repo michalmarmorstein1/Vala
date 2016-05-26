@@ -65,6 +65,7 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
     private TextView afAddress;
     private TextView afHours;
     private TextView afDistance;
+    private LatLng mUserPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,11 +163,11 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
                 new LatLng(STUB_LAT, STUB_LONG), 16));
 //        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
 //                new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()), 16));
-        LatLng userPosition = new LatLng(STUB_LAT, STUB_LONG);
+        mUserPosition = new LatLng(STUB_LAT, STUB_LONG);
 //        LatLng userPosition = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
         mMap.addMarker(new MarkerOptions()
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.userposition))
-                .position(userPosition));
+                .position(mUserPosition));
         MarkerOptions selected = null;
         for(LatLng af : mAffiliates.keySet()){
 
@@ -189,6 +190,10 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
 
             @Override
             public boolean onMarkerClick(Marker marker) {
+
+                if(mHideMarkers){
+                    return false;
+                }
                 Affiliate selected = mAffiliates.get(marker.getPosition());
                 if (marker.equals(selectedMarker)) {
                     return false;
@@ -278,23 +283,39 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
 
         if(requestCode == ReservationActivity.REQUEST_CODE){
             if(resultCode == RESULT_OK){
-                //TODO add marker, add textView
-                mMap.clear();
-                mHideMarkers = true;
-                mAmountTextView.setVisibility(View.VISIBLE);
-                mButton.setText(getText(R.string.pickup_reserve));
-                mButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if(confirmAffiliateTask == null){
-                            //TODO show progress
-                            confirmAffiliateTask = new ConfirmAffiliateTask();
-                            confirmAffiliateTask.execute((Void) null);
-                        }
-                    }
-                });
+                updateUIOnReservation();
+                //Start Google Maps navigation
+//                String navigationPath = "google.navigation:q=" + selectedMarker.getPosition().latitude +
+//                        "," + selectedMarker.getPosition().longitude + "&mode=w";
+//                Uri gmmIntentUri = Uri.parse(navigationPath);
+//                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+//                mapIntent.setPackage("com.google.android.apps.maps");
+//                startActivity(mapIntent);
             }
         }
+    }
+
+    private void updateUIOnReservation(){
+        mMap.clear();
+        mHideMarkers = true;
+        mMap.addMarker(new MarkerOptions()
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.userposition))
+                .position(mUserPosition));
+        mMap.addMarker(new MarkerOptions()
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.affiliate_on))
+                .position(selectedMarker.getPosition()));
+        mAmountTextView.setVisibility(View.VISIBLE);
+        mButton.setText(getText(R.string.pickup_reserve));
+        mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(confirmAffiliateTask == null){
+                    //TODO show progress
+                    confirmAffiliateTask = new ConfirmAffiliateTask();
+                    confirmAffiliateTask.execute((Void) null);
+                }
+            }
+        });
     }
 
     private class ConfirmAffiliateTask extends AsyncTask<Void, Void, Boolean> {
