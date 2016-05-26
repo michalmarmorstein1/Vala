@@ -32,7 +32,7 @@ import com.valapay.vala.model.User;
 import com.valapay.vala.utils.RoundImage;
 
 public class HomeActivity extends NavigationDrawerActivity implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener{
+        GoogleApiClient.OnConnectionFailedListener {
 
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_LOCATION = 1;
 
@@ -76,10 +76,14 @@ public class HomeActivity extends NavigationDrawerActivity implements GoogleApiC
         mCollectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (getAffiliatesTask == null) {
-                    showProgress(true);
-                    getAffiliatesTask = new GetAffiliatesTask();
-                    getAffiliatesTask.execute((Void) null);
+                if(mLastLocation == null){
+                    Toast.makeText(HomeActivity.this, getString(R.string.home_location_disabled_msg), Toast.LENGTH_LONG).show();
+                }else{
+                    if (getAffiliatesTask == null) {
+                        showProgress(true);
+                        getAffiliatesTask = new GetAffiliatesTask();
+                        getAffiliatesTask.execute((Void) null);
+                    }
                 }
             }
         });
@@ -110,6 +114,41 @@ public class HomeActivity extends NavigationDrawerActivity implements GoogleApiC
     @Override
     protected void onStart() {
         mGoogleApiClient.connect();
+        final LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        LocationListener locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                Log.d("VALA", "HomeActivity:onLocationChanged()");
+                mLastLocation = location;
+                checkLocation();
+                if (ActivityCompat.checkSelfPermission(HomeActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(HomeActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                locationManager.removeUpdates(this);
+            }
+
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+                Log.d("VALA", "HomeActivity:onStatusChanged()");
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+                Log.d("VALA", "HomeActivity:onProviderEnabled()");
+            }
+
+
+            @Override
+            public void onProviderDisabled(String provider) {
+                Log.d("VALA", "HomeActivity:onProviderDisabled()");
+            }
+        };
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+//        locationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, locationListener, null);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
         super.onStart();
     }
 
@@ -150,11 +189,9 @@ public class HomeActivity extends NavigationDrawerActivity implements GoogleApiC
         Log.d("VALA", "HomeActivity:checkLocation() - " + mLastLocation);
         LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if(mLastLocation != null){
-            mCollectButton.setEnabled(true);
             mLocaionTextView.setVisibility(View.INVISIBLE);
         }else{
             if(!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-                mCollectButton.setEnabled(false);
                 mLocaionTextView.setVisibility(View.VISIBLE);
             }
         }

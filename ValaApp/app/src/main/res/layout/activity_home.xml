@@ -82,7 +82,6 @@
         android:text="@string/home_collect_btn"
         android:id="@+id/collect_btn"
         android:layout_gravity="center"
-        android:enabled="false"
         android:layout_marginTop="20dp" />
 
     <Button
