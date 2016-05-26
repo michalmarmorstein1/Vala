@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import com.valapay.vala.utils.CameraUtils;
 
@@ -41,6 +42,7 @@ public class User {
 
         preferences = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
         isRegistered = preferences.getBoolean(IS_REGISTERED_KEY, false);
+        Log.d("VALA", "User:User() - isRegistered=" + isRegistered);
         if(isRegistered()){
             restoreFromPreferences();
         }
@@ -48,31 +50,37 @@ public class User {
 
     public void login(Bitmap userBitmap, String firstName, String lastName, String email,
                       String phone, String country, int balance, String currency) {
+        Log.d("VALA", "User:login() - firstName=" + this.firstName +
+                ", lastName=" + this.lastName + ", email=" + this.email +
+                ", phone=" + this.phone+ ", country=" + this.country +
+                ", balance=" + this.balance + ", currency=" + this.currency);
         this.firstName = firstName;
-        preferences.edit().putString(FIRST_NAME_KEY, firstName);
+        preferences.edit().putString(FIRST_NAME_KEY, firstName).apply();
         this.lastName = lastName;
-        preferences.edit().putString(LAST_NAME_KEY, lastName);
+        preferences.edit().putString(LAST_NAME_KEY, lastName).apply();
         this.email = email;
-        preferences.edit().putString(EMAIL_KEY, email);
+        preferences.edit().putString(EMAIL_KEY, email).apply();
         this.phone = phone;
-        preferences.edit().putString(PHONE_KEY, phone);
+        preferences.edit().putString(PHONE_KEY, phone).apply();
         this.country = country;
-        preferences.edit().putString(COUNTRY_KEY, country);
+        preferences.edit().putString(COUNTRY_KEY, country).apply();
         this.isRegistered = true;
-        preferences.edit().putBoolean(IS_REGISTERED_KEY, true);
+        preferences.edit().putBoolean(IS_REGISTERED_KEY, true).apply();
         recipients = new ArrayList<>(); //TODO handle preferences?
         this.balance = balance;
-        preferences.edit().putFloat(BALANCE_KEY, balance);
+        preferences.edit().putInt(BALANCE_KEY, balance).apply();
         this.currency = currency;
-        preferences.edit().putString(CURRENCY_KEY, currency);
+        preferences.edit().putString(CURRENCY_KEY, currency).apply();
 
         File imageFile = CameraUtils.createImageFile();
         this.imagePath = imageFile.getAbsolutePath();
+        preferences.edit().putString(IMAGE_KEY, imagePath).apply();
         CameraUtils.storeImageToFile(userBitmap, imageFile);
     }
 
     public void logout() {
-        preferences.edit().clear().commit();
+        Log.d("VALA", "User:logout()");
+        preferences.edit().clear().apply();
         getImageFile().delete();
         this.imagePath = null;
         this.firstName = null;
@@ -91,7 +99,9 @@ public class User {
     }
 
     public Bitmap getImageBitmap() {
-        return BitmapFactory.decodeFile(imagePath);
+        Log.d("VALA", "User:getImageBitmap() - imagePath=" + imagePath);
+        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+        return bitmap;
     }
 
     public File getImageFile() {
