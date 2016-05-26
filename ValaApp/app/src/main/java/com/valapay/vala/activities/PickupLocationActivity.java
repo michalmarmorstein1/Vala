@@ -1,6 +1,7 @@
 package com.valapay.vala.activities;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -43,14 +44,14 @@ import com.valapay.vala.utils.RoundImage;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PickupLocationActivity extends NavigationDrawerActivity implements OnMapReadyCallback,
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class PickupLocationActivity extends NavigationDrawerActivity implements OnMapReadyCallback {
 
     private static final float STUB_LAT = 32.064642f;
     private static final float STUB_LONG = 34.774431f;
 
+    private static final String LOCATION_KEY = "LOCATION_KEY";
+
     private GoogleMap mMap;
-    private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     private Button mButton;
     private boolean mHideMarkers;
@@ -67,9 +68,18 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
     private TextView afDistance;
     private LatLng mUserPosition;
 
+    public static void startActivity(Context context, Location location){
+
+        Intent intent = new Intent(context, PickupLocationActivity.class);
+        intent.putExtra(LOCATION_KEY, location);
+        context.startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mLastLocation = getIntent().getParcelableExtra(LOCATION_KEY);
 
         afImage = (ImageView) findViewById(R.id.imageViewAffiliate);
         afRating = (ImageView) findViewById(R.id.imageViewRating);
@@ -79,20 +89,12 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
         afHours = (TextView) findViewById(R.id.textViewHours);
         afDistance = (TextView) findViewById(R.id.textViewdistance);;
 
-        //Add map
+        // Add map
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        // Create an instance of GoogleAPIClient.
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build();
-        }
-
+        //Update UI
         ImageView userImage = (ImageView) findViewById(R.id.imageViewAffiliate);
         Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.babu);
         RoundImage roundedImage = new RoundImage(bm);
@@ -159,30 +161,30 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
 
     private void showMarkers(){
 
+        // Show user location
+        mUserPosition = new LatLng(STUB_LAT, STUB_LONG); //TODO replace with next line to get real user location
+//        mUserPosition = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                new LatLng(STUB_LAT, STUB_LONG), 16));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-//                new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()), 16));
-        mUserPosition = new LatLng(STUB_LAT, STUB_LONG);
-//        LatLng userPosition = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+                mUserPosition, 16));
         mMap.addMarker(new MarkerOptions()
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.userposition))
                 .position(mUserPosition));
+
+        // Show affiliate markers
         MarkerOptions selected = null;
         for(LatLng af : mAffiliates.keySet()){
-
-            if(selected == null){
+            if(selected == null){ // TODO select closest affiliate instead of the first one on the list
                 selected = new MarkerOptions()
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.affiliate_on))
                         .position(af);
                 selectedMarker = mMap.addMarker(selected);
-            }else{
+            }else{ //Add other affiliate markers to the map
                 mMap.addMarker(new MarkerOptions()
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.affiliate_off))
                         .position(af));
             }
         }
-        if(selected != null){
+        if (selected != null) {
             updateUIWithAffiliateDetails(mAffiliates.get(selected.getPosition()));
         }
 
@@ -191,13 +193,13 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
             @Override
             public boolean onMarkerClick(Marker marker) {
 
-                if(mHideMarkers){
+                if(mHideMarkers){ //User already made a reservation - do nothing
                     return false;
                 }
                 Affiliate selected = mAffiliates.get(marker.getPosition());
-                if (marker.equals(selectedMarker)) {
+                if (marker.equals(selectedMarker)) { //User pressed a marker twice - do nothing
                     return false;
-                } else if(selected != null){ //Affiliate marker
+                } else if(selected != null){ //User pressed an affiliate marker - update UI
                     if (selectedMarker != null) {
                         selectedMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.affiliate_off));
                     }
@@ -211,13 +213,15 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
     }
 
     private void updateUIWithAffiliateDetails(final Affiliate af){
+
         afImage.setImageDrawable(new BitmapDrawable(getResources(), af.getImage()));
         afRating.setImageDrawable(new BitmapDrawable(getResources(), af.getRating()));
         afName.setText(af.getName());
         afAddress.setText(af.getAddress());
         afHours.setText(af.getOpeningHours());
         LatLng afLoc = af.getLocation();
-        afDistance.setText(String.valueOf(LocationUtils.distance(afLoc.latitude, afLoc.longitude, STUB_LAT, STUB_LONG)) + "m");
+        afDistance.setText(String.valueOf(LocationUtils.distance(afLoc.latitude, afLoc.longitude,
+                mUserPosition.latitude, mUserPosition.longitude)) + "m");
         afPhone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -234,48 +238,6 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
         if(mLastLocation != null){
             showMarkers();
         }
-    }
-
-    @Override
-    protected void onStart() {
-        mGoogleApiClient.connect();
-        super.onStart();
-    }
-
-    @Override
-    protected void onStop() {
-        mGoogleApiClient.disconnect();
-        super.onStop();
-    }
-
-    @Override
-    public void onConnected(Bundle bundle) {
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                mGoogleApiClient);
-        if(mMap != null && mLastLocation != null && !mHideMarkers){
-            showMarkers();
-        }
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-
     }
 
     @Override
@@ -348,5 +310,4 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
             //TODO hide progress
         }
     }
-
 }

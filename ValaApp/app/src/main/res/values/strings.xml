@@ -46,6 +46,8 @@
     <string name="home_balance">Your balance is:</string>
     <string name="home_collect_btn">Collect</string>
     <string name="home_send_btn">Send</string>
+    <string name="home_location_disabled_msg">Please turn on location services\n in order to collect your money</string>
+
 
     <!-- send screen -->
     <string name="send_name">Hi %1$s,</string>
