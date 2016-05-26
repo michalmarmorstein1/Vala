@@ -35,9 +35,8 @@ public class MyTransactionsActivity extends NavigationDrawerActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(getString(R.string.my_transactions_title));
-        setSupportActionBar(toolbar);
+        TextView title = (TextView) findViewById(R.id.textViewToolbarTitle);
+        title.setText(R.string.my_transactions_title);
         populateLists();
 
         ListView receivedList = (ListView) findViewById(R.id.listViewReceived);
