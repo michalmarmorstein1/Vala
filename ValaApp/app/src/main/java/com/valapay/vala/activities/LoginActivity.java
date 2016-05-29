@@ -26,7 +26,7 @@ import retrofit2.Response;
 public class LoginActivity extends AppCompatActivity {
 
     private UserLoginTask mAuthTask = null;
-    private ForgorPasswordTask mPassowrdTask = null;
+    private ForgotPasswordTask mPasswordTask = null;
 
     // UI references.
     private EditText mEmailView;
@@ -56,9 +56,9 @@ public class LoginActivity extends AppCompatActivity {
         forgotPassword.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mPassowrdTask == null){
-                    mPassowrdTask = new ForgorPasswordTask(mEmailView.getText().toString());
-                    mPassowrdTask.execute();
+                if(mPasswordTask == null){
+                    mPasswordTask = new ForgotPasswordTask(mEmailView.getText().toString());
+                    mPasswordTask.execute();
                 }
 
             }
@@ -195,11 +195,11 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    public class ForgorPasswordTask extends AsyncTask<Void, Void, Boolean> {
+    public class ForgotPasswordTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String mEmail;
 
-        ForgorPasswordTask(String email) {
+        ForgotPasswordTask(String email) {
             mEmail = email;
         }
 
@@ -217,7 +217,7 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(final Boolean success) {
-            mPassowrdTask = null;
+            mPasswordTask = null;
             showProgress(false);
 
             if (success) {
@@ -230,7 +230,7 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected void onCancelled() {
-            mPassowrdTask = null;
+            mPasswordTask = null;
             showProgress(false);
         }
     }

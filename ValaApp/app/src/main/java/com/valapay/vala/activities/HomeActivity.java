@@ -39,7 +39,7 @@ public class HomeActivity extends NavigationDrawerActivity implements GoogleApiC
     private GetAffiliatesTask getAffiliatesTask = null;
     private View mProgressView;
     private View mImage;
-    private View mLocaionTextView;
+    private View mLocationTextView;
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     private Button mCollectButton;
@@ -60,7 +60,7 @@ public class HomeActivity extends NavigationDrawerActivity implements GoogleApiC
         User user = Vala.getUser();
         mProgressView = findViewById(R.id.home_progress);
         mImage = findViewById(R.id.userImage);
-        mLocaionTextView = findViewById(R.id.textViewLocation);
+        mLocationTextView = findViewById(R.id.textViewLocation);
         TextView tv = (TextView) findViewById(R.id.textViewName);
         String str = getString(R.string.home_name, user.getFirstName());
         Spannable wordToSpan = new SpannableString(str);
@@ -189,10 +189,10 @@ public class HomeActivity extends NavigationDrawerActivity implements GoogleApiC
         Log.d("VALA", "HomeActivity:checkLocation() - " + mLastLocation);
         LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if(mLastLocation != null){
-            mLocaionTextView.setVisibility(View.INVISIBLE);
+            mLocationTextView.setVisibility(View.INVISIBLE);
         }else{
             if(!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-                mLocaionTextView.setVisibility(View.VISIBLE);
+                mLocationTextView.setVisibility(View.VISIBLE);
             }
         }
     }
