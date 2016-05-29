@@ -177,7 +177,7 @@ public class AddPinCodeActivity extends AppCompatActivity {
 
             // TODO: register the new account.
             User user = Vala.getUser();
-            user.login(userImage, firstName, lastName, email, phone, country, 0, "$");
+//            user.login(userImage, firstName, lastName, email, phone, country, 0, "$");
             // TODO: upload photo
             user.getImageFile();
             try {

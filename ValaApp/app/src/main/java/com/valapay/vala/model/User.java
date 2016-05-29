@@ -6,9 +6,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.valapay.vala.utils.CameraUtils;
 
 import java.io.File;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class User {
@@ -24,6 +27,8 @@ public class User {
     private final static String RECIPIENTS_KEY = "RECIPIENTS_KEY";
     private final static String BALANCE_KEY = "BALANCE_KEY";
     private final static String CURRENCY_KEY = "CURRENCY_KEY";
+    private final static String TOKEN_KEY = "TOKEN_KEY";
+    private final static String ID_KEY = "ID_KEY";
 
     private String imagePath;
     private String firstName;
@@ -35,6 +40,8 @@ public class User {
     private ArrayList<Recipient> recipients;
     private boolean isRegistered;
     private String currency;
+    private String token;
+    private String userId;
 
     private SharedPreferences preferences;
 
@@ -48,12 +55,9 @@ public class User {
         }
     }
 
-    public void login(Bitmap userBitmap, String firstName, String lastName, String email,
-                      String phone, String country, int balance, String currency) {
-        Log.d("VALA", "User:login() - firstName=" + this.firstName +
-                ", lastName=" + this.lastName + ", email=" + this.email +
-                ", phone=" + this.phone+ ", country=" + this.country +
-                ", balance=" + this.balance + ", currency=" + this.currency);
+    public void login(String firstName, String lastName, String email,
+                      String phone, String country, int balance, String currency, String token,
+                      String userId) {
         this.firstName = firstName;
         preferences.edit().putString(FIRST_NAME_KEY, firstName).apply();
         this.lastName = lastName;
@@ -66,16 +70,40 @@ public class User {
         preferences.edit().putString(COUNTRY_KEY, country).apply();
         this.isRegistered = true;
         preferences.edit().putBoolean(IS_REGISTERED_KEY, true).apply();
-        recipients = new ArrayList<>(); //TODO handle preferences?
+        recipients = new ArrayList<>();
         this.balance = balance;
         preferences.edit().putInt(BALANCE_KEY, balance).apply();
-        this.currency = currency;
-        preferences.edit().putString(CURRENCY_KEY, currency).apply();
+        //TODO - move this logic to the server
+        if(currency.equals("NIS")){
+            this.currency = "\\u20AA";
+        }else{
+            this.currency = "$";
+        }
+        preferences.edit().putString(CURRENCY_KEY, this.currency).apply();
+        this.token = token;
+        preferences.edit().putString(TOKEN_KEY, token).apply();
+        this.userId = userId;
+        preferences.edit().putString(ID_KEY, userId).apply();
 
-        File imageFile = CameraUtils.createImageFile();
+        Log.d("VALA", "User:login() - firstName=" + this.firstName +
+                ", lastName=" + this.lastName + ", email=" + this.email +
+                ", phone=" + this.phone+ ", country=" + this.country +
+                ", balance=" + this.balance + ", currency=" + this.currency +
+                ", token=" + this.token + ", userId=" + this.userId);
+    }
+
+    public void saveImage(Bitmap userBitmap){
+
+        File imageFile = CameraUtils.createImageFile(this.firstName);
         this.imagePath = imageFile.getAbsolutePath();
         preferences.edit().putString(IMAGE_KEY, imagePath).apply();
         CameraUtils.storeImageToFile(userBitmap, imageFile);
+    }
+
+    public void saveImageFile(File userImageFile){
+
+        this.imagePath = userImageFile.getAbsolutePath();
+        preferences.edit().putString(IMAGE_KEY, imagePath).apply();
     }
 
     public void logout() {
@@ -92,6 +120,8 @@ public class User {
         this.isRegistered = false;
         this.balance = 0;
         this.currency = null;
+        this.token = null;
+        userId = null;
     }
 
     public boolean isRegistered(){
@@ -134,20 +164,33 @@ public class User {
 
     public void addRecipient(Recipient recipient) {
         this.recipients.add(recipient);
-        //TODO handle preferences
+        setRecipients(this.recipients);
     }
 
     public void setRecipients(ArrayList<Recipient> recipients) {
         this.recipients = recipients;
-        //TODO handle preferences
+
+        //Save in sharedPreferences
+        Gson gson = new Gson();
+        String json = gson.toJson(recipients);
+        preferences.edit().putString(RECIPIENTS_KEY, json).commit();
     }
 
     public String getCurrency() {
+
         return currency;
     }
 
     public int getBalance() {
         return balance;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public String getUserId() {
+        return userId;
     }
 
     public String getBalanceString() {
@@ -161,8 +204,17 @@ public class User {
         email = preferences.getString(EMAIL_KEY, null);
         phone = preferences.getString(PHONE_KEY, null);
         country = preferences.getString(COUNTRY_KEY, null);
-        //TODO handle this: recipients = ;
         balance = preferences.getInt(BALANCE_KEY, 0);
         currency = preferences.getString(CURRENCY_KEY, null);
+        token = preferences.getString(TOKEN_KEY, null);
+        userId = preferences.getString(ID_KEY, null);
+
+        Gson gson = new Gson();
+        String json = preferences.getString(RECIPIENTS_KEY, null);
+        Type type = new TypeToken<ArrayList<Recipient>>() {}.getType();
+        recipients = gson.fromJson(json, type);
+        if(recipients == null){
+            recipients = new ArrayList<>();
+        }
     }
 }

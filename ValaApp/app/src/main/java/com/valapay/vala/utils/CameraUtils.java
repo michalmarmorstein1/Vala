@@ -13,12 +13,34 @@ import java.util.Date;
 
 public class CameraUtils {
 
-
     public static File createImageFile(){
 
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        File image = null;
+        try {
+            image = File.createTempFile(
+                    imageFileName,  /* prefix */
+                    ".jpg",         /* suffix */
+                    storageDir      /* directory */
+            );
+        } catch (FileNotFoundException e) {
+            Log.d("VALA", "CameraUtils:createImageFile() - File not found: " + e.getMessage());
+        } catch (IOException e) {
+            Log.d("VALA", "CameraUtils:createImageFile() - Error accessing file: " + e.getMessage());
+        }
+
+        return image;
+    }
+
+    public static File createImageFile(String id){
+
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + id + "_" + timeStamp + "_";
         File storageDir = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES);
         File image = null;

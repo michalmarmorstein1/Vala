@@ -8,8 +8,7 @@ public class Recipient {
     private String name;
     private String id;
 
-    public Recipient(Bitmap image, String name, String id) {
-        this.image = image;
+    public Recipient(String name, String id) {
         this.name = name;
         this.id = id;
     }

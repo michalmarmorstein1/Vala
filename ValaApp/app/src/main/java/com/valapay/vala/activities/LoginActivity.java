@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -16,11 +17,20 @@ import android.widget.Toast;
 import com.valapay.vala.R;
 import com.valapay.vala.Vala;
 import com.valapay.vala.common.UserLoginMessage;
+import com.valapay.vala.model.Recipient;
 import com.valapay.vala.model.User;
 import com.valapay.vala.network.NetworkUtils;
+import com.valapay.vala.utils.CameraUtils;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
 import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
@@ -162,10 +172,42 @@ public class LoginActivity extends AppCompatActivity {
             }
             if(loginResponse.isSuccessful()){
                 UserLoginMessage data = loginResponse.body();
+                UserLoginMessage.UserData userData = data.getUserData();
                 User user = Vala.getUser();
-                user.login(BitmapFactory.decodeResource(getResources(), R.drawable.babu),
-                        "Babu", "bla", data.getEmail(), "123456", "Pakistan", 250, "\u20AA");
-                //TODO set recipients
+                user.login(userData.getFirstName(), userData.getLastName(), data.getEmail(),
+                        userData.getPhone(), userData.getCoutry(), userData.getBalance(),
+                        userData.getCurrency(), data.getToken(), data.getUserId());
+                ArrayList<Recipient> recipients = new ArrayList<>();
+                UserLoginMessage.Receiver[] receivers = userData.getReceiverList();
+                for(int i = 0; i < receivers.length; i++){
+                    recipients.add(new Recipient(receivers[i].getName(), receivers[i].getUserId()));
+                }
+                user.setRecipients(recipients);
+                //Get Image
+                Response<ResponseBody> response = null;
+                try {
+                    response = NetworkUtils.getTestService().getImageFile(user.getUserId()).execute();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if (response.isSuccessful()) {
+                    Log.d("VALA", "LoginActivity:UserLoginTask.doInBackground() - server contacted and has file");
+
+                    File imageFile = writeResponseBodyToFile(response.body());
+                    if(imageFile != null){
+                        user.saveImageFile(imageFile);
+                    }else{
+                        //TODO replace with placeholder
+                        user.saveImage(BitmapFactory.decodeResource(getResources(), R.drawable.babu));
+//                        return false; //TODO uncomment to show server errors
+                    }
+                    Log.d("VALA", "LoginActivity:UserLoginTask.doInBackground() - image file: " + imageFile);
+                } else {
+                    Log.d("VALA", "LoginActivity:UserLoginTask.doInBackground() - image download failed");
+                    //TODO replace with placeholder
+                    user.saveImage(BitmapFactory.decodeResource(getResources(), R.drawable.babu));
+//                        return false; //TODO uncomment to show server errors
+                }
                 return true;
             }else{
                 return false;
@@ -192,6 +234,55 @@ public class LoginActivity extends AppCompatActivity {
         protected void onCancelled() {
             mAuthTask = null;
             showProgress(false);
+        }
+    }
+
+    private File writeResponseBodyToFile(ResponseBody body) {
+        try {
+            File file = CameraUtils.createImageFile();
+
+            InputStream inputStream = null;
+            OutputStream outputStream = null;
+
+            try {
+                byte[] fileReader = new byte[4096];
+
+                long fileSize = body.contentLength();
+                long fileSizeDownloaded = 0;
+
+                inputStream = body.byteStream();
+                outputStream = new FileOutputStream(file);
+
+                while (true) {
+                    int read = inputStream.read(fileReader);
+
+                    if (read == -1) {
+                        break;
+                    }
+
+                    outputStream.write(fileReader, 0, read);
+
+                    fileSizeDownloaded += read;
+
+                    Log.d("VALA", "LoginActivity:writeResponseBodyToFile() - file download: " + fileSizeDownloaded + " of " + fileSize);
+                }
+
+                outputStream.flush();
+
+                return file;
+            } catch (IOException e) {
+                return null;
+            } finally {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+            }
+        } catch (IOException e) {
+            return null;
         }
     }
 
