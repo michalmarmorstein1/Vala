@@ -10,9 +10,6 @@ import java.io.OutputStream;
 
 import okhttp3.ResponseBody;
 
-/**
- * Created by Arik on 5/29/2016.
- */
 public class NetworkUtils {
 
     public static File writeResponseBodyToFile(ResponseBody body) {
@@ -42,7 +39,7 @@ public class NetworkUtils {
 
                     fileSizeDownloaded += read;
 
-                    Log.d("VALA", "LoginActivity:writeResponseBodyToFile() - file download: " + fileSizeDownloaded + " of " + fileSize);
+                    Log.i("VALA", "NetworkUtils:writeResponseBodyToFile() - file download: " + fileSizeDownloaded + " of " + fileSize);
                 }
 
                 outputStream.flush();

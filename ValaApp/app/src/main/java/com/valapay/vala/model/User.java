@@ -43,12 +43,12 @@ public class User {
     private String token;
     private String userId;
 
-    private SharedPreferences preferences;
+    private SharedPreferences userPreferences;
 
     public User(Context context){
 
-        preferences = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
-        isRegistered = preferences.getBoolean(IS_REGISTERED_KEY, false);
+        userPreferences = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+        isRegistered = userPreferences.getBoolean(IS_REGISTERED_KEY, false);
         Log.d("VALA", "User:User() - isRegistered=" + isRegistered);
         if(isRegistered()){
             restoreFromPreferences();
@@ -59,31 +59,31 @@ public class User {
                       String phone, String country, int balance, String currency, String token,
                       String userId) {
         this.firstName = firstName;
-        preferences.edit().putString(FIRST_NAME_KEY, firstName).apply();
+        userPreferences.edit().putString(FIRST_NAME_KEY, firstName).apply();
         this.lastName = lastName;
-        preferences.edit().putString(LAST_NAME_KEY, lastName).apply();
+        userPreferences.edit().putString(LAST_NAME_KEY, lastName).apply();
         this.email = email;
-        preferences.edit().putString(EMAIL_KEY, email).apply();
+        userPreferences.edit().putString(EMAIL_KEY, email).apply();
         this.phone = phone;
-        preferences.edit().putString(PHONE_KEY, phone).apply();
+        userPreferences.edit().putString(PHONE_KEY, phone).apply();
         this.country = country;
-        preferences.edit().putString(COUNTRY_KEY, country).apply();
+        userPreferences.edit().putString(COUNTRY_KEY, country).apply();
         this.isRegistered = true;
-        preferences.edit().putBoolean(IS_REGISTERED_KEY, true).apply();
+        userPreferences.edit().putBoolean(IS_REGISTERED_KEY, true).apply();
         recipients = new ArrayList<>();
         this.balance = balance;
-        preferences.edit().putInt(BALANCE_KEY, balance).apply();
+        userPreferences.edit().putInt(BALANCE_KEY, balance).apply();
         //TODO - move this logic to the server
         if(currency.equals("NIS")){
             this.currency = "\\u20AA";
         }else{
             this.currency = "$";
         }
-        preferences.edit().putString(CURRENCY_KEY, this.currency).apply();
+        userPreferences.edit().putString(CURRENCY_KEY, this.currency).apply();
         this.token = token;
-        preferences.edit().putString(TOKEN_KEY, token).apply();
+        userPreferences.edit().putString(TOKEN_KEY, token).apply();
         this.userId = userId;
-        preferences.edit().putString(ID_KEY, userId).apply();
+        userPreferences.edit().putString(ID_KEY, userId).apply();
 
         Log.d("VALA", "User:login() - firstName=" + this.firstName +
                 ", lastName=" + this.lastName + ", email=" + this.email +
@@ -96,19 +96,19 @@ public class User {
 
         File imageFile = CameraUtils.createImageFile(this.firstName);
         this.imagePath = imageFile.getAbsolutePath();
-        preferences.edit().putString(IMAGE_KEY, imagePath).apply();
+        userPreferences.edit().putString(IMAGE_KEY, imagePath).apply();
         CameraUtils.storeImageToFile(userBitmap, imageFile);
     }
 
     public void saveImageFile(File userImageFile){
 
         this.imagePath = userImageFile.getAbsolutePath();
-        preferences.edit().putString(IMAGE_KEY, imagePath).apply();
+        userPreferences.edit().putString(IMAGE_KEY, imagePath).apply();
     }
 
     public void logout() {
         Log.d("VALA", "User:logout()");
-        preferences.edit().clear().apply();
+        userPreferences.edit().clear().apply();
         getImageFile().delete();
         this.imagePath = null;
         this.firstName = null;
@@ -163,6 +163,7 @@ public class User {
     }
 
     public synchronized void addRecipient(Recipient recipient) {
+        Log.d("VALA", "User:addRecipient() - " + recipient.getName());
         this.recipients.add(recipient);
         setRecipients(this.recipients);
     }
@@ -173,7 +174,8 @@ public class User {
         //Save in sharedPreferences
         Gson gson = new Gson();
         String json = gson.toJson(recipients);
-        preferences.edit().putString(RECIPIENTS_KEY, json).commit();
+        Log.d("VALA", "User:setRecipients() - " + json);
+        userPreferences.edit().putString(RECIPIENTS_KEY, json).commit();
     }
 
     public String getCurrency() {
@@ -198,19 +200,21 @@ public class User {
     }
 
     private void restoreFromPreferences(){
-        imagePath = preferences.getString(IMAGE_KEY, null);
-        firstName = preferences.getString(FIRST_NAME_KEY, null);
-        lastName = preferences.getString(LAST_NAME_KEY, null);
-        email = preferences.getString(EMAIL_KEY, null);
-        phone = preferences.getString(PHONE_KEY, null);
-        country = preferences.getString(COUNTRY_KEY, null);
-        balance = preferences.getInt(BALANCE_KEY, 0);
-        currency = preferences.getString(CURRENCY_KEY, null);
-        token = preferences.getString(TOKEN_KEY, null);
-        userId = preferences.getString(ID_KEY, null);
+
+        Log.d("VALA", "User:restoreFromPreferences()");
+        imagePath = userPreferences.getString(IMAGE_KEY, null);
+        firstName = userPreferences.getString(FIRST_NAME_KEY, null);
+        lastName = userPreferences.getString(LAST_NAME_KEY, null);
+        email = userPreferences.getString(EMAIL_KEY, null);
+        phone = userPreferences.getString(PHONE_KEY, null);
+        country = userPreferences.getString(COUNTRY_KEY, null);
+        balance = userPreferences.getInt(BALANCE_KEY, 0);
+        currency = userPreferences.getString(CURRENCY_KEY, null);
+        token = userPreferences.getString(TOKEN_KEY, null);
+        userId = userPreferences.getString(ID_KEY, null);
 
         Gson gson = new Gson();
-        String json = preferences.getString(RECIPIENTS_KEY, null);
+        String json = userPreferences.getString(RECIPIENTS_KEY, null);
         Type type = new TypeToken<ArrayList<Recipient>>() {}.getType();
         recipients = gson.fromJson(json, type);
         if(recipients == null){

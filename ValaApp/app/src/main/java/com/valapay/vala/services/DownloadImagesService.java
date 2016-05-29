@@ -28,17 +28,20 @@ public class DownloadImagesService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        Log.d("VALA", "DownloadImagesService:onHandleIntent()");
+
         if (intent != null) {
             User user = Vala.getUser();
             ArrayList<Recipient> recipients = user.getRecipients();
             for(Recipient r : recipients){
                 saveRecipientImage(r);
             }
+            user.setRecipients(user.getRecipients());//Save image paths in sharedPref
         }
     }
 
     private void saveRecipientImage(Recipient recipient){
-
+        Log.d("VALA", "DownloadImagesService:saveRecipientImage()");
         Response<ResponseBody> response = null;
         try {
             response = NetworkServices.getTestService().getImageFile(recipient.getId()).execute();

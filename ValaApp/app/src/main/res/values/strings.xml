@@ -72,14 +72,6 @@
     <string name="send_amount_error">Please select amount to send</string>
     <string name="select_receiver_error">Please select a receiver</string>
 
-    <!-- DELETE THIS - temporary-->
-    <string-array name="receivers_array">
-        <item>Ashish</item>
-        <item>Moshe</item>
-        <item>Haim</item>
-        <item>Kumar</item>
-    </string-array>
-
     <!-- payment screen-->
     <string name="payment_amount">You are sending</string>
     <string name="payment_fee">You will pay $%1$s as fees</string>

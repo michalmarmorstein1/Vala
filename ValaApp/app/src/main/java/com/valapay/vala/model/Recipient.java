@@ -11,19 +11,17 @@ public class Recipient {
     private String imagePath;
     private String name;
     private String id;
-    private Bitmap defaultBitmap;
 
-    public Recipient(String name, String id, Bitmap defaultBitmap) {
+    public Recipient(String name, String id) {
         this.name = name;
         this.id = id;
-        this.defaultBitmap = defaultBitmap;
     }
 
     public void saveImage(File image){
         imagePath = image.getAbsolutePath();
     }
 
-    public Bitmap getImage() {
+    public Bitmap getImage(Bitmap defaultBitmap) {
         Log.d("VALA", "Recipient:getImage() - imagePath=" + imagePath);
         Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
         if(bitmap == null){

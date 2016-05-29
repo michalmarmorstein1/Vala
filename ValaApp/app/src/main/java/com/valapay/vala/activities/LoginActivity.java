@@ -181,8 +181,7 @@ public class LoginActivity extends AppCompatActivity {
                 ArrayList<Recipient> recipients = new ArrayList<>();
                 UserLoginMessage.Receiver[] receivers = userData.getReceiverList();
                 for(int i = 0; i < receivers.length; i++){
-                    recipients.add(new Recipient(receivers[i].getName(), receivers[i].getUserId(),
-                            BitmapFactory.decodeResource(getResources(), R.drawable.babu)));
+                    recipients.add(new Recipient(receivers[i].getName(), receivers[i].getUserId()));
                 }
                 user.setRecipients(recipients);
                 //Download recipients images in the background
@@ -208,7 +207,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                     Log.d("VALA", "LoginActivity:UserLoginTask.doInBackground() - image file: " + imageFile);
                 } else {
-                    Log.d("VALA", "LoginActivity:UserLoginTask.doInBackground() - image download failed");
+                    Log.d("VALA", "LoginActivity:UserLoginTask.doInBackground() - image download failed, using default image");
                     //TODO replace with placeholder
                     user.saveImage(BitmapFactory.decodeResource(getResources(), R.drawable.babu));
 //                        return false; //TODO uncomment to show server errors

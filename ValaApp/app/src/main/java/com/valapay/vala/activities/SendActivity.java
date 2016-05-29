@@ -5,9 +5,9 @@ import android.app.DialogFragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -35,6 +35,7 @@ import android.widget.Toast;
 
 import com.valapay.vala.R;
 import com.valapay.vala.Vala;
+import com.valapay.vala.model.Recipient;
 import com.valapay.vala.model.User;
 import com.valapay.vala.utils.RoundImage;
 
@@ -46,18 +47,19 @@ public class SendActivity extends NavigationDrawerActivity {
     private TextView mSelectReceiver;
     private EditText mAmount;
     private View mProgressView;
-    private View mImage;
+    private ImageView mUserImage;
     private SendMoneyTask mSendMoneyTask = null;
-
-    public static ArrayList<String> receiversList;
+    private User user;
+    public static ArrayList<Recipient> searchResultList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        User user = Vala.getUser();
+        user = Vala.getUser();
         mProgressView = findViewById(R.id.send_progress);
-        mImage = findViewById(R.id.userImage);
+        mAmount = (EditText) findViewById(R.id.amount_editText);
+        mUserImage = (ImageView) findViewById(R.id.userImage);
 
         Spinner currencySpinner = (Spinner) findViewById(R.id.send_currency_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -65,7 +67,6 @@ public class SendActivity extends NavigationDrawerActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         currencySpinner.setAdapter(adapter);
 
-        mAmount = (EditText) findViewById(R.id.amount_editText);
         mSelectReceiver = (TextView) findViewById(R.id.select_receiver);
         mSelectReceiver.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,9 +99,8 @@ public class SendActivity extends NavigationDrawerActivity {
             }
         });
 
-        ImageView userImage = (ImageView) findViewById(R.id.userImage);
         RoundImage roundedImage = new RoundImage(user.getImageBitmap());
-        userImage.setImageDrawable(roundedImage);
+        mUserImage.setImageDrawable(roundedImage);
 
         TextView tv = (TextView) findViewById(R.id.textViewName);
         String str = getString(R.string.send_name, user.getFirstName());
@@ -111,7 +111,7 @@ public class SendActivity extends NavigationDrawerActivity {
 
     private void showProgress(final boolean show) {
         mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-        mImage.setVisibility(show ? View.GONE: View.VISIBLE);
+        mUserImage.setVisibility(show ? View.GONE: View.VISIBLE);
     }
 
     @Override
@@ -186,8 +186,8 @@ public class SendActivity extends NavigationDrawerActivity {
             mFragmentProgressBar = root.findViewById(R.id.search_progress);
             mFragmentImage = root.findViewById(R.id.imageSelectReceiver);
             mListHeader = (TextView) root.findViewById(R.id.textListHeader);
-            receiversList = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.receivers_array)));
-            refreshReceiversList(receiversList);
+            searchResultList = new ArrayList<Recipient>();
+            refreshReceiversList(Vala.getUser().getRecipients());
 
             mCancelBtn.setOnClickListener(new MainCancelListener());
 
@@ -214,9 +214,10 @@ public class SendActivity extends NavigationDrawerActivity {
                         return;
                     }
                     setSearchMode(false);
-                    String receiver = radioButton.getText().toString();
-                    receiversList.add(receiver);
-                    refreshReceiversList(receiversList);
+                    User user = Vala.getUser();
+                    Recipient recipient = searchResultList.get(radioButton.getId());
+                    user.addRecipient(recipient);
+                    refreshReceiversList(user.getRecipients());
                 }
             });
 
@@ -271,24 +272,23 @@ public class SendActivity extends NavigationDrawerActivity {
             mFragmentImage.setVisibility(show ? View.GONE: View.VISIBLE);
         }
 
-        public void refreshReceiversList(ArrayList<String> list){
+        public void refreshReceiversList(ArrayList<Recipient> list){
 
             mRadioGroup.removeAllViews();
-            String[] receiversArray = new String[list.size()];
-            receiversArray = list.toArray(receiversArray);
-            // layout params to use when adding each radio button
+            // layout params to use when adding eachR radio button
             LinearLayout.LayoutParams layoutParams = new RadioGroup.LayoutParams(
                     RadioGroup.LayoutParams.WRAP_CONTENT,
                     RadioGroup.LayoutParams.WRAP_CONTENT);
-            for (int i = 0; i < receiversArray.length; i++){
+            for (int i = 0; i < list.size(); i++){
+                Recipient recipient = list.get(i);
                 RadioButton newRadioButton = new RadioButton(getActivity());
-                String label = receiversArray[i];
-                newRadioButton.setText(label);
+                newRadioButton.setText(recipient.getName());
                 newRadioButton.setId(i);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(RadioGroup.LayoutParams.MATCH_PARENT, RadioGroup.LayoutParams.WRAP_CONTENT, 1f);
                 params.gravity = Gravity.LEFT;
                 newRadioButton.setLayoutParams(params);
-                Drawable avatarImg = getActivity().getDrawable(R.drawable.babu);
+                Drawable avatarImg = new BitmapDrawable(getResources(),
+                        recipient.getImage(BitmapFactory.decodeResource(getResources(), R.drawable.babu)));
                 avatarImg.setBounds(0, 0, 100, 100);
                 Drawable radioImg = getActivity().getDrawable(R.drawable.radio_btn);
                 newRadioButton.setCompoundDrawables(avatarImg, null, null, null);
@@ -309,7 +309,7 @@ public class SendActivity extends NavigationDrawerActivity {
 
             @Override
             protected Boolean doInBackground(Void... params) {
-                // TODO: search user name
+                // TODO: search receiver
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
@@ -323,7 +323,10 @@ public class SendActivity extends NavigationDrawerActivity {
                 mSearchReceiverTask = null;
                 showProgress(false);
                 if (success) {
-                    refreshReceiversList(receiversList);
+                    //TODO add response data
+                    searchResultList.add(new Recipient("Moshe", "sdasd"));
+                    searchResultList.add(new Recipient("Haim", "sdasdxzcxc"));
+                    refreshReceiversList(searchResultList);
                     mRadioGroup.clearCheck();
                     setSearchMode(true);
                 } else {
@@ -351,7 +354,7 @@ public class SendActivity extends NavigationDrawerActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: search user name
+            // TODO: send money
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
