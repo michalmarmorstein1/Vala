@@ -19,8 +19,10 @@ import com.valapay.vala.Vala;
 import com.valapay.vala.common.UserLoginMessage;
 import com.valapay.vala.model.Recipient;
 import com.valapay.vala.model.User;
-import com.valapay.vala.network.NetworkUtils;
+import com.valapay.vala.network.NetworkServices;
+import com.valapay.vala.services.DownloadImagesService;
 import com.valapay.vala.utils.CameraUtils;
+import com.valapay.vala.utils.NetworkUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -30,7 +32,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 
 import okhttp3.ResponseBody;
-import retrofit2.Call;
 import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
@@ -166,7 +167,7 @@ public class LoginActivity extends AppCompatActivity {
             userLoginMessage.setPassword(mPassword);
             Response<UserLoginMessage> loginResponse = null;
             try {
-                loginResponse = NetworkUtils.getTestService().login(userLoginMessage).execute();
+                loginResponse = NetworkServices.getTestService().login(userLoginMessage).execute();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -180,20 +181,24 @@ public class LoginActivity extends AppCompatActivity {
                 ArrayList<Recipient> recipients = new ArrayList<>();
                 UserLoginMessage.Receiver[] receivers = userData.getReceiverList();
                 for(int i = 0; i < receivers.length; i++){
-                    recipients.add(new Recipient(receivers[i].getName(), receivers[i].getUserId()));
+                    recipients.add(new Recipient(receivers[i].getName(), receivers[i].getUserId(),
+                            BitmapFactory.decodeResource(getResources(), R.drawable.babu)));
                 }
                 user.setRecipients(recipients);
-                //Get Image
+                //Download recipients images in the background
+                Intent intent = new Intent(LoginActivity.this, DownloadImagesService.class);
+                startService(intent);
+                //Get user Image
                 Response<ResponseBody> response = null;
                 try {
-                    response = NetworkUtils.getTestService().getImageFile(user.getUserId()).execute();
+                    response = NetworkServices.getTestService().getImageFile(user.getUserId()).execute();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 if (response.isSuccessful()) {
                     Log.d("VALA", "LoginActivity:UserLoginTask.doInBackground() - server contacted and has file");
 
-                    File imageFile = writeResponseBodyToFile(response.body());
+                    File imageFile = NetworkUtils.writeResponseBodyToFile(response.body());
                     if(imageFile != null){
                         user.saveImageFile(imageFile);
                     }else{
@@ -234,55 +239,6 @@ public class LoginActivity extends AppCompatActivity {
         protected void onCancelled() {
             mAuthTask = null;
             showProgress(false);
-        }
-    }
-
-    private File writeResponseBodyToFile(ResponseBody body) {
-        try {
-            File file = CameraUtils.createImageFile();
-
-            InputStream inputStream = null;
-            OutputStream outputStream = null;
-
-            try {
-                byte[] fileReader = new byte[4096];
-
-                long fileSize = body.contentLength();
-                long fileSizeDownloaded = 0;
-
-                inputStream = body.byteStream();
-                outputStream = new FileOutputStream(file);
-
-                while (true) {
-                    int read = inputStream.read(fileReader);
-
-                    if (read == -1) {
-                        break;
-                    }
-
-                    outputStream.write(fileReader, 0, read);
-
-                    fileSizeDownloaded += read;
-
-                    Log.d("VALA", "LoginActivity:writeResponseBodyToFile() - file download: " + fileSizeDownloaded + " of " + fileSize);
-                }
-
-                outputStream.flush();
-
-                return file;
-            } catch (IOException e) {
-                return null;
-            } finally {
-                if (inputStream != null) {
-                    inputStream.close();
-                }
-
-                if (outputStream != null) {
-                    outputStream.close();
-                }
-            }
-        } catch (IOException e) {
-            return null;
         }
     }
 

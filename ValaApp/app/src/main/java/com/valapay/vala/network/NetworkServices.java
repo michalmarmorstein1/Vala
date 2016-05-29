@@ -5,7 +5,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class NetworkUtils {
+public class NetworkServices {
 
 private final static String TEST_SERVER = "https://test.api.valapay.com/";
 

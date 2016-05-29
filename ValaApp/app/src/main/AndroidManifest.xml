@@ -3,17 +3,22 @@
     package="com.valapay.vala">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-feature android:name="android.hardware.camera" android:required="true" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:allowBackup="true"
         android:name=".Vala"
+        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.WelcomeActivity"
+        <activity
+            android:name=".activities.WelcomeActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,13 +29,13 @@
         <activity
             android:name=".activities.LoginActivity"
             android:label="@string/login_title"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".activities.WelcomeActivity" />
+            android:parentActivityName=".activities.WelcomeActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.SignupActivity"
             android:label="@string/signup_title"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".activities.WelcomeActivity" />
+            android:parentActivityName=".activities.WelcomeActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.HomeActivity"
             android:launchMode="singleTask"
@@ -48,7 +53,8 @@
             android:name=".activities.ReservationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/GreenTheme" />
-        <activity android:name=".activities.PickupConfirmationActivity"
+        <activity
+            android:name=".activities.PickupConfirmationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/GreenTheme" />
         <activity
@@ -60,11 +66,10 @@
             android:name=".activities.PickupLocationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-
-        <activity android:name=".activities.AddPinCodeActivity"
+        <activity
+            android:name=".activities.AddPinCodeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/GreenTheme" />
-
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -78,6 +83,9 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
+        <service
+            android:name=".services.DownloadImagesService"
+            android:exported="false"></service>
     </application>
 
 </manifest>

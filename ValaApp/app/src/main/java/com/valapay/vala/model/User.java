@@ -162,7 +162,7 @@ public class User {
         return recipients;
     }
 
-    public void addRecipient(Recipient recipient) {
+    public synchronized void addRecipient(Recipient recipient) {
         this.recipients.add(recipient);
         setRecipients(this.recipients);
     }
