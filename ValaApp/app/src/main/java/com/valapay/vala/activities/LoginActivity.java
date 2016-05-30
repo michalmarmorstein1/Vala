@@ -214,6 +214,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 return true;
             }else{
+                Log.d("VALA", "LoginActivity:UserLoginTask.doInBackground() - login failed");
                 return false;
             }
         }

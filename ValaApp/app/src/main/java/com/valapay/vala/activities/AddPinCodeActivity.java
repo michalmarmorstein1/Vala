@@ -13,6 +13,7 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -22,7 +23,19 @@ import android.widget.Toast;
 
 import com.valapay.vala.R;
 import com.valapay.vala.Vala;
+import com.valapay.vala.common.UserLoginMessage;
+import com.valapay.vala.common.UserSignupMessage;
 import com.valapay.vala.model.User;
+import com.valapay.vala.network.NetworkServices;
+
+import java.io.File;
+import java.io.IOException;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Response;
 
 public class AddPinCodeActivity extends AppCompatActivity {
 
@@ -36,6 +49,10 @@ public class AddPinCodeActivity extends AppCompatActivity {
     private UserSignupTask mAuthTask = null;
     private View mProgressView;
     private View mImage;
+    private EditText e1;
+    private EditText e2;
+    private EditText e3;
+    private EditText e4;
 
     private static Bitmap userImage;
     private String firstName;
@@ -79,10 +96,10 @@ public class AddPinCodeActivity extends AppCompatActivity {
         wordToSpan.setSpan(new ForegroundColorSpan(Color.rgb(0, 172, 163)), 13, 22, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         tv.setText(wordToSpan);
 
-        final EditText e1 = (EditText) findViewById(R.id.editText1);
-        final EditText e2 = (EditText) findViewById(R.id.editText2);
-        final EditText e3 = (EditText) findViewById(R.id.editText3);
-        final EditText e4 = (EditText) findViewById(R.id.editText4);
+        e1 = (EditText) findViewById(R.id.editText1);
+        e2 = (EditText) findViewById(R.id.editText2);
+        e3 = (EditText) findViewById(R.id.editText3);
+        e4 = (EditText) findViewById(R.id.editText4);
 
         final Button button = (Button) findViewById(R.id.button);
 
@@ -126,28 +143,17 @@ public class AddPinCodeActivity extends AppCompatActivity {
             return;
         }
 
-        Bundle bundle = getIntent().getExtras();
-        // Show a progress spinner, and kick off a background task to
-        // perform the user sign up attempt.
+        String pin = e1.getText().toString() + e2.getText().toString() + e3.getText().toString() + e4.getText().toString();
         showProgress(true);
-        mAuthTask = new UserSignupTask(firstName,
-                lastName, email,
-                phone, country, password);
+        mAuthTask = new UserSignupTask(firstName, lastName, email, phone, country, password, pin);
         mAuthTask.execute((Void) null);
     }
 
-    /**
-     * Shows the progress UI and hides the login form.
-     */
     private void showProgress(final boolean show) {
         mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
         mImage.setVisibility(show ? View.GONE : View.VISIBLE);
     }
 
-    /**
-     * Represents an asynchronous registration task used to authenticate
-     * the user.
-     */
     public class UserSignupTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String mFirstName;
@@ -156,34 +162,62 @@ public class AddPinCodeActivity extends AppCompatActivity {
         private final String mPhone;
         private final String mCountry;
         private final String mPassword;
+        private final String mPin;
 
-        UserSignupTask(String firstName, String lastName, String email, String phone, String country, String password) {
+        UserSignupTask(String firstName, String lastName, String email, String phone, String country,
+                       String password, String pin) {
             mFirstName = firstName;
             mLastName = lastName;
             mEmail = email;
             mPhone = phone;
             mCountry = country;
             mPassword = password;
+            mPin = pin;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: signup
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
 
-            // TODO: register the new account.
-            User user = Vala.getUser();
-//            user.login(userImage, firstName, lastName, email, phone, country, 0, "$");
-            // TODO: upload photo
-            user.getImageFile();
+            UserSignupMessage userSignupMessage = new UserSignupMessage();
+            userSignupMessage.setCountry(mCountry);
+            userSignupMessage.setEmail(mEmail);
+            userSignupMessage.setFirstName(mFirstName);
+            userSignupMessage.setLastName(mLastName);
+            userSignupMessage.setPassword(mPassword);
+            userSignupMessage.setPhoneNumber(mPhone);
+            userSignupMessage.setPin(mPin);
+            Response<UserLoginMessage> signupResponse = null;
             try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                signupResponse = NetworkServices.getTestService().signup(userSignupMessage).execute();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            if(signupResponse.isSuccessful()){
+                User user = Vala.getUser();
+                UserLoginMessage data = signupResponse.body();
+                user.login(mFirstName, mLastName, mEmail, mPhone, mCountry, 0, "$", data.getToken(),
+                        data.getUserId());
+                //Upload photo
+                user.saveImage(userImage);
+                File file = user.getImageFile();
+                RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+                MultipartBody.Part body = MultipartBody.Part.createFormData("name", user.getUserId(), requestFile);
+
+                Response<ResponseBody> uploadImageResponse = null;
+                try {
+                    uploadImageResponse = NetworkServices.getTestService().uploadImage(body).execute();
+                } catch (IOException e2) {
+                    e2.printStackTrace();
+                }
+                if(uploadImageResponse.isSuccessful()){
+                    Log.d("VALA", "AddPinCodeActivity:UserSignupTask.doInBackground() - uploaded image successfully");
+                }else{
+                    Log.d("VALA", "AddPinCodeActivity:UserSignupTask.doInBackground() - upload image failed");
+                    return false;
+                }
+            }else{
+                Log.d("VALA", "AddPinCodeActivity:UserSignupTask.doInBackground() - signup failed");
+                return false;
             }
             return true;
         }
