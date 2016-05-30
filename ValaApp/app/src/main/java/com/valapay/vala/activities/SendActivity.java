@@ -15,6 +15,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -35,12 +36,18 @@ import android.widget.Toast;
 
 import com.valapay.vala.R;
 import com.valapay.vala.Vala;
+import com.valapay.vala.common.UserNameQueryResult;
+import com.valapay.vala.common.UserQueryMessage;
+import com.valapay.vala.common.UserRcvrListMessage;
 import com.valapay.vala.model.Recipient;
 import com.valapay.vala.model.User;
+import com.valapay.vala.network.NetworkServices;
 import com.valapay.vala.utils.RoundImage;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
+
+import retrofit2.Response;
 
 public class SendActivity extends NavigationDrawerActivity {
 
@@ -218,6 +225,7 @@ public class SendActivity extends NavigationDrawerActivity {
                     Recipient recipient = searchResultList.get(radioButton.getId());
                     user.addRecipient(recipient);
                     refreshReceiversList(user.getRecipients());
+                    new AddRecipientTask(recipient.getId()).execute();
                 }
             });
 
@@ -309,13 +317,30 @@ public class SendActivity extends NavigationDrawerActivity {
 
             @Override
             protected Boolean doInBackground(Void... params) {
-                // TODO: search receiver
+                Response<UserQueryMessage> searchResponse = null;
+                UserQueryMessage requestBody = new UserQueryMessage();
+                requestBody.setQuery(mUserName);
+                if(mUserName.contains("@")){
+                    requestBody.setQueryType(UserQueryMessage.QueryType.EMAIL);
+                }else{
+                    requestBody.setQueryType(UserQueryMessage.QueryType.NAME);
+                }
                 try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
+                    searchResponse = NetworkServices.getTestService().searchUser(requestBody).execute();
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
-                return true;
+                if(searchResponse.isSuccessful()){
+                    UserQueryMessage data = searchResponse.body();
+                    searchResultList.clear();
+                    for(UserNameQueryResult result : data.getNames()){
+                        searchResultList.add(new Recipient(result.getName(), result.getUserId()));
+                    }
+                    return true;
+                }else{
+                    Log.d("VALA", "SendActivity:SearchReceiverTask.doInBackground() - search failed");
+                    return false;
+                }
             }
 
             @Override
@@ -323,9 +348,6 @@ public class SendActivity extends NavigationDrawerActivity {
                 mSearchReceiverTask = null;
                 showProgress(false);
                 if (success) {
-                    //TODO add response data
-                    searchResultList.add(new Recipient("Moshe", "sdasd"));
-                    searchResultList.add(new Recipient("Haim", "sdasdxzcxc"));
                     refreshReceiversList(searchResultList);
                     mRadioGroup.clearCheck();
                     setSearchMode(true);
@@ -339,6 +361,34 @@ public class SendActivity extends NavigationDrawerActivity {
                 mSearchReceiverTask = null;
                 showProgress(false);
             }
+        }
+
+        public class AddRecipientTask extends AsyncTask<Void, Void, Void> {
+
+            private String mReceiver;
+
+            AddRecipientTask(String receiver) {
+                mReceiver = receiver;
+            }
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                Response<UserRcvrListMessage> addRecipientResponse = null;
+                UserRcvrListMessage requestBody = new UserRcvrListMessage();
+                requestBody.setAction(UserRcvrListMessage.Action.ADD);
+                requestBody.setRcvrId(mReceiver);
+                requestBody.setUserId(Vala.getUser().getUserId());
+                try {
+                    addRecipientResponse = NetworkServices.getTestService().addRecipient(requestBody).execute();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if(!addRecipientResponse.isSuccessful()){
+                    Log.d("VALA", "SendActivity:AddRecipientTask.doInBackground() - add recipient failed");
+                }
+                return null;
+            }
+
         }
     }
 
@@ -380,4 +430,6 @@ public class SendActivity extends NavigationDrawerActivity {
             showProgress(false);
         }
     }
+
+
 }

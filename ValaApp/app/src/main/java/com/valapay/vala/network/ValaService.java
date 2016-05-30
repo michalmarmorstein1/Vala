@@ -1,6 +1,8 @@
 package com.valapay.vala.network;
 
 import com.valapay.vala.common.UserLoginMessage;
+import com.valapay.vala.common.UserQueryMessage;
+import com.valapay.vala.common.UserRcvrListMessage;
 import com.valapay.vala.common.UserSignupMessage;
 
 import okhttp3.MultipartBody;
@@ -27,4 +29,10 @@ public interface ValaService {
     @Multipart
     @POST("/cdn/profilePic")
     Call<ResponseBody> uploadImage(@Part MultipartBody.Part file);
+
+    @POST("/user/query")
+    Call<UserQueryMessage> searchUser(@Body UserQueryMessage query);
+
+    @POST("/user/rcvrList")
+    Call<UserRcvrListMessage> addRecipient(@Body UserRcvrListMessage recipient);
 }
