@@ -418,7 +418,7 @@ public class SendActivity extends NavigationDrawerActivity {
             mSendMoneyTask = null;
             showProgress(false);
             if (success) {
-                PaymentActivity.startPaymentActivity(mReceiver, mAmount, SendActivity.this);
+                PaymentActivity.startPaymentActivity("$", 3, mReceiver, mAmount, SendActivity.this);
             } else {
                 //TODO show server errors
             }
