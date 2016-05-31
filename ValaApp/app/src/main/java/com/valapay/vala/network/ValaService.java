@@ -46,4 +46,7 @@ public interface ValaService {
 
     @GET("/collect/complete")
     Call<ResponseBody> confirmCollection(@Query("reservationCode") String code);
+
+    @POST("/unAuth/forgotPassword")
+    Call<ResponseBody> resetPassword(@Body UserLoginMessage user);
 }

@@ -252,14 +252,21 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt to reset password using a network service.
+            Response<ResponseBody> response = null;
             try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
+                UserLoginMessage request = new UserLoginMessage();
+                request.setEmail(mEmail);
+                response = NetworkServices.getTestService().resetPassword(request).execute();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
-            // TODO: register the new account.
-            return true;
+            if (response.isSuccessful()) {
+                Log.d("VALA", "LoginActivity:ForgotPasswordTask.doInBackground() - reset password successfully");
+                return true;
+            } else {
+                Log.d("VALA", "LoginActivity:ForgotPasswordTask.doInBackground() - reset password failed");
+                return false;
+            }
         }
 
         @Override
@@ -271,7 +278,7 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, String.format("email will be sent to %1$s", mEmail), Toast.LENGTH_SHORT).show();
 
             } else {
-                //TODO show server errors
+                Toast.makeText(LoginActivity.this, String.format("failed to reset password"), Toast.LENGTH_SHORT).show();
             }
         }
 
