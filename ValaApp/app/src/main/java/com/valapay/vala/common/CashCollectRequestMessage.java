@@ -64,7 +64,7 @@ public class CashCollectRequestMessage {
 
     @Override
     public String toString() {
-        return "ClassPojo [amount = " + amount + ", locationLong = " + locationLong + ", userId = " + userId + ", locationLat = " + locationLat + ", affiliates = " + affiliates + ", currency = " + currency + "]";
+        return "CashCollectRequestMessage [amount = " + amount + ", locationLong = " + locationLong + ", userId = " + userId + ", locationLat = " + locationLat + ", affiliates = " + affiliates + ", currency = " + currency + "]";
     }
 }
 

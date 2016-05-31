@@ -93,6 +93,6 @@ public class Affiliate {
 
     @Override
     public String toString() {
-        return "ClassPojo [phoneNumber = " + phoneNumber + ", locationLong = " + locationLong + ", address = " + address + ", userId = " + userId + ", name = " + name + ", locationLat = " + locationLat + ", hoursClose = " + hoursClose + ", rating = " + rating + ", hoursOpen = " + hoursOpen + "]";
+        return "Affiliate [phoneNumber = " + phoneNumber + ", locationLong = " + locationLong + ", address = " + address + ", userId = " + userId + ", name = " + name + ", locationLat = " + locationLat + ", hoursClose = " + hoursClose + ", rating = " + rating + ", hoursOpen = " + hoursOpen + "]";
     }
 }

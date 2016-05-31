@@ -45,7 +45,8 @@ public class User {
     private String currency;
     private String token;
     private String userId;
-    private Map<LatLng, Affiliate> affiliates;
+    private Map<LatLng, Affiliate> affiliates;     //TODO move to a different class
+    private String reservationCode;    //TODO move to a different class
 
     private SharedPreferences userPreferences;
 
@@ -227,7 +228,17 @@ public class User {
         }
     }
 
+    //TODO move to a different class
     public Map<LatLng, Affiliate> getAffiliates() {
         return affiliates;
+    }
+    //TODO move to a different class
+    public String getReservationCode(){
+        return reservationCode;
+    }
+    //TODO move to a different class
+    public void setReservationCode(String code){
+        Log.d("VALA", "User:setReservationCode() - " + code);
+        reservationCode = code;
     }
 }

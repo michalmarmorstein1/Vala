@@ -57,4 +57,7 @@ public class Affiliate {
         return address;
     }
 
+    public String getId() {
+        return id;
+    }
 }

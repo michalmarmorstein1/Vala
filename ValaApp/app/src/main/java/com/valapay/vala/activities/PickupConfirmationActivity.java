@@ -18,6 +18,7 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.valapay.vala.R;
+import com.valapay.vala.Vala;
 
 public class PickupConfirmationActivity extends AppCompatActivity {
 
@@ -28,7 +29,6 @@ public class PickupConfirmationActivity extends AppCompatActivity {
 
     private ConfirmCollectionTask confirmCollectionTask = null;
     private ReportIssueTask reportIssueTask = null;
-    private static String code = "SKT8N7";
     View mProgressView;
     View mImage;
 
@@ -41,7 +41,7 @@ public class PickupConfirmationActivity extends AppCompatActivity {
         mImage = findViewById(R.id.imageViewHeader);
 
         TextView codeView = (TextView) findViewById(R.id.textViewCode);
-        SpannableString content = new SpannableString(code);
+        SpannableString content = new SpannableString(Vala.getUser().getReservationCode());
         content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
         codeView.setText(content);
 
@@ -71,7 +71,7 @@ public class PickupConfirmationActivity extends AppCompatActivity {
 
         ImageView imageView = (ImageView) findViewById(R.id.qrCode);
         try {
-            Bitmap bitmap = encodeAsBitmap(code);
+            Bitmap bitmap = encodeAsBitmap(Vala.getUser().getReservationCode());
             imageView.setImageBitmap(bitmap);
         } catch (WriterException e) {
             e.printStackTrace();

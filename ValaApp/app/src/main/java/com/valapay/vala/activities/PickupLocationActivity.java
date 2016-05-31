@@ -51,7 +51,6 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
     private Button mButton;
     private boolean mHideMarkers;
     private TextView mAmountTextView;
-    private ConfirmAffiliateTask confirmAffiliateTask = null;
     private Marker selectedMarker;
     private ImageView afImage;
     private ImageView afRating;
@@ -105,8 +104,10 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Affiliate af = user.getAffiliates().get(selectedMarker.getPosition());
+                ReservationActivity.startCollectActivity(af.getId(), af.getName(),
                 //TODO send amount according to server response
-                ReservationActivity.startCollectActivity(user.getAffiliates().get(selectedMarker.getPosition()).getName(), user.getBalanceString(), PickupLocationActivity.this);
+                        user.getBalanceString(), PickupLocationActivity.this);
             }
         });
 
@@ -270,43 +271,8 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(confirmAffiliateTask == null){
-                    //TODO show progress
-                    confirmAffiliateTask = new ConfirmAffiliateTask();
-                    confirmAffiliateTask.execute((Void) null);
-                }
+                startActivity(new Intent(PickupLocationActivity.this, PickupConfirmationActivity.class));
             }
         });
-    }
-
-    private class ConfirmAffiliateTask extends AsyncTask<Void, Void, Boolean> {
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: get QR code
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            confirmAffiliateTask = null;
-            //TODO hide progress
-            if (success) {
-                startActivity(new Intent(PickupLocationActivity.this, PickupConfirmationActivity.class));
-            } else {
-                //TODO show server errors
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            confirmAffiliateTask = null;
-            //TODO hide progress
-        }
     }
 }

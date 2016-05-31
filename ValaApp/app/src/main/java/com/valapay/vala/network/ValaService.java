@@ -1,6 +1,7 @@
 package com.valapay.vala.network;
 
 import com.valapay.vala.common.CashCollectRequestMessage;
+import com.valapay.vala.common.CashCollectReserveMessage;
 import com.valapay.vala.common.UserLoginMessage;
 import com.valapay.vala.common.UserQueryMessage;
 import com.valapay.vala.common.UserRcvrListMessage;
@@ -39,4 +40,7 @@ public interface ValaService {
 
     @POST("/collect/collect")
     Call<CashCollectRequestMessage> collect(@Body CashCollectRequestMessage request);
+
+    @POST("/collect/reserve")
+    Call<CashCollectReserveMessage> reserve(@Body CashCollectReserveMessage request);
 }
