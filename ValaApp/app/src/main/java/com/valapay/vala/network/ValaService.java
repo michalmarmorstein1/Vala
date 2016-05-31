@@ -43,4 +43,7 @@ public interface ValaService {
 
     @POST("/collect/reserve")
     Call<CashCollectReserveMessage> reserve(@Body CashCollectReserveMessage request);
+
+    @GET("/collect/complete")
+    Call<ResponseBody> confirmCollection(@Query("reservationCode") String code);
 }

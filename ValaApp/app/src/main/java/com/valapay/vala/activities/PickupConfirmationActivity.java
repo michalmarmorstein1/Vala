@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,6 +20,12 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.valapay.vala.R;
 import com.valapay.vala.Vala;
+import com.valapay.vala.network.NetworkServices;
+
+import java.io.IOException;
+
+import okhttp3.ResponseBody;
+import retrofit2.Response;
 
 public class PickupConfirmationActivity extends AppCompatActivity {
 
@@ -111,13 +118,19 @@ public class PickupConfirmationActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: confirm money received
+            Response<ResponseBody> response = null;
             try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
+                response = NetworkServices.getTestService().confirmCollection(Vala.getUser().getReservationCode()).execute();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
-            return true;
+            if (response.isSuccessful()) {
+                Log.d("VALA", "PickupConfirmationActivity:ConfirmCollectionTask.doInBackground() - confirmed collection successfully");
+                return true;
+            } else {
+                Log.d("VALA", "PickupConfirmationActivity:ConfirmCollectionTask.doInBackground() - confirm collection failed");
+                return false;
+            }
         }
 
         @Override
