@@ -11,17 +11,20 @@ public class Affiliate {
     private String openingHours;
     private Bitmap rating;
     private String phone;
-    private Bitmap image;
+    private String id;
     private String address;
+    private Bitmap defaultImage;
 
-    public Affiliate(String name, LatLng location, String openingHours, Bitmap rating, String phone, Bitmap image, String address) {
+    public Affiliate(String name, LatLng location, String openingHours, Bitmap rating, String phone
+            , Bitmap defaultImage, String address, String id) {
         this.name = name;
         this.location = location;
         this.openingHours = openingHours;
         this.rating = rating;
         this.phone = phone;
-        this.image = image;
+        this.id = id;
         this.address = address;
+        this.defaultImage = defaultImage;
     }
 
     public String getName() {
@@ -45,7 +48,9 @@ public class Affiliate {
     }
 
     public Bitmap getImage() {
-        return image;
+
+        //TODO get image from cache according to id
+        return defaultImage;
     }
 
     public String getAddress() {

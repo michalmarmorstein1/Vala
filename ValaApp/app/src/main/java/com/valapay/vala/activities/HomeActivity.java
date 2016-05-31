@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationListener;
@@ -24,12 +26,19 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 import com.valapay.vala.R;
 import com.valapay.vala.Vala;
+import com.valapay.vala.common.CashCollectRequestMessage;
+import com.valapay.vala.model.Affiliate;
 import com.valapay.vala.model.User;
+import com.valapay.vala.network.NetworkServices;
 import com.valapay.vala.utils.RoundImage;
+
+import java.io.IOException;
+
+import retrofit2.Response;
 
 public class HomeActivity extends NavigationDrawerActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
@@ -43,6 +52,7 @@ public class HomeActivity extends NavigationDrawerActivity implements GoogleApiC
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     private Button mCollectButton;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +67,7 @@ public class HomeActivity extends NavigationDrawerActivity implements GoogleApiC
                     .build();
         }
 
-        User user = Vala.getUser();
+        user = Vala.getUser();
         mProgressView = findViewById(R.id.home_progress);
         mImage = findViewById(R.id.userImage);
         mLocationTextView = findViewById(R.id.textViewLocation);
@@ -217,13 +227,33 @@ public class HomeActivity extends NavigationDrawerActivity implements GoogleApiC
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: get affiliates details
+            Response<CashCollectRequestMessage> collectResponse = null;
+            CashCollectRequestMessage requestBody = new CashCollectRequestMessage();
+            requestBody.setUserId(user.getUserId());
+            requestBody.setAmount(user.getBalanceString());
+            requestBody.setCurrency(user.getCurrency());
+            requestBody.setLocationLat(mLastLocation.getLatitude());
+            requestBody.setLocationLong(mLastLocation.getLongitude());
             try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
+                collectResponse = NetworkServices.getTestService().collect(requestBody).execute();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
-            return true;
+            if(collectResponse.isSuccessful()){
+                CashCollectRequestMessage data = collectResponse.body();
+                for(com.valapay.vala.common.Affiliate af : data.getAffiliates()){
+                    LatLng afLoc = new LatLng(af.getLocationLat(), af.getLocationLong());
+                    Affiliate affiliate = new Affiliate(af.getName(), afLoc, af.getHoursOpen() +
+                            "-" + af.getHoursClose(), mapRatingToImage(af.getRating()),
+                            af.getPhoneNumber(), BitmapFactory.decodeResource(getResources(), R.drawable.babu),
+                            af.getAddress(), af.getUserId());
+                    user.getAffiliates().put(afLoc, affiliate);
+                }
+                return true;
+            }else{
+                Log.d("VALA", "HomeActivity:GetAffiliatesTask.doInBackground() - collect failed");
+                return false;
+            }
         }
 
         @Override
@@ -244,4 +274,21 @@ public class HomeActivity extends NavigationDrawerActivity implements GoogleApiC
 
         }
     }
+    private Bitmap mapRatingToImage(String rating){
+        double d = Double.valueOf(rating);
+        int i = (int) d;
+        switch(i){
+            case 5:
+                return BitmapFactory.decodeResource(getResources(), R.drawable.rating_5);
+            case 4:
+                return BitmapFactory.decodeResource(getResources(), R.drawable.rating_4);
+            case 3:
+                return BitmapFactory.decodeResource(getResources(), R.drawable.rating_3);
+            case 2:
+                return BitmapFactory.decodeResource(getResources(), R.drawable.rating_2);
+            default:
+                return BitmapFactory.decodeResource(getResources(), R.drawable.rating_1);
+        }
+    }
+
 }

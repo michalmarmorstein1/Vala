@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.valapay.vala.utils.CameraUtils;
@@ -13,6 +14,8 @@ import com.valapay.vala.utils.CameraUtils;
 import java.io.File;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class User {
 
@@ -42,6 +45,7 @@ public class User {
     private String currency;
     private String token;
     private String userId;
+    private Map<LatLng, Affiliate> affiliates;
 
     private SharedPreferences userPreferences;
 
@@ -53,6 +57,7 @@ public class User {
         if(isRegistered()){
             restoreFromPreferences();
         }
+        affiliates = new HashMap<>();
     }
 
     public void login(String firstName, String lastName, String email,
@@ -220,5 +225,9 @@ public class User {
         if(recipients == null){
             recipients = new ArrayList<>();
         }
+    }
+
+    public Map<LatLng, Affiliate> getAffiliates() {
+        return affiliates;
     }
 }

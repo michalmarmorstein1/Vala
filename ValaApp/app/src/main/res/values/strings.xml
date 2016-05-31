@@ -87,9 +87,10 @@
     <string name="payment_confirmation_bottom">You can review this info\n from the home screen</string>
     <string name="payment_confirmation_button">Back to home</string>
 
-    <!-- pickup confirmation screen-->
+    <!-- pickup location screen-->
     <string name="pickup_collect">Collect</string>
     <string name="pickup_reserve">I\'m here</string>
+    <string name="pickup_amount">%1$s is waiting for you</string>
 
     <!-- collect screen-->
     <string name="collect_header">Collect</string>

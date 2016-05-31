@@ -1,9 +1,7 @@
 package com.valapay.vala.activities;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
@@ -12,7 +10,6 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -25,9 +22,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -37,12 +31,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.valapay.vala.R;
+import com.valapay.vala.Vala;
 import com.valapay.vala.model.Affiliate;
+import com.valapay.vala.model.User;
 import com.valapay.vala.utils.LocationUtils;
 import com.valapay.vala.utils.RoundImage;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Iterator;
 
 public class PickupLocationActivity extends NavigationDrawerActivity implements OnMapReadyCallback {
 
@@ -57,7 +52,6 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
     private boolean mHideMarkers;
     private TextView mAmountTextView;
     private ConfirmAffiliateTask confirmAffiliateTask = null;
-    private Map<LatLng, Affiliate> mAffiliates;
     private Marker selectedMarker;
     private ImageView afImage;
     private ImageView afRating;
@@ -67,6 +61,7 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
     private TextView afHours;
     private TextView afDistance;
     private LatLng mUserPosition;
+    private User user;
 
     public static void startActivity(Context context, Location location){
 
@@ -79,6 +74,7 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        user = Vala.getUser();
         mLastLocation = getIntent().getParcelableExtra(LOCATION_KEY);
 
         afImage = (ImageView) findViewById(R.id.imageViewAffiliate);
@@ -101,21 +97,20 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
         userImage.setImageDrawable(roundedImage);
 
         mAmountTextView = (TextView) findViewById(R.id.textViewAmount);
-        Spannable wordToSpan = new SpannableString(mAmountTextView.getText().toString());
-        wordToSpan.setSpan(new StyleSpan(Typeface.BOLD), 1, wordToSpan.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        Spannable wordToSpan = new SpannableString(getString(R.string.pickup_amount, user.getBalanceString())); //TODO replace with amount from server response
+        wordToSpan.setSpan(new StyleSpan(Typeface.BOLD), user.getCurrency().length(), wordToSpan.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         mAmountTextView.setText(wordToSpan);
 
         mButton = (Button) findViewById(R.id.button);
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ReservationActivity.startCollectActivity(mAffiliates.get(selectedMarker.getPosition()).getName(), "$100", PickupLocationActivity.this);
+                //TODO send amount according to server response
+                ReservationActivity.startCollectActivity(user.getAffiliates().get(selectedMarker.getPosition()).getName(), user.getBalanceString(), PickupLocationActivity.this);
             }
         });
 
-        //Add affiliates
-        mAffiliates = new HashMap<>();
-        addAffiliates();
+        addAffiliates(); //TODO remove to use server affiliates
     }
 
     @Override
@@ -146,17 +141,18 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
         LatLng location2 = new LatLng(32.065560, 34.778913);
         LatLng location3 = new LatLng(32.065076, 34.773394);
         Affiliate affiliate1 = new Affiliate("Barack", location1,
-                "9:00-19:00", BitmapFactory.decodeResource(getResources(), R.drawable.rating_3), "111111",
-                BitmapFactory.decodeResource(getResources(), R.drawable.babu), "36 Montefiore, Tel Aviv");
+                "9:00-19:00", BitmapFactory.decodeResource(getResources(), R.drawable.rating_3),
+                "111111", BitmapFactory.decodeResource(getResources(), R.drawable.babu), "36 Montefiore, Tel Aviv", "aaa");
         Affiliate affiliate2 = new Affiliate("Bill", location2,
                 "8:00-18:00", BitmapFactory.decodeResource(getResources(), R.drawable.rating_5), "111111",
-                BitmapFactory.decodeResource(getResources(), R.drawable.babu), "19 Maze, Tel Aviv");
+                BitmapFactory.decodeResource(getResources(), R.drawable.babu), "19 Maze, Tel Aviv", "aaa");
         Affiliate affiliate3 = new Affiliate("George", location3,
                 "9:00-20:00", BitmapFactory.decodeResource(getResources(), R.drawable.rating_4), "111111",
-                BitmapFactory.decodeResource(getResources(), R.drawable.babu), "15 Yavne, Tel Aviv");
-        mAffiliates.put(location1, affiliate1);
-        mAffiliates.put(location2, affiliate2);
-        mAffiliates.put(location3, affiliate3);
+                BitmapFactory.decodeResource(getResources(), R.drawable.babu), "15 Yavne, Tel Aviv", "aaa");
+        user.getAffiliates().clear();
+        user.getAffiliates().put(location1, affiliate1);
+        user.getAffiliates().put(location2, affiliate2);
+        user.getAffiliates().put(location3, affiliate3);
     }
 
     private void showMarkers(){
@@ -164,15 +160,17 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
         // Show user location
         mUserPosition = new LatLng(STUB_LAT, STUB_LONG); //TODO replace with next line to get real user location
 //        mUserPosition = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                mUserPosition, 16));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mUserPosition, 16));
+//        Iterator<LatLng> it = user.getAffiliates().keySet().iterator();
+//        LatLng loc = it.next();
+//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 16)); //TODO uncomment to focus camera on affiliate
         mMap.addMarker(new MarkerOptions()
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.userposition))
                 .position(mUserPosition));
 
         // Show affiliate markers
         MarkerOptions selected = null;
-        for(LatLng af : mAffiliates.keySet()){
+        for(LatLng af : user.getAffiliates().keySet()){
             if(selected == null){ // TODO select closest affiliate instead of the first one on the list
                 selected = new MarkerOptions()
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.affiliate_on))
@@ -185,7 +183,7 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
             }
         }
         if (selected != null) {
-            updateUIWithAffiliateDetails(mAffiliates.get(selected.getPosition()));
+            updateUIWithAffiliateDetails(user.getAffiliates().get(selected.getPosition()));
         }
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
@@ -196,7 +194,7 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
                 if(mHideMarkers){ //User already made a reservation - do nothing
                     return false;
                 }
-                Affiliate selected = mAffiliates.get(marker.getPosition());
+                Affiliate selected = user.getAffiliates().get(marker.getPosition());
                 if (marker.equals(selectedMarker)) { //User pressed a marker twice - do nothing
                     return false;
                 } else if(selected != null){ //User pressed an affiliate marker - update UI
@@ -214,7 +212,8 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
 
     private void updateUIWithAffiliateDetails(final Affiliate af){
 
-        afImage.setImageDrawable(new BitmapDrawable(getResources(), af.getImage()));
+        RoundImage roundedImage = new RoundImage(af.getImage());
+        afImage.setImageDrawable(roundedImage);
         afRating.setImageDrawable(new BitmapDrawable(getResources(), af.getRating()));
         afName.setText(af.getName());
         afAddress.setText(af.getAddress());
