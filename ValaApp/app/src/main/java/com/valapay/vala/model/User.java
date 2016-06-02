@@ -47,6 +47,7 @@ public class User {
     private String userId;
     private Map<LatLng, Affiliate> affiliates;     //TODO move to a different class
     private String reservationCode;    //TODO move to a different class
+    private String transactionId;    //TODO move to a different class
 
     private SharedPreferences userPreferences;
 
@@ -240,5 +241,14 @@ public class User {
     public void setReservationCode(String code){
         Log.d("VALA", "User:setReservationCode() - " + code);
         reservationCode = code;
+    }
+    //TODO move to a different class
+    public String getTransactionId(){
+        return transactionId;
+    }
+    //TODO move to a different class
+    public void setTransactionId(String id){
+        Log.d("VALA", "User:setTransactionId() - " + id);
+        transactionId = id;
     }
 }

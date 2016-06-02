@@ -42,13 +42,13 @@ public class PaymentActivity extends NavigationDrawerActivity {
 
     private String recipient;
     private int amount;
-    private int fee;
+    private double fee;
     private String currency;
     private ConfirmPaymentTask confirmPaymentTask = null;
     private Button mContinueButton;
     private TextView mCardTextView;
 
-    public static void startPaymentActivity(String currency, int fee, String recipient, int amount, Activity context){
+    public static void startPaymentActivity(String currency, double fee, String recipient, int amount, Activity context){
 
         Intent intent = new Intent(context, PaymentActivity.class);
         intent.putExtra(RECIPIENT_KEY, recipient);
@@ -65,7 +65,7 @@ public class PaymentActivity extends NavigationDrawerActivity {
         recipient = getIntent().getStringExtra(RECIPIENT_KEY);
         amount = getIntent().getIntExtra(AMOUNT_KEY, 0);
         currency = getIntent().getStringExtra(CURRENCY_KEY);
-        fee = getIntent().getIntExtra(FEE_KEY, 0);
+        fee = getIntent().getDoubleExtra(FEE_KEY, 0);
 
         TextView amountView = (TextView) findViewById(R.id.amount_text);
         TextView feeView = (TextView) findViewById(R.id.fee_text);
@@ -78,15 +78,15 @@ public class PaymentActivity extends NavigationDrawerActivity {
         wordToSpan.setSpan(new StyleSpan(Typeface.BOLD), currency.length(), wordToSpan.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         amountView.setText(wordToSpan);
 
-        String feeStr = getString(R.string.payment_fee, fee);
+        String feeStr = getString(R.string.payment_fee, currency + fee);
         wordToSpan = new SpannableString(feeStr);
         int startIndex = feeStr.indexOf("pay") + 4;
         wordToSpan.setSpan(new ForegroundColorSpan(Color.rgb(242, 160, 104)), startIndex, startIndex + currency.length() + String.valueOf(fee).length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         wordToSpan.setSpan(new StyleSpan(Typeface.BOLD), startIndex + currency.length(), startIndex + currency.length() + String.valueOf(fee).length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         feeView.setText(wordToSpan);
 
-        int total = amount - fee;
-        String totalText = recipient + " " + getString(R.string.payment_total) + " $" + total;
+        double total = amount - fee;
+        String totalText = recipient + " " + getString(R.string.payment_total) + " " + currency + total;
         wordToSpan = new SpannableString(totalText);
         startIndex = totalText.indexOf(currency);
         wordToSpan.setSpan(new ForegroundColorSpan(Color.rgb(0, 153, 219)), startIndex, startIndex + currency.length() + String.valueOf(total).length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);

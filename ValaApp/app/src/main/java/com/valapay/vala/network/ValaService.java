@@ -2,6 +2,7 @@ package com.valapay.vala.network;
 
 import com.valapay.vala.common.CashCollectRequestMessage;
 import com.valapay.vala.common.CashCollectReserveMessage;
+import com.valapay.vala.common.TransactionMessage;
 import com.valapay.vala.common.UserLoginMessage;
 import com.valapay.vala.common.UserQueryMessage;
 import com.valapay.vala.common.UserRcvrListMessage;
@@ -49,4 +50,7 @@ public interface ValaService {
 
     @POST("/unAuth/forgotPassword")
     Call<ResponseBody> resetPassword(@Body UserLoginMessage user);
+
+    @POST("/transaction/new")
+    Call<TransactionMessage> createTransaction(@Body TransactionMessage request);
 }

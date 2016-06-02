@@ -59,6 +59,7 @@
     <string-array name="currency_array">
         <item>USD</item>
         <item>NIS</item>
+        <item>INR</item>
     </string-array>
     <string name="invite_dialog">Select Receiver</string>
     <string name="invite_my_receivers">My Receivers</string>
@@ -74,7 +75,7 @@
 
     <!-- payment screen-->
     <string name="payment_amount">You are sending</string>
-    <string name="payment_fee">You will pay $%1$s as fees</string>
+    <string name="payment_fee">You will pay %1$s as fees</string>
     <string name="payment_total">will get</string>
     <string name="payment_button">Continue to payment</string>
     <string name="payment_ok_button">Confirm</string>

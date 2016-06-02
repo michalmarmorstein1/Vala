@@ -23,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,6 +37,7 @@ import android.widget.Toast;
 
 import com.valapay.vala.R;
 import com.valapay.vala.Vala;
+import com.valapay.vala.common.TransactionMessage;
 import com.valapay.vala.common.UserNameQueryResult;
 import com.valapay.vala.common.UserQueryMessage;
 import com.valapay.vala.common.UserRcvrListMessage;
@@ -46,6 +48,7 @@ import com.valapay.vala.utils.RoundImage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
 import retrofit2.Response;
 
@@ -56,7 +59,9 @@ public class SendActivity extends NavigationDrawerActivity {
     private View mProgressView;
     private ImageView mUserImage;
     private SendMoneyTask mSendMoneyTask = null;
+    private static String currency;
     private User user;
+    private static int selectedReceiverIndex;
     public static ArrayList<Recipient> searchResultList;
 
     @Override
@@ -68,10 +73,23 @@ public class SendActivity extends NavigationDrawerActivity {
         mAmount = (EditText) findViewById(R.id.amount_editText);
         mUserImage = (ImageView) findViewById(R.id.userImage);
 
-        Spinner currencySpinner = (Spinner) findViewById(R.id.send_currency_spinner);
+        final Spinner currencySpinner = (Spinner) findViewById(R.id.send_currency_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.currency_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        currencySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                currency = currencySpinner.getSelectedItem().toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                currency = "USD";
+            }
+
+        });
         currencySpinner.setAdapter(adapter);
 
         mSelectReceiver = (TextView) findViewById(R.id.select_receiver);
@@ -240,8 +258,8 @@ public class SendActivity extends NavigationDrawerActivity {
                         return;
                     }
                     TextView selectReceiver = (TextView) getActivity().findViewById(R.id.select_receiver);
-                    CharSequence receiver = radioButton.getText();
-                    selectReceiver.setText(receiver);
+                    selectedReceiverIndex = radioButton.getId();
+                    selectReceiver.setText(Vala.getUser().getRecipients().get(selectedReceiverIndex).getName());
                     getDialog().dismiss();
                 }
             });
@@ -396,21 +414,37 @@ public class SendActivity extends NavigationDrawerActivity {
 
         private String mReceiver;
         private int mAmount;
+        private double mFee;
 
         SendMoneyTask(String receiver, int amount) {
             mReceiver = receiver;
             mAmount = amount;
+            mFee = 3;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: send money
+            Response<TransactionMessage> response = null;
+            TransactionMessage requestBody = new TransactionMessage();
+            requestBody.setSenderId(user.getUserId());
+            requestBody.setReceiverId(user.getRecipients().get(selectedReceiverIndex).getId());
+            requestBody.setAmount(String.valueOf(mAmount));
+            requestBody.setSendCurrency(currency);
+            requestBody.setTransactionCreationTimeMilliseconds(new Date().getTime());
             try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
+                response = NetworkServices.getTestService().createTransaction(requestBody).execute();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
-            return true;
+            if(response.isSuccessful()){
+                TransactionMessage data = response.body();
+                user.setTransactionId(data.getTransactionId());
+                mFee = Double.valueOf(data.getPriceResponse().getValaFee().getAmount());
+                return true;
+            }else{
+                Log.d("VALA", "SendActivity:SendMoneyTask.doInBackground() - transaction failed");
+                return false;
+            }
         }
 
         @Override
@@ -418,7 +452,7 @@ public class SendActivity extends NavigationDrawerActivity {
             mSendMoneyTask = null;
             showProgress(false);
             if (success) {
-                PaymentActivity.startPaymentActivity("$", 3, mReceiver, mAmount, SendActivity.this);
+                PaymentActivity.startPaymentActivity(getCurrencySymbol(), mFee, mReceiver, mAmount, SendActivity.this);
             } else {
                 //TODO show server errors
             }
@@ -431,5 +465,13 @@ public class SendActivity extends NavigationDrawerActivity {
         }
     }
 
-
+    private String getCurrencySymbol(){
+        if("NIS".equals(currency)){
+            return 	"\u20AA";
+        }
+        if("INR".equals(currency)){
+            return "\u20B9";
+        }
+        return "$";
+    }
 }
