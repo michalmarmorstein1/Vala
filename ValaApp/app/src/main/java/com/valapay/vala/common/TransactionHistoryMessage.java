@@ -2,7 +2,7 @@ package com.valapay.vala.common;
 
 import com.valapay.vala.activities.MyTransactionsActivity;
 
-public class TransactionHistoryMessage {
+public class TransactionHistoryMessage extends Message{
 
     Transaction[] sentTransactions;
     Transaction[] receivedTransactions;

@@ -17,6 +17,7 @@ import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,9 +29,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.valapay.vala.R;
+import com.valapay.vala.Vala;
+import com.valapay.vala.common.FundingSourceDetails;
+import com.valapay.vala.common.TransactionConfirmMessage;
+import com.valapay.vala.model.User;
+import com.valapay.vala.network.NetworkServices;
 import com.valapay.vala.utils.RoundImage;
 
+import java.io.IOException;
+
 import io.card.payment.*;
+import retrofit2.Response;
 
 public class PaymentActivity extends NavigationDrawerActivity {
 
@@ -47,6 +56,11 @@ public class PaymentActivity extends NavigationDrawerActivity {
     private ConfirmPaymentTask confirmPaymentTask = null;
     private Button mContinueButton;
     private TextView mCardTextView;
+    private CreditCard creditCard;
+    private View mProgressBar;
+    private TextView amountView;
+    private Button okBtn;
+    private static String trackingNumber;
 
     public static void startPaymentActivity(String currency, double fee, String recipient, int amount, Activity context){
 
@@ -58,6 +72,11 @@ public class PaymentActivity extends NavigationDrawerActivity {
         context.startActivity(intent);
     }
 
+    private void showProgress(final boolean show) {
+        mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+        okBtn.setVisibility(show ? View.GONE : View.VISIBLE);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,12 +86,12 @@ public class PaymentActivity extends NavigationDrawerActivity {
         currency = getIntent().getStringExtra(CURRENCY_KEY);
         fee = getIntent().getDoubleExtra(FEE_KEY, 0);
 
-        TextView amountView = (TextView) findViewById(R.id.amount_text);
+        mProgressBar = findViewById(R.id.payment_progress);
+        amountView = (TextView) findViewById(R.id.amount_text);
         TextView feeView = (TextView) findViewById(R.id.fee_text);
         TextView totalView = (TextView) findViewById(R.id.total_text);
         mCardTextView = (TextView) findViewById(R.id.card_text);
 
-        //TODO handle currency
         String amountStr = currency + amount;
         Spannable wordToSpan = new SpannableString(amountStr);
         wordToSpan.setSpan(new StyleSpan(Typeface.BOLD), currency.length(), wordToSpan.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -94,13 +113,13 @@ public class PaymentActivity extends NavigationDrawerActivity {
         wordToSpan.setSpan(new StyleSpan(Typeface.BOLD), 0, recipient.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         totalView.setText(wordToSpan);
 
-        Button okBtn = (Button) findViewById(R.id.buttonPaymentOk);
+        okBtn = (Button) findViewById(R.id.buttonPaymentOk);
         okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(confirmPaymentTask == null){
-                    //TODO show progress
-                    confirmPaymentTask = new ConfirmPaymentTask();
+                    showProgress(true);
+                    confirmPaymentTask = new ConfirmPaymentTask(creditCard);
                     confirmPaymentTask.execute((Void) null);
                 }
             }
@@ -128,16 +147,16 @@ public class PaymentActivity extends NavigationDrawerActivity {
 
         String resultStr = "Failed to scan credit card";
         if (data != null && data.hasExtra(io.card.payment.CardIOActivity.EXTRA_SCAN_RESULT)) {
-            CreditCard scanResult = data.getParcelableExtra(io.card.payment.CardIOActivity.EXTRA_SCAN_RESULT);
-            resultStr = "Card Number: " + scanResult.getRedactedCardNumber() + "\n";
-            if (scanResult.isExpiryValid()) {
-                resultStr += "Expiration Date: " + scanResult.expiryMonth + "/" + scanResult.expiryYear + "\n";
+            creditCard = data.getParcelableExtra(io.card.payment.CardIOActivity.EXTRA_SCAN_RESULT);
+            resultStr = "Card Number: " + creditCard.getRedactedCardNumber() + "\n";
+            if (creditCard.isExpiryValid()) {
+                resultStr += "Expiration Date: " + creditCard.expiryMonth + "/" + creditCard.expiryYear + "\n";
             }
-            if (scanResult.cvv != null) {
-                resultStr += "CVV: " + scanResult.cvv + "\n";
+            if (creditCard.cvv != null) {
+                resultStr += "CVV: " + creditCard.cvv + "\n";
             }
-            if (scanResult.cardholderName != null) {
-                resultStr += "Cardholder Name: " + scanResult.cardholderName + "\n";
+            if (creditCard.cardholderName != null) {
+                resultStr += "Cardholder Name: " + creditCard.cardholderName + "\n";
             }
             // Update UI after successful scan
             LinearLayout layout = (LinearLayout) findViewById(R.id.LayoutConfirmPayment);
@@ -241,7 +260,7 @@ public class PaymentActivity extends NavigationDrawerActivity {
             recipientTextView.setText(wordToSpan);
 
             TextView trackingNumberTextView = (TextView) root.findViewById(R.id.textViewTrackingNumber);
-            SpannableString content = new SpannableString("WE456TYU7");
+            SpannableString content = new SpannableString(trackingNumber);
             content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
             trackingNumberTextView.setText(content);
 
@@ -252,21 +271,51 @@ public class PaymentActivity extends NavigationDrawerActivity {
 
     public class ConfirmPaymentTask extends AsyncTask<Void, Void, Boolean> {
 
+        private CreditCard cc;
+
+        public ConfirmPaymentTask(CreditCard cc){
+            this.cc = cc;
+        }
+
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: get tracking number
+            Response<TransactionConfirmMessage> response = null;
+            TransactionConfirmMessage requestBody = new TransactionConfirmMessage();
+            User user = Vala.getUser();
+            requestBody.setTransactionId(user.getTransactionId());
+            FundingSourceDetails fsd = new FundingSourceDetails();
+//            fsd.setCardHolderName(cc.cardholderName); //TODO uncomment
+//            fsd.setCardNumber(cc.cardNumber); //TODO uncomment
+//            fsd.setCcv(cc.cvv); //TODO uncomment
+//            fsd.setExpiresMonth(String.valueOf(cc.expiryMonth)); //TODO uncomment
+//            fsd.setExpiresYear(String.valueOf(cc.expiryYear)); //TODO uncomment
+//            fsd.setType(cc.getCardType().toString()); //TODO uncomment
+            fsd.setCardHolderName("Moshe Cohen"); //TODO remove
+            fsd.setCardNumber("4580123412341234"); //TODO remove
+            fsd.setCcv("123"); //TODO remove
+            fsd.setExpiresMonth(String.valueOf(1)); //TODO remove
+            fsd.setExpiresYear(String.valueOf(20)); //TODO remove
+            fsd.setType(cc.getCardType().toString()); //TODO remove
+            requestBody.setFundingSourceDetails(fsd); //TODO remove
             try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
+                response = NetworkServices.getTestService().confirmTransaction(requestBody).execute();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
-            return true;
+            if(response.isSuccessful()){
+                TransactionConfirmMessage data = response.body();
+                trackingNumber = data.getTrackingNumber();
+                return true;
+            }else{
+                Log.d("VALA", "PaymentActivity:v.doInBackground() - confirm transaction failed");
+                return false;
+            }
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
+            showProgress(false);
             confirmPaymentTask = null;
-            //TODO hide progress
             if (success) {
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 PaymentConfirmationDialogFragment frag = new PaymentConfirmationDialogFragment();
@@ -279,8 +328,8 @@ public class PaymentActivity extends NavigationDrawerActivity {
 
         @Override
         protected void onCancelled() {
+            showProgress(false);
             confirmPaymentTask = null;
-            //TODO hide progress
         }
     }
 }

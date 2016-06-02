@@ -14,6 +14,7 @@
         android:id="@+id/stepsImage"
         android:src="@drawable/stepstabs_scan" />
 
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -98,6 +99,16 @@
             style="@style/SilverButton"
             android:text="@android:string/cancel"
             android:id="@+id/buttonPaymentCancel" />
+
+        <ProgressBar
+            android:id="@+id/payment_progress"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp"
+            android:visibility="gone"/>
 
         <Button
             android:layout_width="wrap_content"

@@ -48,7 +48,7 @@
         <activity
             android:name=".activities.PaymentActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/GreenTheme" />
         <activity
             android:name=".activities.ReservationActivity"
             android:screenOrientation="portrait"

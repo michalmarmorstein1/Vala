@@ -2,6 +2,7 @@ package com.valapay.vala.network;
 
 import com.valapay.vala.common.CashCollectRequestMessage;
 import com.valapay.vala.common.CashCollectReserveMessage;
+import com.valapay.vala.common.TransactionConfirmMessage;
 import com.valapay.vala.common.TransactionMessage;
 import com.valapay.vala.common.UserLoginMessage;
 import com.valapay.vala.common.UserQueryMessage;
@@ -53,4 +54,8 @@ public interface ValaService {
 
     @POST("/transaction/new")
     Call<TransactionMessage> createTransaction(@Body TransactionMessage request);
+
+    @POST("/transaction/confirm")
+    Call<TransactionConfirmMessage> confirmTransaction(@Body TransactionConfirmMessage request);
+
 }
