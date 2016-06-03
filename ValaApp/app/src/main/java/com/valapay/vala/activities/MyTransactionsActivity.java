@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
@@ -13,6 +14,7 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,12 +26,27 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.valapay.vala.R;
+import com.valapay.vala.Vala;
+import com.valapay.vala.common.TransactionHistoryMessage;
+import com.valapay.vala.network.NetworkServices;
 import com.valapay.vala.utils.RoundImage;
+
+import java.io.IOException;
+
+import okhttp3.ResponseBody;
+import retrofit2.Response;
 
 public class MyTransactionsActivity extends NavigationDrawerActivity {
 
     private Transaction[] receivedTransactions;
     private Transaction[] sentTransactions;
+
+    private View mSentList;
+    private View mReceivedList;
+    private View mSentProgress;
+    private View mReceivedProgress;
+
+    private GetTransactionsTask getTransactionsTask = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,12 +54,18 @@ public class MyTransactionsActivity extends NavigationDrawerActivity {
 
         TextView title = (TextView) findViewById(R.id.textViewToolbarTitle);
         title.setText(R.string.my_transactions_title);
-        populateLists();
 
-        ListView receivedList = (ListView) findViewById(R.id.listViewReceived);
-        receivedList.setAdapter(new TransactionAdapter(this, receivedTransactions));
-        ListView sentList = (ListView) findViewById(R.id.listViewSent);
-        sentList.setAdapter(new TransactionAdapter(this, sentTransactions));
+        mReceivedList = findViewById(R.id.listViewReceived);
+        mReceivedProgress = findViewById(R.id.progressReceived);
+        mSentList = findViewById(R.id.listViewSent);
+        mSentProgress = findViewById(R.id.progressSent);
+
+//        populateDummyLists();
+        if(getTransactionsTask == null){
+            showProgress(true);
+            getTransactionsTask = new GetTransactionsTask();
+            getTransactionsTask.execute((Void) null);
+        }
     }
 
     @Override
@@ -118,8 +141,7 @@ public class MyTransactionsActivity extends NavigationDrawerActivity {
             desc.setText(wordToSpan);
             status.setText(t.getStatus());
             date.setText(t.getDate());
-            Bitmap bm = BitmapFactory.decodeResource(getResources(), t.getImage());
-            RoundImage roundedImage = new RoundImage(bm);
+            RoundImage roundedImage = new RoundImage(t.getImage());
             image.setImageDrawable(roundedImage);
             return rowView;
         }
@@ -128,13 +150,13 @@ public class MyTransactionsActivity extends NavigationDrawerActivity {
     public class Transaction {
 
         private String name;
-        private int image;
+        private Bitmap image;
         private String amount;
         private String date;
         private boolean isSent;
         private String status;
 
-        public Transaction(String name, int image, String amount, String date, boolean isSent, String status) {
+        public Transaction(String name, Bitmap image, String amount, String date, boolean isSent, String status) {
             this.name = name;
             this.image = image;
             this.amount = amount;
@@ -147,7 +169,7 @@ public class MyTransactionsActivity extends NavigationDrawerActivity {
             return name;
         }
 
-        public int getImage() {
+        public Bitmap getImage() {
             return image;
         }
 
@@ -168,18 +190,89 @@ public class MyTransactionsActivity extends NavigationDrawerActivity {
         }
     }
 
-    //TODO delete this
-    private void populateLists(){
+    private class GetTransactionsTask extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            Response<TransactionHistoryMessage> response = null;
+            try {
+                response = NetworkServices.getTestService().getTransactionList(Vala.getUser().getUserId()).execute();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (response.isSuccessful()) {
+                Log.d("VALA", "MyTransactionsActivity:GetTransactionsTask.doInBackground() - get transactions succeeded");
+                populateLists(response.body());
+                return true;
+            } else {
+                Log.d("VALA", "MyTransactionsActivity:GetTransactionsTask.doInBackground() - get transactions failed");
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            getTransactionsTask = null;
+            showProgress(false);
+            if (success) {
+                ListView receivedList = (ListView) findViewById(R.id.listViewReceived);
+                receivedList.setAdapter(new TransactionAdapter(MyTransactionsActivity.this, receivedTransactions));
+                ListView sentList = (ListView) findViewById(R.id.listViewSent);
+                sentList.setAdapter(new TransactionAdapter(MyTransactionsActivity.this, sentTransactions));
+            } else {
+                //TODO show server errors
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            getTransactionsTask = null;
+            showProgress(false);
+        }
+    }
+
+    private void showProgress(final boolean show) {
+        mSentProgress.setVisibility(show ? View.VISIBLE : View.GONE);
+        mSentList.setVisibility(show ? View.GONE : View.VISIBLE);
+        mReceivedProgress.setVisibility(show ? View.VISIBLE : View.GONE);
+        mReceivedList.setVisibility(show ? View.GONE : View.VISIBLE);
+    }
+
+    private void populateLists(TransactionHistoryMessage response){
+
+        TransactionHistoryMessage.Transaction[] received = response.getReceivedTransactions();
+        TransactionHistoryMessage.Transaction[] sent = response.getSentTransactions();
+
+        receivedTransactions = new Transaction[received.length];
+        sentTransactions = new Transaction[sent.length];
+
+        //TODO get image from cache according to id
+        Bitmap bm = Vala.getUser().getImageBitmap();
+
+        for(int i = 0; i < receivedTransactions.length; i++){
+            TransactionHistoryMessage.Transaction t = received[i];
+            receivedTransactions[i] = new Transaction(t.getName(), bm, t.getAmount(), t.getDate(), false, t.getStatus());
+        }
+
+        for(int i = 0; i < sentTransactions.length; i++){
+            TransactionHistoryMessage.Transaction t = sent[i];
+            sentTransactions[i] = new Transaction(t.getName(), bm, t.getAmount(), t.getDate(), true, t.getStatus());
+        }
+    }
+
+    private void populateDummyLists(){
+
+        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.babu);
 
         sentTransactions = new Transaction[3];
         receivedTransactions = new Transaction[1];
-        Transaction t1 = new Transaction("Kumar", R.drawable.babu, "$ 100", "19/03/2016", true, "Kumar is notified");
-        Transaction t2 = new Transaction("Moshe", R.drawable.babu, "$ 50", "21/03/2016", true, "Moshe is on his way to pick up the cash");
-        Transaction t3 = new Transaction("Ashish", R.drawable.babu, "$ 200", "21/03/2016", true, "Ashish has got the cash");
+        Transaction t1 = new Transaction("Kumar", bm, "$ 100", "19/03/2016", true, "Kumar is notified");
+        Transaction t2 = new Transaction("Moshe", bm, "$ 50", "21/03/2016", true, "Moshe is on his way to pick up the cash");
+        Transaction t3 = new Transaction("Ashish", bm, "$ 200", "21/03/2016", true, "Ashish has got the cash");
         sentTransactions[0] = t1;
         sentTransactions[1] = t2;
         sentTransactions[2] = t3;
-        Transaction t4 = new Transaction("Haim", R.drawable.babu, "$ 200", "21/03/2016", false, "You got the cash");
+        Transaction t4 = new Transaction("Haim", bm, "$ 200", "21/03/2016", false, "You got the cash");
         receivedTransactions[0] = t4;
     }
 }

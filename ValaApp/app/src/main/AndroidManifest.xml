@@ -61,7 +61,7 @@
             android:name=".activities.MyTransactionsActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/GreenTheme" />
         <activity
             android:name=".activities.PickupLocationActivity"
             android:screenOrientation="portrait"

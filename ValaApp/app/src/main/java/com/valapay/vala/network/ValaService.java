@@ -3,6 +3,7 @@ package com.valapay.vala.network;
 import com.valapay.vala.common.CashCollectRequestMessage;
 import com.valapay.vala.common.CashCollectReserveMessage;
 import com.valapay.vala.common.TransactionConfirmMessage;
+import com.valapay.vala.common.TransactionHistoryMessage;
 import com.valapay.vala.common.TransactionMessage;
 import com.valapay.vala.common.UserLoginMessage;
 import com.valapay.vala.common.UserQueryMessage;
@@ -58,4 +59,6 @@ public interface ValaService {
     @POST("/transaction/confirm")
     Call<TransactionConfirmMessage> confirmTransaction(@Body TransactionConfirmMessage request);
 
+    @GET("/user/transactions")
+    Call<TransactionHistoryMessage> getTransactionList(@Query("userId") String userId);
 }

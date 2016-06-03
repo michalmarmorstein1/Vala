@@ -25,6 +25,15 @@
         android:layout_gravity="center"
         android:id="@+id/listViewSent" />
 
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="80dp"
+        android:layout_gravity="center"
+        style="?android:attr/progressBarStyle"
+        android:visibility="gone"
+        android:id="@+id/progressSent" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="38dp"
@@ -42,5 +51,14 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:id="@+id/listViewReceived" />
+
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        style="?android:attr/progressBarStyle"
+        android:visibility="gone"
+        android:layout_margin="80dp"
+        android:id="@+id/progressReceived" />
 
 </LinearLayout>
