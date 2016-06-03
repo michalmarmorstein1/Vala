@@ -202,6 +202,7 @@ public class MyTransactionsActivity extends NavigationDrawerActivity {
             }
             if (response.isSuccessful()) {
                 Log.d("VALA", "MyTransactionsActivity:GetTransactionsTask.doInBackground() - get transactions succeeded");
+                populateDummyResponse(response.body()); //TODO remove this when the server is ready
                 populateLists(response.body());
                 return true;
             } else {
@@ -260,6 +261,23 @@ public class MyTransactionsActivity extends NavigationDrawerActivity {
         }
     }
 
+    //TODO delete
+    private static void populateDummyResponse(TransactionHistoryMessage response){
+        TransactionHistoryMessage.Transaction[] sentTransactions = new TransactionHistoryMessage.Transaction[3];
+        TransactionHistoryMessage.Transaction[] receivedTransactions = new TransactionHistoryMessage.Transaction[1];
+        TransactionHistoryMessage.Transaction t1 = new TransactionHistoryMessage.Transaction("Kumar", "$ 100", "19/03/2016", "Kumar is notified", "abc");
+        TransactionHistoryMessage.Transaction t2 = new TransactionHistoryMessage.Transaction("Moshe", "$ 50", "21/03/2016", "Moshe is on his way to pick up the cash", "abc");
+        TransactionHistoryMessage.Transaction t3 = new TransactionHistoryMessage.Transaction("Ashish", "$ 200", "21/03/2016", "Ashish has got the cash", "acb");
+        sentTransactions[0] = t1;
+        sentTransactions[1] = t2;
+        sentTransactions[2] = t3;
+        TransactionHistoryMessage.Transaction t4 = new TransactionHistoryMessage.Transaction("Haim", "$ 200", "21/03/2016", "You got the cash", "abcs");
+        receivedTransactions[0] = t4;
+        response.setReceivedTransactions(receivedTransactions);
+        response.setSentTransactions(sentTransactions);
+    }
+
+    //TODO delete
     private void populateDummyLists(){
 
         Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.babu);

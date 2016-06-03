@@ -28,7 +28,7 @@ public class TransactionHistoryMessage extends Message{
         this.receivedTransactions = receivedTransactions;
     }
 
-    public class Transaction {
+    public static class Transaction {
 
         private String name;
         private String amount;
