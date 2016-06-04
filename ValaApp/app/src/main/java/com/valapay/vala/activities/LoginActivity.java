@@ -104,16 +104,16 @@ public class LoginActivity extends AppCompatActivity {
             cancel = true;
         }
 
-        // Check for a valid email address.
-//        if (TextUtils.isEmpty(email)) {
-//            mEmailView.setError(getString(R.string.error_field_required));
-//            focusView = mEmailView;
-//            cancel = true;
-//        } else if (!isEmailValid(email)) {
-//            mEmailView.setError(getString(R.string.error_invalid_email));
-//            focusView = mEmailView;
-//            cancel = true;
-//        }
+//         Check for a valid email address.
+        if (TextUtils.isEmpty(email)) {
+            mEmailView.setError(getString(R.string.error_field_required));
+            focusView = mEmailView;
+            cancel = true;
+        } else if (!isEmailValid(email)) {
+            mEmailView.setError(getString(R.string.error_invalid_email));
+            focusView = mEmailView;
+            cancel = true;
+        }
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
@@ -201,14 +201,14 @@ public class LoginActivity extends AppCompatActivity {
                     if(imageFile != null){
                         user.saveImageFile(imageFile);
                     }else{
-                        //TODO replace with placeholder
+                        //TODO replace with placeholder image
                         user.saveImage(BitmapFactory.decodeResource(getResources(), R.drawable.babu));
 //                        return false; //TODO uncomment to show server errors
                     }
                     Log.d("VALA", "LoginActivity:UserLoginTask.doInBackground() - image file: " + imageFile);
                 } else {
                     Log.d("VALA", "LoginActivity:UserLoginTask.doInBackground() - image download failed, using default image");
-                    //TODO replace with placeholder
+                    //TODO replace with placeholder image
                     user.saveImage(BitmapFactory.decodeResource(getResources(), R.drawable.babu));
 //                        return false; //TODO uncomment to show server errors
                 }

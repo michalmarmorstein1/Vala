@@ -27,6 +27,8 @@
     <string name="signup_phone">Phone</string>
     <string name="signup_country">Country of residence</string>
     <string name="signup_btn">Continue</string>
+    <string name="signup_country_error">Please select a country</string>
+    <string name="signup_photo_error">Please take a photo</string>
     <string-array name="countries_array">
         <item>India</item>
         <item>Israel</item>

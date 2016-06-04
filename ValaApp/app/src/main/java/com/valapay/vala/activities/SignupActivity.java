@@ -126,37 +126,45 @@ public class SignupActivity extends AppCompatActivity {
         View focusView = null;
 
         // Check user input.
-//        if (TextUtils.isEmpty(phone)) {
-//            mPhoneView.setError(getString(R.string.error_field_required));
-//            focusView = mPhoneView;
-//            cancel = true;
-//        }
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
+        if(mUserBitmap == null){
             cancel = true;
-//        } else if (!isEmailValid(email)) {
-//            mEmailView.setError(getString(R.string.error_invalid_email));
-//            focusView = mEmailView;
-//            cancel = true;
-//        }
-//        if (TextUtils.isEmpty(lastName)) {
-//            mLastNameView.setError(getString(R.string.error_field_required));
-//            focusView = mLastNameView;
-//            cancel = true;
+            focusView = mUserImage;
+            Toast.makeText(SignupActivity.this, getString(R.string.signup_photo_error), Toast.LENGTH_SHORT).show();
+        }
+        if (country.equals(getString(R.string.signup_country))) {
+            focusView = mCountryView;
+            Toast.makeText(SignupActivity.this, getString(R.string.signup_country_error), Toast.LENGTH_SHORT).show();
+            cancel = true;
+        }
+        if (TextUtils.isEmpty(phone)) {
+            mPhoneView.setError(getString(R.string.error_field_required));
+            focusView = mPhoneView;
+            cancel = true;
+        }
+        if (TextUtils.isEmpty(lastName)) {
+            mLastNameView.setError(getString(R.string.error_field_required));
+            focusView = mLastNameView;
+            cancel = true;
         }
         if (TextUtils.isEmpty(firstName)) {
             mFirstNameView.setError(getString(R.string.error_field_required));
             focusView = mFirstNameView;
             cancel = true;
         }
-
-        if(mUserBitmap == null){
+        if (TextUtils.isEmpty(password)) {
+            mPasswordView.setError(getString(R.string.error_field_required));
+            focusView = mPasswordView;
             cancel = true;
-            focusView = mUserImage;
-            Toast.makeText(SignupActivity.this, "Please take a photo", Toast.LENGTH_SHORT).show();
         }
-
+        if (TextUtils.isEmpty(email)) {
+            mEmailView.setError(getString(R.string.error_field_required));
+            focusView = mEmailView;
+            cancel = true;
+        } else if (!isEmailValid(email)) {
+            mEmailView.setError(getString(R.string.error_invalid_email));
+            focusView = mEmailView;
+            cancel = true;
+        }
         if (cancel) {
             focusView.requestFocus();
         } else {
