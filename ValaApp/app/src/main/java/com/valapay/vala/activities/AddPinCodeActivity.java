@@ -233,7 +233,7 @@ public class AddPinCodeActivity extends AppCompatActivity {
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
             } else {
-                //TODO show server errors
+                Toast.makeText(AddPinCodeActivity.this, R.string.general_error_message, Toast.LENGTH_SHORT).show();
             }
         }
 

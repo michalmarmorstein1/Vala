@@ -140,7 +140,7 @@ public class PickupConfirmationActivity extends AppCompatActivity {
             if (success) {
                 startActivity(new Intent(PickupConfirmationActivity.this, HomeActivity.class));
             } else {
-                //TODO show server errors
+                Toast.makeText(PickupConfirmationActivity.this, R.string.general_error_message, Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -171,7 +171,7 @@ public class PickupConfirmationActivity extends AppCompatActivity {
             if (success) {
                 Toast.makeText(PickupConfirmationActivity.this, "That\'s a shame :)", Toast.LENGTH_SHORT).show();
             } else {
-                //TODO show server errors
+                Toast.makeText(PickupConfirmationActivity.this, R.string.general_error_message, Toast.LENGTH_SHORT).show();
             }
         }
 

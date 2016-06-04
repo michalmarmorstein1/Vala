@@ -263,7 +263,7 @@ public class HomeActivity extends NavigationDrawerActivity implements GoogleApiC
             if (success) {
                 PickupLocationActivity.startActivity(HomeActivity.this, mLastLocation);
             } else {
-                //TODO show server errors
+                Toast.makeText(HomeActivity.this, R.string.general_error_message, Toast.LENGTH_SHORT).show();
             }
         }
 

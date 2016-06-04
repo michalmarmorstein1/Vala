@@ -24,6 +24,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.valapay.vala.R;
 import com.valapay.vala.Vala;
@@ -221,7 +222,7 @@ public class MyTransactionsActivity extends NavigationDrawerActivity {
                 ListView sentList = (ListView) findViewById(R.id.listViewSent);
                 sentList.setAdapter(new TransactionAdapter(MyTransactionsActivity.this, sentTransactions));
             } else {
-                //TODO show server errors
+                Toast.makeText(MyTransactionsActivity.this, R.string.general_error_message, Toast.LENGTH_SHORT).show();
             }
         }
 

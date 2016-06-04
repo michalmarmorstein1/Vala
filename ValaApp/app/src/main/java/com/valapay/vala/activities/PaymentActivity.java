@@ -27,6 +27,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.valapay.vala.R;
 import com.valapay.vala.Vala;
@@ -322,7 +323,7 @@ public class PaymentActivity extends NavigationDrawerActivity {
                 frag.show(ft, "payment_confirmation_fragment_tag");
 
             } else {
-                //TODO show server errors
+                Toast.makeText(PaymentActivity.this, R.string.general_error_message, Toast.LENGTH_SHORT).show();
             }
         }
 

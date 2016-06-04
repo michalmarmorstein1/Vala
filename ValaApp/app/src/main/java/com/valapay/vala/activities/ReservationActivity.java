@@ -149,7 +149,7 @@ public class ReservationActivity extends AppCompatActivity {
                 setResult(RESULT_OK);
                 finish();
             } else {
-                //TODO show server errors
+                Toast.makeText(ReservationActivity.this, R.string.general_error_message, Toast.LENGTH_SHORT).show();
             }
         }
 

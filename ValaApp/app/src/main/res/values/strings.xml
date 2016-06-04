@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Vala</string>
 
+    <string name="general_error_message">An error as occurred</string>
 
     <!-- welcome screen -->
     <string name="welcome_text">The best way to send money\nto people you love</string>

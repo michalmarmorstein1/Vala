@@ -370,7 +370,7 @@ public class SendActivity extends NavigationDrawerActivity {
                     mRadioGroup.clearCheck();
                     setSearchMode(true);
                 } else {
-                    //TODO show server errors
+                    Toast.makeText(getActivity(), R.string.general_error_message, Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -454,7 +454,7 @@ public class SendActivity extends NavigationDrawerActivity {
             if (success) {
                 PaymentActivity.startPaymentActivity(getCurrencySymbol(), mFee, mReceiver, mAmount, SendActivity.this);
             } else {
-                //TODO show server errors
+                Toast.makeText(SendActivity.this, R.string.general_error_message, Toast.LENGTH_SHORT).show();
             }
         }
 

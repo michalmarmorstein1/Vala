@@ -120,7 +120,7 @@ public class SignupActivity extends AppCompatActivity {
         String email = mEmailView.getText().toString();
         String phone = mPhoneView.getText().toString();
         String password= mPasswordView.getText().toString();
-        String country = "US"; //TODO handle this
+        String country = (String) mCountryView.getSelectedItem();
 
         boolean cancel = false;
         View focusView = null;
