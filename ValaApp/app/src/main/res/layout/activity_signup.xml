@@ -29,8 +29,8 @@
         android:background="@color/transparentGray"
         android:paddingLeft="50dp"
         android:paddingRight="50dp"
-        android:paddingBottom="20dp"
-        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingTop="5dp"
         android:orientation="vertical">
 
 
@@ -117,8 +117,7 @@
             android:id="@+id/countries_spinner"
             android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp" />
+            android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/signup_button"
@@ -126,7 +125,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginTop="20dp"
             android:layout_gravity="center"
             android:text="@android:string/ok" />
 
