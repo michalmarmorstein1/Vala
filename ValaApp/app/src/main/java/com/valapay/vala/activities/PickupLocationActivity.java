@@ -164,7 +164,7 @@ public class PickupLocationActivity extends NavigationDrawerActivity implements 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mUserPosition, 16));
 //        Iterator<LatLng> it = user.getAffiliates().keySet().iterator();
 //        LatLng loc = it.next();
-//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 16)); //TODO uncomment to focus camera on affiliate
+//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 16)); //TODO uncomment to focus camera on affiliate, change to zoom out
         mMap.addMarker(new MarkerOptions()
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.userposition))
                 .position(mUserPosition));

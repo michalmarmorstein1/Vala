@@ -112,7 +112,6 @@ public class MyTransactionsActivity extends NavigationDrawerActivity {
             return transactions.length;
         }
 
-        //TODO
         @Override
         public Object getItem(int position) {
             return position;

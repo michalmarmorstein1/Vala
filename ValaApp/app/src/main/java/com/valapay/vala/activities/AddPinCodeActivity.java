@@ -195,6 +195,7 @@ public class AddPinCodeActivity extends AppCompatActivity {
             if(signupResponse.isSuccessful()){
                 User user = Vala.getUser();
                 UserLoginMessage data = signupResponse.body();
+                //TODO get currency from server
                 user.login(mFirstName, mLastName, mEmail, mPhone, mCountry, 0, "$", data.getToken(),
                         data.getUserId());
                 //Upload photo
@@ -212,6 +213,7 @@ public class AddPinCodeActivity extends AppCompatActivity {
                 if(uploadImageResponse.isSuccessful()){
                     Log.d("VALA", "AddPinCodeActivity:UserSignupTask.doInBackground() - uploaded image successfully");
                 }else{
+                    user.logout();
                     Log.d("VALA", "AddPinCodeActivity:UserSignupTask.doInBackground() - upload image failed");
                     return false;
                 }
